@@ -32,8 +32,8 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Paieška">
-                        <button class="btn btn-secondary mr-sm-4" type="submit">Paieška</button>
+                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška">
+                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit">Paieška</button>
                     </li>
                     <li class="nav-item mr-sm-4">
                         <a href="../../users/head/info.php"><i class='fas fa-address-card'id="info"></i></a>

@@ -112,6 +112,14 @@
 
 #actions:hover{color:#A9A9A9;}
 
+#actionsAllTasks{
+	font-size:75px;
+	margin-left: 10px;
+	color:#555555;
+}
+
+#actionsAllTasks:hover{color:#A9A9A9;}
+
 table{margin-top:20px;
 	border: 1px solid #DEE2E6;
 }
@@ -453,8 +461,20 @@ th{text-align: center;}
 	margin-right: 0 !important;
 }
 @media only screen and (max-width: 768px) {
-	.paieska{
+	.paieskaButton{
 		margin-top: 5px;
 		width: 100% !important;
+	}
+	.paieskaButton:hover{
+		margin-top: 5px !important;
+		height: 34px;
+	}
+	.paieskaField{
+		margin-top: 5px;
+		width: 100% !important;
+	}
+	#actionsAllTasks{
+		margin-top: 5px;
+		font-size: 45px;
 	}
 }

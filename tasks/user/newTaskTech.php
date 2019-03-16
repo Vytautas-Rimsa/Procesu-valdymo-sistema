@@ -59,10 +59,6 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Paieška">
-                        <button class="btn btn-secondary mr-sm-4" type="submit">Paieška</button>
-                    </li>
                     <li class="nav-item mr-sm-4">
                         <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
                     </li>
@@ -149,10 +145,14 @@
                                         <td><?php echo $row['pareigos']; ?></td>
                                     </tr>
                                     <tr class="container activeTasksContainer">
-                                        <td colspan="4"><form action="newTaskTech.php?newtask=<?php echo $row['darb_id']?>" method="post">
-                                            <div class="row">
+                                        <td colspan="4">
+                                            <form action="newTaskTech.php?newtask=<?php echo $row['darb_id']?>" method="post">
+                                                <div class="row">
 
-                                                    <div class="col col-md-8"><input class="activeTasksInput form-control" placeholder="Užduoties pavadinimas" name="title"><textarea class="activeTasksTextarea form-control" placeholder="Užduoties aprašymas" name="task"></textarea></div>
+                                                    <div class="col col-md-8">
+                                                        <input class="activeTasksInput form-control" placeholder="Užduoties pavadinimas" name="title">
+                                                        <textarea class="activeTasksTextarea form-control" placeholder="Užduoties aprašymas" name="task"></textarea>
+                                                    </div>
                                                     <div class="col col-md-1">
                                                         <input type="submit" value="Įrašyti" class="btn userTaskButton">
                                                     </div>
@@ -171,10 +171,9 @@
                                                             });
                                                         </script>
                                                     </div>
-
-                                            </div></form>
-
-                            </td>
+                                                </div>
+                                            </form>
+                                        </td>
                                     </tr>
                                     <?php $i++;
                                     }

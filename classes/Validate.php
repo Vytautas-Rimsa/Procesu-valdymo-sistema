@@ -35,9 +35,9 @@ class Validate{
                     $this->addError("Neįvesti duomenys <b>Naujojo slaptažodžio</b> laukelyje");
                 }elseif($rule === 'required_password_new_again' && empty($value)){
                     $this->addError("Neįvesti duomenys kartojant <b>Naująjį slaptažodį</b>");
-                }elseif($rule === 'title' && empty($value)){
+                }elseif($rule === 'required_title' && empty($value)){
                     $this->addError("Neįvesti duomenys <b>Užduoties pavadinimo</b> laukelyje");
-                }elseif($rule === 'task' && empty($value)){
+                }elseif($rule === 'required_task' && empty($value)){
                     $this->addError("Neįvesti duomenys <b>Užduoties aprašymo</b> laukelyje");
                 }elseif(!empty($value)){
                     switch($rule){

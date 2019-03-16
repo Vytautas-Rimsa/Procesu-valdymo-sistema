@@ -181,6 +181,21 @@ class DB{
         return $result;
     }
 
+    public function deleteTask($id){
+        //DELETE FROM `users` WHERE `users`.`darb_id` = 109
+        $sql = "DELETE FROM`tasks` WHERE `tasks`.`task_id` = $id";
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
     public function searchUser($search){
         $sql = "SELECT * FROM `users` WHERE `users`.`vardas` LIKE '%$search%' OR `users`.`pavarde` LIKE '%$search%' OR `users`.`skyrius` LIKE '%$search%'
 			 OR `users`.`pareigos` LIKE '%$search%'";
@@ -288,6 +303,21 @@ class DB{
 
     public function insertTask($title, $task, $createdData, $createdBy, $taskTo){
         $sql = "INSERT INTO `tasks` (`task_id`, `title`, `task`, `created_by`, `assigned_to`, `startline`, `deadline`, `finished`) VALUES (NULL, '$title', '$task', '$createdBy', '$taskTo', '$createdData[0]', '$createdData[1]', '');";
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
+    public function getAllTasks(){
+        $sql="SELECT * FROM `tasks`";
+
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
         if ($conn->connect_error) {

@@ -35,8 +35,8 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Paieška">
-                        <button class="btn btn-secondary mr-sm-4" type="submit">Paieška</button>
+                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška">
+                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit">Paieška</button>
                     </li>                    
                     <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logout"></i></a>
                 </ul>                
@@ -70,7 +70,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class='fas fa-tasks'></i>
+                        <i class="fas fa-fw fa-chart-area"></i>
                         <span>Užduočių ataskaita</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="pagesDropdown">                        
@@ -83,15 +83,9 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Charts</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-fw fa-table"></i>
-                        <span>Tables</span>
+                    <a class="nav-link" href="allTasks.php">
+                        <i class='fas fa-tasks'></i>
+                        <span>Visos užduotys</span>
                     </a>
                 </li>
             </ul>
