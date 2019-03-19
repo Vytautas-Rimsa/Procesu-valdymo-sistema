@@ -17,7 +17,13 @@
         $c=$_POST['task'];
         $d=$_SESSION["user"];
         $e=$_GET['newtask'];
+//        if(empty($b)){
+//            $pranesimas = '<div class="error">' . '<p>Neužpildytas <b>Užduoties pavadinimo</b> laukelis</p>' . '</div>';
+//        }elseif(empty($c)){
+//            $pranesimas = '<div class="error">' . '<p>Neužpildytas <b>Užduoties aprašymo</b> laukelis</p>' . '</div>';
+//        }else{DB::insertTask($b, $c, $a, $d, $e);}
         DB::insertTask($b, $c, $a, $d, $e);
+
     }
 ?>
 <!DOCTYPE html>
@@ -117,6 +123,7 @@
                     <div class="container-fluid">
                         <div class="card mb-3">
                             <div class="card-header adminCardHeader">Sukurti naują užduotį administracijai</div>
+<!--                            --><?php //echo @$pranesimas;?>
                             <div class="card-body">
                                 <div id="newTask">
                                     <table class="table table-hover">

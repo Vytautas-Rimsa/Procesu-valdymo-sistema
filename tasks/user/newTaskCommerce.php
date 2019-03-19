@@ -138,7 +138,7 @@
                                         $i =1;
                                         while($row = $data->fetch_assoc()){
                                             ?>
-                                            <tr class="header userCardHeader">
+                                            <tr class="header userCardHeader whiteLine">
                                                 <td><?php echo $i; ?></td>
                                                 <td><?php echo $row['vardas']; ?></td>
                                                 <td><?php echo $row['pavarde']; ?></td>

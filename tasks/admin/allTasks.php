@@ -11,11 +11,18 @@
 
     $data = DB::getAllTasks();
 
-    $getas = @$_GET['del_task'];
+    $deleteTask = @$_GET['del_task'];
 
-    if(!empty($getas)){
-        DB::deleteTask($getas);
+    if(!empty($deleteTask)){
+        DB::deleteTask($deleteTask);
         header('Location: allTasks.php');
+    }
+
+    $search = @$_POST['submit-search'];
+
+    if(!empty($search)){
+        DB::searchTaskFromAll($search);
+        header('Location: searchAllTasks.php');
     }
 ?>
 <!DOCTYPE html>
@@ -61,7 +68,15 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logout"></i></a>
+                    <li class="form-inline my-2 my-lg-0" >
+                        <form class="nav navbar-nav navbar-right" action="searchAllTasks.php" method="POST">
+                    <li class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                    </li>
+                    <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
+                    </form>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -115,7 +130,7 @@
             <div id="content-wrapper">
                 <div class="container-fluid">
                     <div class="card mb-3">
-                        <div class="card-header adminCardHeader">Sukurti naują užduotį administracijai</div>
+                        <div class="card-header adminCardHeader">Užduočių sąrašas</div>
                         <div class="card-body">
                             <div id="newTask">
                                 <table class="table table-hover">
@@ -135,7 +150,11 @@
                                                 <td><?php echo $i; ?></td>
                                                 <td><?php echo $row['title']; ?></td>
                                                 <td><?php echo $row['startline']; ?></td>
-                                                <td></td>
+                                                <td><?php if(date($row['finished'])=='0000-00-00 00:00:00'){
+                                                    echo "Galiojanti";
+                                                } else{
+                                                    echo "Užbaigta";
+                                                }?></td>
                                             </tr>
                                             <tr class="container activeTasksContainer">
                                                 <td colspan="4">
@@ -144,7 +163,7 @@
                                                             <div class="col col-md-10">
                                                                 <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
                                                             </div>
-                                                            <div class="col col-md-2">
+                                                            <div class="col col-md-2 didButtons">
                                                                 <i class='fas fa-edit' id="actionsAllTasks"></i>
                                                                 <a onclick="redirect('<?php echo $row['task_id'];?>')"><i class='fas fa-trash-alt' id="actionsAllTasks"></i></a>
                                                             </div>

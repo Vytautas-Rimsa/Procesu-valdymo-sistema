@@ -57,10 +57,15 @@
 	text-align: left;
 }
 .success {
-	color: #3c763d; 
-	background: #dff0d8; 
-	border: 1px solid #3c763d;
+	width: 92%;
+	margin: 0px auto;
 	margin-bottom: 20px;
+	padding: 10px 0px 10px 20px;
+	border: 1px solid #3c763d;
+	color: #3c763d;
+	background: #dff0d8;
+	border-radius: 5px;
+	text-align: left;
 }
 
 .headerBlue {	
@@ -448,6 +453,12 @@ th{text-align: center;}
 	margin: auto;
 	height: 120px !important;
 }
+
+.activeTasksTextareaComent{
+	width: 100%;
+	margin-top: 15px;
+	height: 90px !important;
+}
 .dateAndTime{
 	width: 100%;
 	padding: 0 10px;
@@ -459,6 +470,10 @@ th{text-align: center;}
 .tarpas{
 	margin-left: 5px;
 	margin-right: 0 !important;
+}
+
+.tasks-button input{
+	margin: 0 2px;
 }
 @media only screen and (max-width: 768px) {
 	.paieskaButton{
@@ -478,3 +493,9 @@ th{text-align: center;}
 		font-size: 45px;
 	}
 }
+
+.didButtons{
+	padding-top: 15px;
+}
+
+.whiteLine{border-bottom: 2px solid white;}

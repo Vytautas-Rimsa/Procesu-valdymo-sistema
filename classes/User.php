@@ -122,11 +122,5 @@ class User{
 
     public function deleteUsers($id) {
         return $data = $this->_db->delete('users', array('darbuotojo_id', '=', $this->data()->darb_id));
-//
-//        $sql = 'DELETE FROM users WHERE darb_id = :darb_id';
-//
-//        $q = $this->_pdo->prepare($sql);
-//
-//        return $q->execute([':darb_id' => $id]);
     }
 }

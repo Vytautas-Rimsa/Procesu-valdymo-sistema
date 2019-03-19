@@ -13,7 +13,6 @@ class DB{
         } catch (PDOException $e){
             die($e->getMessage());
         }
-        //$this->$conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
     }
 
     public static function getInstance(){
@@ -44,12 +43,7 @@ class DB{
         }
         return $this;
     }
-//DELETE FROM `users` WHERE `users`.`darb_id` = 109"
-//action: DELETE
-//table: users
-//where0: `users`.`darb_id`
-//1: =
-//2: 109
+
     public function action($action, $table, $where = array()){
         if(count($where) === 3){
             $operators = array('=', '>', '<', '>=', '<=', '==', '===');
@@ -211,6 +205,20 @@ class DB{
         return $result;
     }
 
+    public function searchTaskFromAll($search){
+        $sql = "SELECT * FROM `tasks` WHERE `tasks`.`title` LIKE '%$search%' OR `tasks`.`task` LIKE '%$search%'";
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
     public function getDepartmentTech($department){
         $sql="SELECT * FROM `users` WHERE `skyrius` LIKE 'Techninis skyrius'";
 
@@ -317,6 +325,21 @@ class DB{
 
     public function getAllTasks(){
         $sql="SELECT * FROM `tasks`";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
+    public function getUserActiveTasks(){
+        $sql="SELECT * FROM `tasks` WHERE `assigned_to` LIKE '".$_SESSION['user']."'";
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 

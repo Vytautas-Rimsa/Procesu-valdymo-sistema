@@ -8,24 +8,23 @@
     } else{
 
     }
+    $data = DB::searchTaskFromAll($_POST['search']);
 
-    $data = DB::getDepartmentPersonal("Personalo skyrius");
+    $deleteTask = @$_GET['del_task'];
 
-    if(!empty($_GET['newtask'])){
-        $a = explode(" - ", $_POST['datetimes']);
-        $b=$_POST['title'];
-        $c=$_POST['task'];
-        $d=$_SESSION["user"];
-        $e=$_GET['newtask'];
-        DB::insertTask($b, $c, $a, $d, $e);
+    if(!empty($deleteTask)){
+        DB::deleteTask($deleteTask);
+        header('Location: allTasks.php');
     }
+
 ?>
+
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Sukurti užduotį</title>
+        <title>Užduočių sąrašas</title>
         <link rel="stylesheet" href="../../css/style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="../../js/scripts.js"></script>
@@ -41,28 +40,29 @@
         <script type="text/javascript" src="../../js/daterangepicker.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/lt.js" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     </head>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">CRM</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarColor03">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Užduotys</a>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Užduotys</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../../database/user/database.php">Duomenų bazė</a>
+                        <a class="nav-link" href="../../users/admin/users.php">Darbuotojai</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Duomenų bazė</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="nav-item mr-sm-4">
-                        <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
-                    </li>
-                    <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logoutLight"></i></a>
+                    <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logout"></i></a>
                 </ul>
             </div>
         </nav>
@@ -71,7 +71,7 @@
     <body id="page-top">
         <div id="wrapper">
             <!-- Sidebar -->
-            <ul class="sidebar navbar-nav userSidebar">
+            <ul class="sidebar navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="activeTasks.php">
                         <i class='fas fa-user-circle'></i>
@@ -88,13 +88,13 @@
                         <a class="dropdown-item" href="newTaskSecurity.php">Apsaugos skyriui</a>
                         <a class="dropdown-item" href="newTaskFinance.php">Finansų skyriui</a>
                         <a class="dropdown-item" href="newTaskCommerce.php">Komercijos skyriui</a>
-                        <a class="dropdown-item" href="#">Personalo skyriui</a>
+                        <a class="dropdown-item" href="newTaskPersonal.php">Personalo skyriui</a>
                         <a class="dropdown-item" href="newTaskTech.php">Techninis skyriui</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class='fas fa-tasks'></i>
+                        <i class="fas fa-fw fa-chart-area"></i>
                         <span>Užduočių ataskaita</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="pagesDropdown">
@@ -107,69 +107,51 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Charts</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-fw fa-table"></i>
-                        <span>Tables</span>
+                    <a class="nav-link" href="allTasks.php">
+                        <i class='fas fa-tasks'></i>
+                        <span>Visos užduotys</span>
                     </a>
                 </li>
             </ul>
             <div id="content-wrapper">
                 <div class="container-fluid">
                     <div class="card mb-3">
-                        <div class="card-header userCardHeader">Sukurti naują užduotį personalo skyriui</div>
+                        <div class="card-header adminCardHeader">Paieškos rezultatai</div>
                         <div class="card-body">
                             <div id="newTask">
                                 <table class="table table-hover">
                                     <thead>
-                                    <tr>
-                                        <th>Nr.</th>
-                                        <th>Vardas</th>
-                                        <th>Pavardė</th>
-                                        <th>Pareigos</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Nr.</th>
+                                            <th>Užduoties pavadinimas</th>
+                                            <th>Sukūrimo data</th>
+                                            <th>Statusas</th>
+                                        </tr>
                                     </thead>
                                     <?php if ($data->num_rows > 0) {
                                         $i =1;
                                         while($row = $data->fetch_assoc()){
                                             ?>
-                                            <tr class="header userCardHeader whiteLine">
+                                            <tr class="header activeTaskAdmin">
                                                 <td><?php echo $i; ?></td>
-                                                <td><?php echo $row['vardas']; ?></td>
-                                                <td><?php echo $row['pavarde']; ?></td>
-                                                <td><?php echo $row['pareigos']; ?></td>
+                                                <td><?php echo $row['title']; ?></td>
+                                                <td><?php echo $row['startline']; ?></td>
+                                                <td><?php if(date($row['finished'])=='0000-00-00 00:00:00'){
+                                                        echo "Galiojanti";
+                                                    } else{
+                                                        echo "Užbaigta";
+                                                    }?></td>
                                             </tr>
                                             <tr class="container activeTasksContainer">
                                                 <td colspan="4">
-                                                    <form action="newTaskPersonal.php?newtask=<?php echo $row['darb_id']?>" method="post">
+                                                    <form action="" method="post">
                                                         <div class="row">
-
-                                                            <div class="col col-md-8">
-                                                                <input class="activeTasksInput form-control" placeholder="Užduoties pavadinimas" name="title">
-                                                                <textarea class="activeTasksTextarea form-control" placeholder="Užduoties aprašymas" name="task"></textarea>
+                                                            <div class="col col-md-10">
+                                                                <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
                                                             </div>
-                                                            <div class="col col-md-1">
-                                                                <input type="submit" value="Įrašyti" class="btn userTaskButton">
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <input type="text" name="datetimes" class="dateAndTime form-control" name="save_task_btn">
-                                                                <script>
-                                                                    $(function() {
-                                                                        $('input[name="datetimes"]').daterangepicker({
-                                                                            timePicker: true,
-                                                                            startDate: moment().locale('lt-LT').startOf('hour'),
-                                                                            endDate: moment().locale('lt-LT').startOf('hour').add(24, 'hour'),
-                                                                            locale: {
-                                                                                format: 'YYYY-MM-DD HH:mm'
-                                                                            }
-                                                                        });
-                                                                    });
-                                                                </script>
+                                                            <div class="col col-md-2 didButtons">
+                                                                <i class='fas fa-edit' id="actionsAllTasks"></i>
+                                                                <a onclick="redirect('<?php echo $row['task_id'];?>')"><i class='fas fa-trash-alt' id="actionsAllTasks"></i></a>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -189,7 +171,7 @@
             </div>
         </div>
         <div class="scroll-to-top rounded">
-            <span><a href=""><i class="fas fa-angle-up upDownButton"></i></a></span>
+            <span><a href=""><i class="fas fa-angle-up upDownButton"></i> </a></span>
         </div>
         <script>
             $(document).ready(function() {
@@ -204,6 +186,24 @@
                     });
                 }
             })
+        </script>
+        <script>
+            function redirect(a){
+                Swal.fire({
+                    title: 'Ar tikrai norite ištrinti šią užduotį?',
+                    text: "Duomenys bus negrįžtamai pašalinti iš duomenų bazės",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#555555',
+                    confirmButtonText: 'Ištrinti',
+                    cancelButtonText: 'Atšaukti'
+                }).then((result) => {
+                    if (result.value) {
+                        location.replace("allTasks.php?del_task=" + a)
+                    }
+                })
+            }
         </script>
     </body>
 </html>
