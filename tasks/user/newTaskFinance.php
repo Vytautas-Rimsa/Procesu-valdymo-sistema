@@ -1,6 +1,7 @@
 <?php
     require_once('../../core/init.php');
     require_once('../../classes/User.php');
+    require_once('../../includes/errors/errors.php');
 
     $user = new User();
     if(!$user->exists()){
@@ -17,7 +18,15 @@
         $c=$_POST['task'];
         $d=$_SESSION["user"];
         $e=$_GET['newtask'];
-        DB::insertTask($b, $c, $a, $d, $e);
+        if(empty($b)) {
+            array_push($errors, "Neužpildytas <b>Užduoties pavadinimo</b> laukelis");
+        }
+        if(empty($c)){
+            array_push($errors, "Neužpildytas <b>Užduoties aprašymo</b> laukelis");
+        }
+        if(!empty($b) && !empty($c)){
+            DB::insertTask($b, $c, $a, $d, $e);
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -123,6 +132,7 @@
                 <div class="container-fluid">
                     <div class="card mb-3">
                         <div class="card-header userCardHeader">Sukurti naują užduotį finansų skyriui</div>
+                        <?php echo display_error(); ?>
                         <div class="card-body">
                             <div id="newTask">
                                 <table class="table table-hover">

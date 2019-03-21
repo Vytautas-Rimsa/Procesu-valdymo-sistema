@@ -1,6 +1,7 @@
 <?php
     require_once('../../core/init.php');
     require_once('../../classes/User.php');
+    require_once('../../includes/errors/errors.php');
 
     $user = new User();
     if(!$user->exists()){
@@ -17,13 +18,15 @@
         $c=$_POST['task'];
         $d=$_SESSION["user"];
         $e=$_GET['newtask'];
-//        if(empty($b)){
-//            $pranesimas = '<div class="error">' . '<p>Neužpildytas <b>Užduoties pavadinimo</b> laukelis</p>' . '</div>';
-//        }elseif(empty($c)){
-//            $pranesimas = '<div class="error">' . '<p>Neužpildytas <b>Užduoties aprašymo</b> laukelis</p>' . '</div>';
-//        }else{DB::insertTask($b, $c, $a, $d, $e);}
-        DB::insertTask($b, $c, $a, $d, $e);
-
+        if(empty($b)) {
+            array_push($errors, "Neužpildytas <b>Užduoties pavadinimo</b> laukelis");
+        }
+        if(empty($c)){
+            array_push($errors, "Neužpildytas <b>Užduoties aprašymo</b> laukelis");
+        }
+        if(!empty($b) && !empty($c)){
+            DB::insertTask($b, $c, $a, $d, $e);
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -51,7 +54,7 @@
 
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">CRM</a>
+                <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -123,7 +126,7 @@
                     <div class="container-fluid">
                         <div class="card mb-3">
                             <div class="card-header adminCardHeader">Sukurti naują užduotį administracijai</div>
-<!--                            --><?php //echo @$pranesimas;?>
+                            <?php echo display_error(); ?>
                             <div class="card-body">
                                 <div id="newTask">
                                     <table class="table table-hover">
@@ -190,6 +193,40 @@
             <div class="scroll-to-top rounded">
                 <span><a href=""><i class="fas fa-angle-up upDownButton"></i></a></span>
             </div>
+
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div>
+                    <ul class="manualList">
+                        <li>
+                            <i class='fas fa-info-circle manualIcon'></i><span class="manualText">Sutartinių ženklų žinynas</span>
+                        </li>
+                        <li>
+                            <i class='fas fa-sign-out-alt manualIcon'></i><span class="manualText">Atsijungimas iš sistemos</span>
+                        </li>
+                        <li>
+                            <i class='fas fa-forward manualIcon'></i><span class="manualText">Peradresuoti užduotį</span>
+                        </li>
+                        <li>
+                            <i class='far fa-check-square manualIcon'></i><span class="manualText">Atlikti užduotį</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-angle-up manualIcon"></i><span class="manualText">Pakilimas į puslapio viršų</span>
+                        </li>
+                        <li>
+                            <i class='fas fa-edit manualIcon'></i><span class="manualText">Redaguoti įrašą</span>
+                        </li>
+                        <li>
+                            <i class='fas fa-trash-alt manualIcon'></i><span class="manualText">Ištrinti įrašą</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
             <script>
                 $(document).ready(function() {
                     //Fixing jQuery Click Events for the iPad
@@ -203,6 +240,33 @@
                         });
                     }
                 })
+            </script>
+            <script>
+                // Get the modal
+                var modal = document.getElementById('myModal');
+
+                // Get the button that opens the modal
+                var btn = document.getElementById("myBtn");
+
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
+
+                // When the user clicks the button, open the modal
+                btn.onclick = function() {
+                    modal.style.display = "block";
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function() {
+                    modal.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
             </script>
         </body>
     </html>

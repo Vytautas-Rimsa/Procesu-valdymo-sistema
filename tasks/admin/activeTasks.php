@@ -1,6 +1,7 @@
 <?php
     require_once('../../core/init.php');
     require_once('../../classes/User.php');
+    require_once('../../includes/success/success.php');
 
     $user = new User();
     if(!$user->exists()){
@@ -12,12 +13,13 @@
     $data = DB::getUserActiveTasks();
     $data2 = DB::getUserActiveTasks();
     $data3 = DB::getUserActiveTasks();
-    //$search = @$_POST['submit-search'];
 
-    //if(!empty($search)){
-    //    DB::searchTaskFromAll($search);
-    //    header('Location: searchAllTasks.php');
-    //}
+    $search = @$_POST['submit-search'];
+
+    if(!empty($search)){
+        DB::searchTaskFromActive($search);
+        header('Location: searchActiveTasks.php');
+    }
 ?>
 
 <!DOCTYPE html>
@@ -55,11 +57,15 @@
                     </li>                     
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li class="form-inline my-2 my-lg-0" >
+                        <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">
                     <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška">
-                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit">Paieška</button>
-                    </li>                    
-                    <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logout"></i></a>
+                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                    </li>
+                    <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
+                    </form>
+                    </li>
                 </ul>                
             </div>
         </nav>
@@ -117,6 +123,7 @@
                         <div class="card-header adminCardHeader">Aktyvios užduotys</div>
                         <div class="card-body">
                             <div id="activeTasks">
+                                <?php echo display_success(); ?>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -141,15 +148,14 @@
                                                         <td colspan="4">
                                                             <form action="activeTasks.php?activeTasks=<?php echo $row['task_id']?>" method="post">
                                                                 <div class="row">
-                                                                    <div class="col col-md-8">
+                                                                    <div class="col col-md-9">
                                                                         <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
                                                                         <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>
                                                                     </div>
-                                                                    <div class="col col-md-3">
-                                                                        <div class="tasks-button">
-                                                                            <input type="submit" value="Atlikti" class="btn adminButton">
-                                                                            <input type="submit" value="Peradresuoti" class="btn adminButton">
-                                                                        </div>
+
+                                                                        <div class="col col-md-3 didButtonsFF">
+                                                                        <i class='far fa-check-square ' id="actionsAllTasks"></i>
+                                                                        <i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i>
                                                                     </div>
                                                                 </div>
                                                             </form>
@@ -157,13 +163,16 @@
                                                     </tr>
                                                     <?php $i++;
                                                 }
-//                                                else {
-//                                                        echo '<div class="success">';
-//                                                        echo "Nėra įrašų";
-//                                                        echo'</div>';
-//                                                }
                                             }
                                         }
+//                                        else {
+//                                            echo '<div class="success">';
+//                                            echo "Nėra įrašų";
+//                                            echo'</div>';
+//                                        }
+                                    else {
+                                        array_push($success, "Lentelėje įrašų nėra");
+                                    }
                                     ?>
                                 </table>
                             </div>
@@ -255,16 +264,14 @@
                                                             <td colspan="4">
                                                                 <form action="activeTasks.php?lateTasks=<?php echo $row['task_id']?>" method="post">
                                                                     <div class="row">
-                                                                        <div class="col col-md-8">
+                                                                        <div class="col col-md-9">
                                                                             <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?>
                                                                             </textarea>
                                                                             <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>
                                                                         </div>
-                                                                        <div class="col col-md-3">
-                                                                            <div class="tasks-button">
-                                                                                <input type="submit" value="Atlikti" class="btn adminButton">
-                                                                                <input type="submit" value="Peradresuoti" class="btn adminButton">
-                                                                            </div>
+                                                                        <div class="col col-md-3 didButtonsFF">
+                                                                            <i class='far fa-check-square ' id="actionsAllTasks"></i>
+                                                                            <i class='fas fa-forward didButtonsForwardFinishP' id="actionsAllTasks"></i>
                                                                         </div>
                                                                     </div>
                                                                 </form>

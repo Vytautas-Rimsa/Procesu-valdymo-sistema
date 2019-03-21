@@ -1,6 +1,7 @@
 <?php
     require_once('../../core/init.php');
     require_once('../../classes/User.php');
+    require_once('../../includes/errors/errors.php');
 
 //    $user = new User();
 //    if(!$user->exists()){
@@ -8,13 +9,8 @@
 //    } else{
 //
 //    }
-    $errors   = array();
-//    $task ="";
-//    $title="";
 
     $data = DB::getDepartmentAdministration("Administracija");
-
-
 
     if(!empty($_GET['newtask'])){
         $a = explode(" - ", $_POST['datetimes']);
@@ -23,28 +19,16 @@
         $d=$_SESSION["user"];
         $e=$_GET['newtask'];
 
-        if (empty($b)) {
-            array_push($errors, "Reikalingas uzduoties pavadinimas");
+        if(empty($b)) {
+            array_push($errors, "Neužpildytas <b>Užduoties pavadinimo</b> laukelis");
         }
-        if (empty($c)) {
-            array_push($errors, "Reikalingas uzduoties aprasymas");
+        if(empty($c)){
+            array_push($errors, "Neužpildytas <b>Užduoties aprašymo</b> laukelis");
         }
-
-        if(count($errors) == 0){
-        DB::insertTask($b, $c, $a, $d, $e);}
+        if(!empty($b) && !empty($c)){
+            DB::insertTask($b, $c, $a, $d, $e);
+        }
     }
-
-function display_error() {
-    global $errors;
-
-    if (count($errors) > 0){
-        echo '<div class="error">';
-        foreach ($errors as $error){
-            echo $error .'<br>';
-        }
-        echo '</div>';
-    }
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -149,6 +133,7 @@ function display_error() {
                 <div class="container-fluid">
                     <div class="card mb-3">
                         <div class="card-header userCardHeader">Sukurti naują užduotį administracijai</div>
+                        <?php echo display_error(); ?>
                         <div class="card-body">
                             <div id="newTask">
                                 <table class="table table-hover">
@@ -173,7 +158,6 @@ function display_error() {
                                             <tr class="container activeTasksContainer">
                                                 <td colspan="4">
                                                     <form action="newTaskAdministration.php?newtask=<?php echo $row['darb_id']?>" method="post">
-                                                        <?php echo display_error(); ?>
                                                         <div class="row">
                                                             <div class="col col-md-8">
                                                                 <input class="activeTasksInput form-control" placeholder="Užduoties pavadinimas" name="title">

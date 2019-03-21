@@ -219,6 +219,20 @@ class DB{
         return $result;
     }
 
+    public function searchTaskFromActive($search){
+        $sql = "SELECT * FROM `tasks` WHERE `assigned_to` LIKE '".$_SESSION['user']."' AND `tasks`.`title` LIKE '%$search%' OR `tasks`.`task` LIKE '%$search%'";
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
     public function getDepartmentTech($department){
         $sql="SELECT * FROM `users` WHERE `skyrius` LIKE 'Techninis skyrius'";
 
@@ -352,4 +366,5 @@ class DB{
 
         return $result;
     }
+
 }

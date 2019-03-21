@@ -147,15 +147,13 @@ $data3 = DB::getUserActiveTasks();
                                                     <td colspan="4">
                                                         <form action="activeTasks.php?newtask=<?php echo $row['task_id']?>" method="post">
                                                             <div class="row">
-                                                                <div class="col col-md-8">
+                                                                <div class="col col-md-9">
                                                                     <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
                                                                     <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>
                                                                 </div>
-                                                                <div class="col col-md-3">
-                                                                    <div class="tasks-button">
-                                                                        <input type="submit" value="Atlikti" class="btn userTaskButton">
-                                                                        <input type="submit" value="Peradresuoti" class="btn userTaskButton">
-                                                                    </div>
+                                                                <div class="col col-md-3 didButtonsFF">
+                                                                    <i class='far fa-check-square userCompleteTask' id="actionsAllTasks"></i>
+                                                                    <i class='fas fa-forward didButtonsForwardFinish userForwardTask' id="actionsAllTasks"></i>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -261,16 +259,14 @@ $data3 = DB::getUserActiveTasks();
                                                             <td colspan="4">
                                                                 <form action="activeTasks.php?lateTasks=<?php echo $row['task_id']?>" method="post">
                                                                     <div class="row">
-                                                                        <div class="col col-md-8">
+                                                                        <div class="col col-md-9">
                                                                             <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?>
                                                                             </textarea>
                                                                             <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>
                                                                         </div>
-                                                                        <div class="col col-md-3">
-                                                                            <div class="tasks-button">
-                                                                                <input type="submit" value="Atlikti" class="btn adminButton">
-                                                                                <input type="submit" value="Peradresuoti" class="btn adminButton">
-                                                                            </div>
+                                                                        <div class="col col-md-3 didButtonsFF">
+                                                                            <i class='far fa-check-square userCompleteTask' id="actionsAllTasks"></i>
+                                                                            <i class='fas fa-forward didButtonsForwardFinishP userForwardTask' id="actionsAllTasks"></i>
                                                                         </div>
                                                                     </div>
                                                                 </form>
