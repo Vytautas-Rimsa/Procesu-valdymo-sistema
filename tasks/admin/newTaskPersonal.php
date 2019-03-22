@@ -54,7 +54,7 @@
 
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">CRM</a>
+                <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -161,18 +161,7 @@
                                                                 </div>
                                                                 <div class="col-md-3">
                                                                     <input type="text" name="datetimes" class="dateAndTime form-control" name="save_task_btn">
-                                                                    <script>
-                                                                        $(function() {
-                                                                            $('input[name="datetimes"]').daterangepicker({
-                                                                                timePicker: true,
-                                                                                startDate: moment().locale('lt-LT').startOf('hour'),
-                                                                                endDate: moment().locale('lt-LT').startOf('hour').add(24, 'hour'),
-                                                                                locale: {
-                                                                                    format: 'YYYY-MM-DD HH:mm'
-                                                                                }
-                                                                            });
-                                                                        });
-                                                                    </script>
+                                                                    <script src="../../js/dateTime.js"></script>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -194,19 +183,8 @@
             <div class="scroll-to-top rounded">
                 <span><a href=""><i class="fas fa-angle-up upDownButton"></i></a></span>
             </div>
-            <script>
-                $(document).ready(function() {
-                    //Fixing jQuery Click Events for the iPad
-                    var ua = navigator.userAgent,
-                        event = (ua.match(/iPad/i)) ? "touchstart" : "click";
-                    if ($('.table').length > 0) {
-                        $('.table .header').on(event, function() {
-                            $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
-                                return this.style.display === 'table-row' ? 'none' : 'table-row';
-                            });
-                        });
-                    }
-                })
-            </script>
+            <?php require '../../includes/tools/modalAdmin.php';?>
+            <script src="../../js/cardPopdown.js"></script>
+            <script src="../../js/modal.js"></script>
         </body>
     </html>

@@ -160,18 +160,7 @@
                                                                 </div>
                                                                 <div class="col-md-3">
                                                                     <input type="text" name="datetimes" class="dateAndTime form-control" name="save_task_btn">
-                                                                    <script>
-                                                                        $(function() {
-                                                                            $('input[name="datetimes"]').daterangepicker({
-                                                                                timePicker: true,
-                                                                                startDate: moment().locale('lt-LT').startOf('hour'),
-                                                                                endDate: moment().locale('lt-LT').startOf('hour').add(24, 'hour'),
-                                                                                locale: {
-                                                                                    format: 'YYYY-MM-DD HH:mm'
-                                                                                }
-                                                                            });
-                                                                        });
-                                                                    </script>
+                                                                    <script src="../../js/dateTime.js"></script>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -193,80 +182,8 @@
             <div class="scroll-to-top rounded">
                 <span><a href=""><i class="fas fa-angle-up upDownButton"></i></a></span>
             </div>
-
-            <!-- The Modal -->
-            <div id="myModal" class="modal">
-
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <div>
-                    <ul class="manualList">
-                        <li>
-                            <i class='fas fa-info-circle manualIcon'></i><span class="manualText">Sutartinių ženklų žinynas</span>
-                        </li>
-                        <li>
-                            <i class='fas fa-sign-out-alt manualIcon'></i><span class="manualText">Atsijungimas iš sistemos</span>
-                        </li>
-                        <li>
-                            <i class='fas fa-forward manualIcon'></i><span class="manualText">Peradresuoti užduotį</span>
-                        </li>
-                        <li>
-                            <i class='far fa-check-square manualIcon'></i><span class="manualText">Atlikti užduotį</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-angle-up manualIcon"></i><span class="manualText">Pakilimas į puslapio viršų</span>
-                        </li>
-                        <li>
-                            <i class='fas fa-edit manualIcon'></i><span class="manualText">Redaguoti įrašą</span>
-                        </li>
-                        <li>
-                            <i class='fas fa-trash-alt manualIcon'></i><span class="manualText">Ištrinti įrašą</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <script>
-                $(document).ready(function() {
-                    //Fixing jQuery Click Events for the iPad
-                    var ua = navigator.userAgent,
-                        event = (ua.match(/iPad/i)) ? "touchstart" : "click";
-                    if ($('.table').length > 0) {
-                        $('.table .header').on(event, function() {
-                            $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
-                                return this.style.display === 'table-row' ? 'none' : 'table-row';
-                            });
-                        });
-                    }
-                })
-            </script>
-            <script>
-                // Get the modal
-                var modal = document.getElementById('myModal');
-
-                // Get the button that opens the modal
-                var btn = document.getElementById("myBtn");
-
-                // Get the <span> element that closes the modal
-                var span = document.getElementsByClassName("close")[0];
-
-                // When the user clicks the button, open the modal
-                btn.onclick = function() {
-                    modal.style.display = "block";
-                }
-
-                // When the user clicks on <span> (x), close the modal
-                span.onclick = function() {
-                    modal.style.display = "none";
-                }
-
-                // When the user clicks anywhere outside of the modal, close it
-                window.onclick = function(event) {
-                    if (event.target == modal) {
-                        modal.style.display = "none";
-                    }
-                }
-            </script>
+            <?php require '../../includes/tools/modalAdmin.php';?>
+            <script src="../../js/cardPopdown.js"></script>
+            <script src="../../js/modal.js"></script>
         </body>
     </html>

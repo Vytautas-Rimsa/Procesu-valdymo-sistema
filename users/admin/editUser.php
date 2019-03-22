@@ -17,7 +17,7 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">CRM</a>
+            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -155,5 +155,7 @@
                 </form>
             </div>
         </div>
+        <?php require '../../includes/tools/modalAdmin.php';?>
+        <script src="../../js/modal.js"></script>
     </body>
 </html>

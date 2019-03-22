@@ -38,7 +38,7 @@ $data3 = DB::getUserActiveTasks();
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="#">CRM</a>
+            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -297,19 +297,8 @@ $data3 = DB::getUserActiveTasks();
         <div class="scroll-to-top rounded">
             <span><a href=""><i class="fas fa-angle-up upDownButton"></i> </a></span>
         </div>
-        <script>
-            $(document).ready(function() {
-                //Fixing jQuery Click Events for the iPad
-                var ua = navigator.userAgent,
-                    event = (ua.match(/iPad/i)) ? "touchstart" : "click";
-                if ($('.table').length > 0) {
-                    $('.table .header').on(event, function() {
-                        $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
-                            return this.style.display === 'table-row' ? 'none' : 'table-row';
-                        });
-                    });
-                }
-            })
-        </script>
+        <?php require '../../includes/tools/modalHead.php';?>
+        <script src="../../js/cardPopdown.js"></script>
+        <script src="../../js/modal.js"></script>
     </body>    
 </html>

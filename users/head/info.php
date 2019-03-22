@@ -28,7 +28,7 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="#">CRM</a>
+            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -43,7 +43,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="nav-item mr-sm-4">
-                        <a href="#"><i class='fas fa-address-card active'id="info"></i></a>
+                        <a href="#"><i class='fas fa-address-card'id="info"></i></a>
                     </li>                    
                     <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logout"></i></a>
                 </ul>                
@@ -102,6 +102,8 @@
                     </fieldset>
                 </form>
             </div>
-        </div>        
+        </div>
+        <?php require '../../includes/tools/modalHead.php';?>
+        <script src="../../js/modal.js"></script>
     </body>    
 </html>

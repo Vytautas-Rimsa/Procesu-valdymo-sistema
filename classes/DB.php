@@ -161,7 +161,6 @@ class DB{
     }
 
     public function deleteUser($id){
-        //DELETE FROM `users` WHERE `users`.`darb_id` = 109
         $sql = "DELETE FROM`users` WHERE `users`.`darb_id` = $id";
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
@@ -176,7 +175,6 @@ class DB{
     }
 
     public function deleteTask($id){
-        //DELETE FROM `users` WHERE `users`.`darb_id` = 109
         $sql = "DELETE FROM`tasks` WHERE `tasks`.`task_id` = $id";
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 

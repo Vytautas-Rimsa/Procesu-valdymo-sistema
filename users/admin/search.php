@@ -1,15 +1,21 @@
 <?php
-require_once('../../core/init.php');
-require_once('../../classes/User.php');
+    require_once('../../core/init.php');
+    require_once('../../classes/User.php');
 
-$user = new User();
-if(!$user->exists()){
-    //Redirect::to(404);
-} else{
+    $user = new User();
+    if(!$user->exists()){
+        //Redirect::to(404);
+    } else{
 
-}
-$data = DB::searchUser($_POST['search']);
+    }
+    $data = DB::searchUser($_POST['search']);
 
+    $deleteUser = @$_GET['del_user'];
+
+    if(!empty($deleteUser)){
+        DB::deleteUser($deleteUser);
+        header('Location: users.php');
+    }
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +36,7 @@ $data = DB::searchUser($_POST['search']);
 
 	<header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">CRM</a>
+            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -88,7 +94,11 @@ $data = DB::searchUser($_POST['search']);
                             <td ><?php echo $row['skyrius']; ?></td>
                             <td ><?php echo $row['pareigos']; ?></td>
                             <td class=""><a href="<!--editUser.php?editUser=<?php echo $row['darb_id']; ?>-->"><i class='fas fa-edit' id="actions"></i></a></td>
-                            <td class=""><a href="users.php?del_user=<?php echo $row['darb_id']; ?>"><i class='fas fa-trash-alt' id="actions"></i></a></td>
+                            <td class="">
+                                <a onclick="redirect('<?php echo $row['darb_id'];?>')">
+                                    <i class='fas fa-trash-alt' id="actions"></i>
+                                </a>
+                            </td>
                         </tr>
 
                         <?php $i++;
@@ -98,6 +108,9 @@ $data = DB::searchUser($_POST['search']);
                 } ?>
                 </tbody>
             </table>
-		</div>        
+		</div>
+        <?php require '../../includes/tools/modalAdmin.php';?>
+        <script src="../../js/deleteUser.js"></script>
+        <script src="../../js/modal.js"></script>
 	</body>
 </html>

@@ -167,7 +167,7 @@ h3{text-align: center;
 th{text-align: center;}
 
 .btnRight{float: right;}
-.btnRight:hover{height: 34px;}
+.btnRight:hover{height: 34px !important;}
 
 #wrapper {
 	display: -webkit-box;
@@ -515,8 +515,11 @@ th{text-align: center;}
 		font-size: 45px;
 	}
 
-	.manualIcon{font-size: 30px !important;}
-	.manualText{font-size: 20px !important;}
+	.manualIcon, .manualIconHead, .manualIconUser, .manualIconCheck, .manualIconCheckHead, .manualIconCheckUser{font-size: 30px !important;}
+	.manualText, .manualTextHead, .manualTextUser, .manualTextFinish, .manualTextFinishHead, .manualTextFinishUser, .manualTextUp, .manualTextUpHead, .manualTextUpUser, .manualTextEdit, .manualTextEditHead, .manualTextEditUser, .manualTextDelete, .manualTextInfoHead, .manualTextInfoUser{font-size: 20px !important;}
+	.manualTextFinish, .manualTextFinishHead, .manualTextFinishUser, .manualTextDelete {margin-left: 35px !important;}
+	.manualTextUp, .manualTextUpHead, .manualTextUpUser{margin-left: 42px !important;}
+	.manualTextEdit, .manualTextEditHead, .manualTextEditUser, .manualTextInfoHead{margin-left: 28px !important;}
 }
 
 .didButtons{padding-top: 15px; padding-left: 0px;}
@@ -560,29 +563,53 @@ th{text-align: center;}
 }
 
 /* The Close Button */
-.close {
-	color: #aaaaaa;
+.close, .closeHead {
 	float: right;
 	font-size: 28px;
 	font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
-	color: #000;
+.close{color: #aaaaaa;}
+/*.closeHead{color: #158CBA;}*/
+
+.close:hover,.close:focus,
+.closeHead:hover, .closeHead:focus{
 	text-decoration: none;
 	cursor: pointer;
 }
 
+.close:hover, .close:focus{color: #000;}
+/*.closeHead:hover, .closeHead:focus{color: #117298;}*/
+
 .manualList{list-style-type: none;}
 
-.manualIcon{
+.manualIcon, .manualIconCheck, .manualText, .manualTextFinish, .manualTextUp, .manualTextEdit, .manualTextDelete{color: #555555;}
+
+.manualIconHead, .manualIconCheckHead, .manualTextHead, .manualTextFinishHead, .manualTextUpHead, .manualTextEditHead, .manualTextInfoHead {color: #158CBA;}
+
+.manualIconUser, .manualIconCheckUser, .manualTextUser, .manualTextFinishUser, .manualTextUpUser, .manualTextEditUser, .manualTextInfoUser{color: #A9A9A9;}
+
+.manualIcon, .manualIconCheck, .manualText, .manualTextFinish, .manualTextUp, .manualTextEdit, .manualTextDelete,
+.manualIconHead, .manualIconCheckHead, .manualTextHead, .manualTextFinishHead, .manualTextUpHead, .manualTextEditHead, .manualTextInfoHead ,
+.manualIconUser, .manualIconCheckUser, .manualTextUser, .manualTextFinishUser, .manualTextUpUser, .manualTextEditUser, .manualTextInfoUser{vertical-align:middle;}
+
+.manualIcon, .manualIconHead, .manualIconUser{
 	font-size: 60px;
-	padding-top: 5px;
-	color: #555555;
+	padding-top: 10px;
 }
-.manualText{
-	font-size: 40px;
-	margin-left: 30px;
-	color: #555555;
+
+.manualIconCheck, .manualIconCheckHead, .manualIconCheckUser{
+	font-size: 60px;
+	padding-top: 20px;
 }
+
+.manualText, .manualTextFinish, .manualTextUp, .manualTextEdit, .manualTextDelete,
+.manualTextHead, .manualTextFinishHead, .manualTextUpHead, .manualTextEditHead, .manualTextInfoHead,
+.manualTextUser, .manualTextFinishUser, .manualTextUpUser, .manualTextEditUser, .manualTextInfoUser {font-size: 40px;}
+
+.manualText, .manualTextHead, .manualTextUser, .manualTextInfoUser{margin-left: 30px;}
+.manualTextFinish, .manualTextFinishHead, .manualTextFinishUser{margin-left: 40px;}
+.manualTextUp, .manualTextUpHead, .manualTextUpUser{margin-left: 52px;}
+.manualTextEdit, .manualTextEditHead, .manualTextEditUser, .manualTextInfoHead {margin-left: 25px;}
+.manualTextDelete {margin-left: 40px;}
+
