@@ -13,6 +13,7 @@
     $data = DB::getUserActiveTasks();
     $data2 = DB::getUserActiveTasks();
     $data3 = DB::getUserActiveTasks();
+    $data4 = DB::getUserCreatedTasks();
 
     $search = @$_POST['submit-search'];
 
@@ -73,49 +74,7 @@
 
 	<body id="page-top">
         <div id="wrapper">
-            <!-- Sidebar -->
-            <ul class="sidebar navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">                        
-                        <i class='fas fa-user-circle'></i>
-                        <span>Mano užduotys</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class='far fa-file-alt'></i>
-                        <span>Nauja užduotis</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-                        <a class="dropdown-item" href="newTaskAdministration.php">Administracijai</a>
-                        <a class="dropdown-item" href="newTaskSecurity.php">Apsaugos skyriui</a>
-                        <a class="dropdown-item" href="newTaskFinance.php">Finansų skyriui</a>
-                        <a class="dropdown-item" href="newTaskCommerce.php">Komercijos skyriui</a>
-                        <a class="dropdown-item" href="newTaskPersonal.php">Personalo skyriui</a>
-                        <a class="dropdown-item" href="newTaskTech.php">Techninis skyriui</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Užduočių ataskaita</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">                        
-                        <a class="dropdown-item" href="#">Dienos</a>
-                        <a class="dropdown-item" href="#">Savaitės</a>
-                        <a class="dropdown-item" href="#">Mėnesio</a>                        
-                        <a class="dropdown-item" href="#">Pasirinkto laikotarpio</a>
-                        <!-- <div class="dropdown-divider"></div> -->
-                        <!-- <h6 class="dropdown-header">Other Pages:</h6> -->                        
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="allTasks.php">
-                        <i class='fas fa-tasks'></i>
-                        <span>Visos užduotys</span>
-                    </a>
-                </li>
-            </ul>
+            <?php require '../../includes/tools/sidebarAdmin.php';?>
             <div id="content-wrapper">
                 <div class="container-fluid">                
                 <!-- Area Chart Example-->
@@ -154,7 +113,7 @@
                                                                     </div>
 
                                                                         <div class="col col-md-3 didButtonsFF">
-                                                                        <i class='far fa-check-square ' id="actionsAllTasks"></i>
+                                                                        <i class='far fa-check-square' id="actionsAllTasks"></i>
                                                                         <i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i>
                                                                     </div>
                                                                 </div>
@@ -179,6 +138,73 @@
                         </div>
                         <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
                     </div>
+
+
+
+
+                    <div class="card mb-3">
+                        <div class="card-header adminCardHeader">Mano sukurtos užduotys</div>
+                        <div class="card-body">
+                            <div id="activeTasks">
+                                <?php echo display_success(); ?>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Nr.</th>
+                                        <th>Užduoties pavadinimas</th>
+                                        <th>Užduoties sukūrimo data</th>
+                                        <th>Statusas</th>
+                                    </tr>
+                                    </thead>
+                                    <?php
+                                    if ($data4->num_rows > 0) {
+                                        $i =1;
+                                        while($row = $data4->fetch_assoc()){
+                                    ?>
+                                                <tr class="header activeTaskAdmin">
+                                                    <td><?php echo $i; ?></td>
+                                                    <td><?php echo $row['title']; ?></td>
+                                                    <td><?php echo $row['startline']; ?></td>
+                                                    <td><?php if(date($row['finished'])=='0000-00-00 00:00:00'){
+                                                            echo "Galiojanti";
+                                                        } else{
+                                                            echo "Užbaigta";
+                                                        }?></td>
+                                                </tr>
+                                                <tr class="container activeTasksContainer">
+                                                    <td colspan="4">
+                                                        <form action="activeTasks.php?activeTasks=<?php echo $row['task_id']?>" method="post">
+                                                            <div class="row">
+                                                                <div class="col col-md-12">
+                                                                    <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
+                                                                    <p>Užduoties vykdytojas: <?php echo $row['assigned_to']; ?></p>
+                                                                    <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                <?php $i++;
+                                            }
+                                        }
+//                                        else {
+//                                            echo '<div class="success">';
+//                                            echo "Nėra įrašų";
+//                                            echo'</div>';
+//                                        }
+                                    else {
+                                        array_push($success, "Lentelėje įrašų nėra");
+                                    }
+                                    ?>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
+                    </div>
+
+
+
+
 
                     <div class="row">
                         <div class="col-lg-6">

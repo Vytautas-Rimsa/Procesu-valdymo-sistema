@@ -221,8 +221,8 @@
                         </div>
                         <div class="form my-2 my-lg-0">
                             <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-                            <button type="reset" class="btn btn-default mr-sm-2 btnRight tarpas">Atšaukti</button>
-                            <button type="submit" class="btn adminButton my-2 my-sm-0 btnRight tarpas" name="register_btn">Patvirtinti</button>
+                            <button type="reset" class="btn btn-default mr-sm-2 createUserBtn">Atšaukti</button>
+                            <button type="submit" class="btn adminButton mr-sm-2 createUserBtn" name="register_btn">Patvirtinti</button>
                         </div>
                     </fieldset>
                 </form>

@@ -365,4 +365,19 @@ class DB{
         return $result;
     }
 
+    public function getUserCreatedTasks(){
+        $sql="SELECT * FROM `tasks` WHERE `created_by` LIKE '".$_SESSION['user']."'";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
 }
