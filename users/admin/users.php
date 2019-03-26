@@ -75,14 +75,14 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">Nr.</th>
-                        <th scope="col">Vardas</th>
-                        <th scope="col">Pavardė</th>
-                        <th scope="col">El. paštas</th>
-                        <th scope="col">Skyrius</th>
-                        <th scope="col">Pareigos</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
+                        <th>Nr.</th>
+                        <th>Vardas</th>
+                        <th>Pavardė</th>
+                        <th>El. paštas</th>
+                        <th>Skyrius</th>
+                        <th>Pareigos</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 

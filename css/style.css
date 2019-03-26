@@ -520,6 +520,8 @@ th{text-align: center;}
 	.manualTextFinish, .manualTextFinishHead, .manualTextFinishUser, .manualTextDelete {margin-left: 35px !important;}
 	.manualTextUp, .manualTextUpHead, .manualTextUpUser{margin-left: 42px !important;}
 	.manualTextEdit, .manualTextEditHead, .manualTextEditUser, .manualTextInfoHead{margin-left: 28px !important;}
+
+	.alert{width: 70% !important;}
 }
 
 .didButtons{padding-top: 15px; padding-left: 0px;}
@@ -621,3 +623,14 @@ th{text-align: center;}
 }
 .createUserBtn:hover{height: 34px !important;}
 
+.alert{
+	width: 40%;
+	margin-top: 10px;
+}
+
+.author{
+	float: right;
+	font-size: 12px;
+}
+
+.alertAdmin{background-color: #BABABA;}

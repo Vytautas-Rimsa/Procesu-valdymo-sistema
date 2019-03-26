@@ -112,7 +112,7 @@
                                                                         <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>
                                                                     </div>
 
-                                                                        <div class="col col-md-3 didButtonsFF">
+                                                                    <div class="col col-md-3 didButtonsFF">
                                                                         <i class='far fa-check-square' id="actionsAllTasks"></i>
                                                                         <i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i>
                                                                     </div>
@@ -138,73 +138,6 @@
                         </div>
                         <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
                     </div>
-
-
-
-
-                    <div class="card mb-3">
-                        <div class="card-header adminCardHeader">Mano sukurtos užduotys</div>
-                        <div class="card-body">
-                            <div id="activeTasks">
-                                <?php echo display_success(); ?>
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Nr.</th>
-                                        <th>Užduoties pavadinimas</th>
-                                        <th>Užduoties sukūrimo data</th>
-                                        <th>Statusas</th>
-                                    </tr>
-                                    </thead>
-                                    <?php
-                                    if ($data4->num_rows > 0) {
-                                        $i =1;
-                                        while($row = $data4->fetch_assoc()){
-                                    ?>
-                                                <tr class="header activeTaskAdmin">
-                                                    <td><?php echo $i; ?></td>
-                                                    <td><?php echo $row['title']; ?></td>
-                                                    <td><?php echo $row['startline']; ?></td>
-                                                    <td><?php if(date($row['finished'])=='0000-00-00 00:00:00'){
-                                                            echo "Galiojanti";
-                                                        } else{
-                                                            echo "Užbaigta";
-                                                        }?></td>
-                                                </tr>
-                                                <tr class="container activeTasksContainer">
-                                                    <td colspan="4">
-                                                        <form action="activeTasks.php?activeTasks=<?php echo $row['task_id']?>" method="post">
-                                                            <div class="row">
-                                                                <div class="col col-md-12">
-                                                                    <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
-                                                                    <p>Užduoties vykdytojas: <?php echo $row['assigned_to']; ?></p>
-                                                                    <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                                <?php $i++;
-                                            }
-                                        }
-//                                        else {
-//                                            echo '<div class="success">';
-//                                            echo "Nėra įrašų";
-//                                            echo'</div>';
-//                                        }
-                                    else {
-                                        array_push($success, "Lentelėje įrašų nėra");
-                                    }
-                                    ?>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
-                    </div>
-
-
-
-
 
                     <div class="row">
                         <div class="col-lg-6">

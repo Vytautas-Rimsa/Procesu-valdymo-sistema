@@ -4,7 +4,7 @@ echo "<!-- The Modal -->
 
             <!-- Modal content -->
             <div class=\"modal-content\">
-                <span class=\"close\">&times;</span>
+                <div><span class=\"close\">&times;</span></div>
                 <div>
                     <ul class=\"manualList\">
                         <li>

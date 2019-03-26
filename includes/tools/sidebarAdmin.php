@@ -8,6 +8,12 @@ echo "<!-- Sidebar -->
                     </a>
                 </li>
                 <li class=\"nav-item\">
+                    <a class=\"nav-link\" href=\"myCreatedTasks.php\">
+                        <i class='far fa-sticky-note'></i>
+                        <span>Mano sukurtos užduotys</span>
+                    </a>
+                </li>
+                <li class=\"nav-item\">
                     <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"pagesDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
                         <i class='far fa-file-alt'></i>
                         <span>Nauja užduotis</span>
@@ -23,7 +29,7 @@ echo "<!-- Sidebar -->
                 </li>
                 <li class=\"nav-item dropdown\">
                     <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"pagesDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
-                        <i class=\"fas fa-fw fa-chart-area\"></i>
+                        <i class='fas fa-chart-pie'></i>
                         <span>Užduočių ataskaita</span>
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"pagesDropdown\">
