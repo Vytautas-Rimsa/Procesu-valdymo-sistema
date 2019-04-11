@@ -89,10 +89,8 @@
                 <div class="container-fluid">
                     <div class="card mb-3">
                         <div class="card-header adminCardHeader">Užduočių sąrašas</div>
-
                         <form method="post" action="allTasks.php">
-
-                        <div class="card-body">
+                        <div class="card-body allTasksAdmin">
                             <div id="newTask">
                                 <table class="table table-hover">
                                     <thead>

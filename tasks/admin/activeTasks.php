@@ -21,6 +21,19 @@
         DB::searchTaskFromActive($search);
         header('Location: searchActiveTasks.php');
     }
+
+    if(!empty($_GET['lateTasks'])){
+        $taskas = $_POST['task'];
+        DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
+        header('Location: activeTasks.php');
+    }
+
+    if(!empty($_GET['activeTasks'])){
+        $taskas = $_POST['task'];
+        DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
+        header('Location: activeTasks.php');
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -60,12 +73,12 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="form-inline my-2 my-lg-0" >
                         <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">
-                    <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
-                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
-                    </li>
-                    <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
-                    </form>
+                            <li class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                                <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                            </li>
+                            <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
+                        </form>
                     </li>
                 </ul>                
             </div>
@@ -80,7 +93,7 @@
                 <!-- Area Chart Example-->
                     <div class="card mb-3">
                         <div class="card-header adminCardHeader">Aktyvios užduotys</div>
-                        <div class="card-body">
+                        <div class="card-body activeTasksAdmin">
                             <div id="activeTasks">
                                 <?php echo display_success(); ?>
                                 <table class="table table-hover">
@@ -108,13 +121,26 @@
                                                             <form action="activeTasks.php?activeTasks=<?php echo $row['task_id']?>" method="post">
                                                                 <div class="row">
                                                                     <div class="col col-md-9">
-                                                                        <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
-                                                                        <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>
+                                                                        <h4><?php echo $row['task']; ?></h4>
+                                                                        <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                     </div>
 
                                                                     <div class="col col-md-3 didButtonsFF">
-                                                                        <i class='far fa-check-square' id="actionsAllTasks"></i>
+                                                                        <button type="submit" class="button-submit"> <i class='far fa-check-square ' id="actionsAllTasks"></i></button>
                                                                         <i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row dialog">
+                                                                    <div class="col col-md-9">
+                                                                        <?php
+                                                                        $task = DB::showResults($row['task_id']);
+                                                                        while($row = $task->fetch_assoc()) {
+                                                                            echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                            echo '<div class="alert alertAdmin" role="alert">';
+                                                                            echo $row['reply'];
+                                                                            echo '</div></div> ';
+                                                                        }
+                                                                        ?>
                                                                     </div>
                                                                 </div>
                                                             </form>
@@ -129,9 +155,6 @@
 //                                            echo "Nėra įrašų";
 //                                            echo'</div>';
 //                                        }
-                                    else {
-                                        array_push($success, "Lentelėje įrašų nėra");
-                                    }
                                     ?>
                                 </table>
                             </div>
@@ -143,7 +166,7 @@
                         <div class="col-lg-6">
                             <div class="card mb-3">
                                 <div class="card-header adminCardHeader">Atliktos užduotys</div>
-                                <div class="card-body">
+                                <div class="card-body completedTasksAdmin">
                                     <div id="completedTasks">
                                         <table class="table table-hover">
                                             <thead>
@@ -171,8 +194,20 @@
                                                                 <form action="activeTasks.php?completedTasks=<?php echo $row['task_id']?>" method="post">
                                                                     <div class="row">
                                                                         <div class="col col-md-12">
-                                                                            <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?>
-                                                                            </textarea>
+                                                                            <h4><?php echo $row['task']; ?></h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row dialog">
+                                                                        <div class="col col-md-12">
+                                                                            <?php
+                                                                            $task = DB::showResults($row['task_id']);
+                                                                            while($row = $task->fetch_assoc()) {
+                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                                echo '<div class="alert alertAdmin" role="alert">';
+                                                                                echo $row['reply'];
+                                                                                echo '</div></div> ';
+                                                                            }
+                                                                            ?>
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -196,7 +231,7 @@
                         <div class="col-lg-6">
                             <div class="card mb-3">
                                 <div class="card-header adminCardHeader">Pradelstos užduotys</div>
-                                <div class="card-body">
+                                <div class="card-body overdueTasksAdmin">
                                     <div id="lateTasks">
                                         <table class="table table-hover">
                                             <thead>
@@ -224,13 +259,26 @@
                                                                 <form action="activeTasks.php?lateTasks=<?php echo $row['task_id']?>" method="post">
                                                                     <div class="row">
                                                                         <div class="col col-md-9">
-                                                                            <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?>
-                                                                            </textarea>
-                                                                            <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>
+                                                                            <h4><?php echo $row['task']; ?></h4>
+                                                                            <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                         </div>
                                                                         <div class="col col-md-3 didButtonsFF">
-                                                                            <i class='far fa-check-square ' id="actionsAllTasks"></i>
+                                                                            <button type="submit" class="button-submit"> <i class='far fa-check-square ' id="actionsAllTasks"></i></button>
+
                                                                             <i class='fas fa-forward didButtonsForwardFinishP' id="actionsAllTasks"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row dialog">
+                                                                        <div class="col col-md-9">
+                                                                            <?php
+                                                                            $task = DB::showResults($row['task_id']);
+                                                                            while($row = $task->fetch_assoc()) {
+                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                                echo '<div class="alert alertAdmin" role="alert">';
+                                                                                echo $row['reply'];
+                                                                                echo '</div></div> ';
+                                                                            }
+                                                                            ?>
                                                                         </div>
                                                                     </div>
                                                                 </form>

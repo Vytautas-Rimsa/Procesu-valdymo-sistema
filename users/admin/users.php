@@ -72,7 +72,7 @@
 	<body id="page-top">	
         <div class="container">
             <div><h3>Darbuotojų sąrašas</h3></div>
-            <table class="table table-hover">
+            <table class="table table-hover ">
                 <thead>
                     <tr>
                         <th>Nr.</th>

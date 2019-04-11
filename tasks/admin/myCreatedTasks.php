@@ -77,17 +77,17 @@
                     <!-- Area Chart Example-->
                     <div class="card mb-3">
                         <div class="card-header adminCardHeader">Mano sukurtos užduotys</div>
-                        <div class="card-body">
+                        <div class="card-body myCreatedTasks">
                             <div id="activeTasks">
                                 <?php echo display_success(); ?>
                                 <table class="table table-hover">
                                     <thead>
-                                    <tr>
-                                        <th>Nr.</th>
-                                        <th>Užduoties pavadinimas</th>
-                                        <th>Užduoties sukūrimo data</th>
-                                        <th>Statusas</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Nr.</th>
+                                            <th>Užduoties pavadinimas</th>
+                                            <th>Užduoties sukūrimo data</th>
+                                            <th>Statusas</th>
+                                        </tr>
                                     </thead>
                                     <?php
                                     if ($data->num_rows > 0) {
@@ -115,22 +115,19 @@
                                                                 <i class='fas fa-edit' id="actionsAllTasks"></i>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
+                                                        <div class="row dialog">
                                                             <div class="col col-md-10">
-                                                                <div class="alert alertAdmin" role="alert">
-                                                                    <?php
-                                                                    $task = DB::showResults($row['task_id'])->fetch_assoc();
-                                                                    //$user = DB::getUserData($task['reply_by']);
-                                                                    // echo "<b>".var_dump($user)."</b>";
-                                                                    echo $task['reply'];
-                                                                    echo "<br><div class='author'>Autorius: ".$task['reply_by']."</div><br>";
-                                                                    ?>
-                                                                </div>
+                                                                <?php
+                                                                    $task = DB::showResults($row['task_id']);
+                                                                    while($row = $task->fetch_assoc()) {
+                                                                        echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                        echo '<div class="alert alertAdmin" role="alert">';
+                                                                        echo $row['reply'];
+                                                                        echo '</div></div> ';
+                                                                    }
+                                                                ?>
                                                             </div>
                                                         </div>
-
-                                                        <!--                                                                    <textarea class="activeTasksTextareaComent form-control" placeholder="Atliktos arba peradresuotos užduoties komentaras" name="task"></textarea>-->
-
                                                     </form>
                                                 </td>
                                             </tr>

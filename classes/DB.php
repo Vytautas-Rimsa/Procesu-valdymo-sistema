@@ -427,4 +427,25 @@ class DB{
         $result = $conn->query($sql);
         return $result;
     }
+
+    public function updateTask($taskId, $comment, $userId){
+
+        if ($taskId == "" or $taskId == null and $comment == "" or $comment == null){
+            die;
+        }else{
+            $sql = "UPDATE `tasks` SET `finished` = '".date('Y-m-d H:i:s')."'WHERE `tasks`.`task_id` = ".$taskId.";";
+            $sql2 = " INSERT INTO `replies` (`r_id`, `reply`, `task_id`, `reply_by`, `date_time`) VALUES (NULL, '".$comment."', '".$taskId."', '".$userId."', CURRENT_TIMESTAMP);";
+            $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+            if ($conn->connect_error) {
+                return false;
+                die("Prisijungti nepavyko: " . $conn->connect_error);
+            }
+
+            $result = $conn->query($sql);
+            $result = $conn->query($sql2);
+
+            return $result;
+        }
+    }
 }
