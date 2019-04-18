@@ -37,33 +37,29 @@
     </head>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logoutLight"></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarColor03">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Užduotys</a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Užduotys</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../../users/admin/users.php">Darbuotojai</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Duomenų bazė</a>
+                        <a class="nav-link" href="../../database/user/database.php">Duomenų bazė</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="form-inline my-2 my-lg-0" >
-                        <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">
-                            <li class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
-                                <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
-                            </li>
-                            <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
-                        </form>
+                    <li class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška">
+                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit">Paieška</button>
                     </li>
+                    <li class="nav-item mr-sm-4">
+                        <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
+                    </li>
+                    <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logoutLight"></i></a>
                 </ul>
             </div>
         </nav>
@@ -71,30 +67,30 @@
 
     <body id="page-top">
         <div id="wrapper">
-            <?php require '../../includes/tools/sidebarAdmin.php';?>
+            <?php require '../../includes/tools/sidebarUser.php';?>
             <div id="content-wrapper">
                 <div class="container-fluid">
                     <!-- Area Chart Example-->
                     <div class="card mb-3">
-                        <div class="card-header adminCardHeader">Mano sukurtos užduotys</div>
+                        <div class="card-header userCardHeader">Mano sukurtos užduotys</div>
                         <div class="card-body myCreatedTasks">
                             <div id="activeTasks">
                                 <?php echo display_success(); ?>
                                 <table class="table table-hover">
                                     <thead>
-                                        <tr>
-                                            <th>Nr.</th>
-                                            <th>Užduoties pavadinimas</th>
-                                            <th>Užduoties sukūrimo data</th>
-                                            <th>Statusas</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Nr.</th>
+                                        <th>Užduoties pavadinimas</th>
+                                        <th>Užduoties sukūrimo data</th>
+                                        <th>Statusas</th>
+                                    </tr>
                                     </thead>
                                     <?php
                                     if ($data->num_rows > 0) {
                                         $i =1;
                                         while($row = $data->fetch_assoc()){
                                             ?>
-                                            <tr class="header activeTaskAdmin">
+                                            <tr class="header userCardHeader whiteLine">
                                                 <td><?php echo $i; ?></td>
                                                 <td><?php echo $row['title']; ?></td>
                                                 <td><?php echo $row['startline']; ?></td>
@@ -112,19 +108,19 @@
                                                                 <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
                                                             </div>
                                                             <div class="col col-md-2 didButtonsFF">
-                                                                <i class='fas fa-edit' id="actionsAllTasks"></i>
+                                                                <i class='fas fa-edit userForwardTask' id="actionsAllTasks"></i>
                                                             </div>
                                                         </div>
                                                         <div class="row dialog">
                                                             <div class="col col-md-10">
                                                                 <?php
-                                                                    $task = DB::showResults($row['task_id']);
-                                                                    while($row = $task->fetch_assoc()) {
-                                                                        echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
-                                                                        echo '<div class="alert alertAdmin" role="alert">';
-                                                                        echo $row['reply'];
-                                                                        echo '</div></div> ';
-                                                                    }
+                                                                $task = DB::showResults($row['task_id']);
+                                                                while($row = $task->fetch_assoc()) {
+                                                                    echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                    echo '<div class="alert alertUser" role="alert">';
+                                                                    echo $row['reply'];
+                                                                    echo '</div></div> ';
+                                                                }
                                                                 ?>
                                                             </div>
                                                         </div>
@@ -134,11 +130,11 @@
                                             <?php $i++;
                                         }
                                     }
-        //                                        else {
-        //                                            echo '<div class="success">';
-        //                                            echo "Nėra įrašų";
-        //                                            echo'</div>';
-        //                                        }
+                                    //                                        else {
+                                    //                                            echo '<div class="success">';
+                                    //                                            echo "Nėra įrašų";
+                                    //                                            echo'</div>';
+                                    //                                        }
                                     else {
                                         array_push($success, "Lentelėje įrašų nėra");
                                     }
@@ -148,6 +144,8 @@
                         </div>
                         <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
                     </div>
+
+
                     <!-- /.container-fluid -->
                 </div>
                 <!-- /.content-wrapper -->

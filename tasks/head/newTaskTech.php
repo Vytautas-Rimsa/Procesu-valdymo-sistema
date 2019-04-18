@@ -10,7 +10,7 @@
 
     }
 
-    $data = DB::getDepartmentTech("Techninis skyrius");
+    $data = DB::getDepartmentEmployee("Techninis skyrius");
 
     if(!empty($_GET['newtask'])){
         $a = explode(" - ", $_POST['datetimes']);

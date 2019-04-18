@@ -630,21 +630,21 @@ th{text-align: center;}
 .dialogWind:nth-child(2n) .author{
 	float: right;
 	font-size: 12px;
-	width: 10%;
+	width: 30%;
 	/*text-align: right;*/
 	padding: 15px;
 }
 .dialogWind:nth-child(2n) .alert{
-	width: 90%;
+	width: 70%;
 }
 .dialogWind:nth-child(2n-1) .author{
 	float: left;
 	font-size: 12px;
-	width: 10%;
+	width: 30%;
 	padding: 15px;
 }
 .dialogWind:nth-child(2n-1) .alert{
-	width: 90%;
+	width: 70%;
 	float: left;
 }
 .dialog{
@@ -655,10 +655,10 @@ th{text-align: center;}
 .alertHead{background-color: #158CBA;}
 .alertUser{background-color: #C0C0C0;}
 
-.myCreatedTasks, .allTasksAdmin{
-	height: 1000px;
-	overflow: auto;
-}
+/*.myCreatedTasks, .allTasksAdmin{*/
+	/*height: 1000px;*/
+	/*overflow: auto;*/
+/*}*/
 
 .activeTasksAdmin, .completedTasksAdmin, .overdueTasksAdmin, .allUsersAdmin{overflow: auto;}
 .activeTasksAdmin{height: 400px;}

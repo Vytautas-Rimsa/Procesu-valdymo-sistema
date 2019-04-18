@@ -245,8 +245,8 @@ class DB{
         return $result;
     }
 
-    public function getDepartmentTech($department){
-        $sql="SELECT * FROM `users` WHERE `skyrius` LIKE 'Techninis skyrius'";
+    public function getDepartmentEmployee($department){
+        $sql="SELECT * FROM `users` WHERE `skyrius` LIKE '$department'";
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
@@ -260,8 +260,8 @@ class DB{
         return $result;
     }
 
-    public function getDepartmentSecurity($department){
-        $sql="SELECT * FROM `users` WHERE `skyrius` LIKE 'Apsaugos skyrius'";
+    public function uzduotiesPeradresavimas(int $uzd_id, int $darb_id){
+        $sql="UPDATE `tasks` SET `assigned_to` = '$darb_id' WHERE `tasks`.`task_id` = $uzd_id;";
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
@@ -275,53 +275,8 @@ class DB{
         return $result;
     }
 
-    public function getDepartmentPersonal($department){
-        $sql="SELECT * FROM `users` WHERE `skyrius` LIKE 'Personalo skyrius'";
-
-        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
-
-        if ($conn->connect_error) {
-            return false;
-            die("Prisijungti nepavyko: " . $conn->connect_error);
-        }
-
-        $result = $conn->query($sql);
-
-        return $result;
-    }
-
-    public function getDepartmentFinance($department){
-        $sql="SELECT * FROM `users` WHERE `skyrius` LIKE 'Finansų skyrius'";
-
-        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
-
-        if ($conn->connect_error) {
-            return false;
-            die("Prisijungti nepavyko: " . $conn->connect_error);
-        }
-
-        $result = $conn->query($sql);
-
-        return $result;
-    }
-
-    public function getDepartmentCommerce($department){
-    $sql="SELECT * FROM `users` WHERE `skyrius` LIKE 'Komercijos skyrius'";
-
-    $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
-
-    if ($conn->connect_error) {
-        return false;
-        die("Prisijungti nepavyko: " . $conn->connect_error);
-    }
-
-    $result = $conn->query($sql);
-
-    return $result;
-}
-
-    public function getDepartmentAdministration($department){
-        $sql="SELECT * FROM `users` WHERE `skyrius` LIKE 'Administracija'";
+    public function getAllDepartments(){
+        $sql="SELECT * FROM `department`";
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 

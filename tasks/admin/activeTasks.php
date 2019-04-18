@@ -30,9 +30,28 @@
 
     if(!empty($_GET['activeTasks'])){
         $taskas = $_POST['task'];
-        DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
-        header('Location: activeTasks.php');
+
+        if(empty($taskas)){
+            array_push($errors, "Neužpildytas <b>Užduoties komentaro</b> laukelis");
+            header('Location: activeTasks.php');
+        }
+
+        if(!empty($taskas)){
+            DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
+            array_push($success, "Sėkmingai išsaugoti užduoties pakeitimai");
+            header('Location: activeTasks.php');
+        }
     }
+
+        if(@$_GET['action'] == "darbuPeradresavimas"){
+            $id=$_POST['peradresavimoId'];
+            $uzd_id=intval($_POST['uzd_id']);
+            if($id!="" || is_int($id)){
+                DB::uzduotiesPeradresavimas($uzd_id, $id);
+            }else{
+                echo "nepasirinktas tinkamas variantas";
+            }
+        }
 
 ?>
 
@@ -93,9 +112,10 @@
                 <!-- Area Chart Example-->
                     <div class="card mb-3">
                         <div class="card-header adminCardHeader">Aktyvios užduotys</div>
+<!--                        --><?php //echo display_error(); ?>
+                        <?php echo display_success(); ?>
                         <div class="card-body activeTasksAdmin">
                             <div id="activeTasks">
-                                <?php echo display_success(); ?>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -124,10 +144,9 @@
                                                                         <h4><?php echo $row['task']; ?></h4>
                                                                         <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                     </div>
-
                                                                     <div class="col col-md-3 didButtonsFF">
-                                                                        <button type="submit" class="button-submit"> <i class='far fa-check-square ' id="actionsAllTasks"></i></button>
-                                                                        <i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i>
+                                                                        <button type="submit" class="button-submit"> <i class='far fa-check-square ' id="actionsAllTasks"></i></button><?php $uzd_id = $row['task_id'] ?>
+
                                                                     </div>
                                                                 </div>
                                                                 <div class="row dialog">
@@ -144,17 +163,27 @@
                                                                     </div>
                                                                 </div>
                                                             </form>
+                                                            <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
+                                                                <select name="peradresavimoId" required>
+                                                                    <option value="">Pasirinkite skyriu</option>
+                                                                    <?php
+                                                                    $qqq=DB::getAllDepartments();
+                                                                    while ($rvvv=mysqli_fetch_array($qqq)) {
+                                                                        echo '<option value="" style="font-weight: bold;">'.$rvvv['skyrius'].'</option>';
+                                                                        $department = DB::getDepartmentEmployee($rvvv['skyrius']);
+                                                                        while ($qw=mysqli_fetch_array($department)) {
+                                                                            echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
+                                                                    }?>
+                                                                </select>
+                                                                <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
+                                                                <button type="submit" class="button-submit" ><i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i></button>
+                                                            </form>
                                                         </td>
                                                     </tr>
                                                     <?php $i++;
                                                 }
                                             }
                                         }
-//                                        else {
-//                                            echo '<div class="success">';
-//                                            echo "Nėra įrašų";
-//                                            echo'</div>';
-//                                        }
                                     ?>
                                 </table>
                             </div>
@@ -213,12 +242,7 @@
                                                                 </form>
                                                             </td>
                                                         </tr>
-                                                        <?php $i++; }
-//                                                        else {
-//                                                        echo '<div class="success">';
-//                                                        echo "Nėra įrašų";
-//                                                        echo'</div>';
-//                                                    }
+                                                    <?php $i++; }
                                                 }
                                             }
                                             ?>
@@ -263,9 +287,8 @@
                                                                             <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                         </div>
                                                                         <div class="col col-md-3 didButtonsFF">
-                                                                            <button type="submit" class="button-submit"> <i class='far fa-check-square ' id="actionsAllTasks"></i></button>
+                                                                            <button type="submit" class="button-submit"> <i class='far fa-check-square ' id="actionsAllTasks"></i></button><?php $uzd_id = $row['task_id'] ?>
 
-                                                                            <i class='fas fa-forward didButtonsForwardFinishP' id="actionsAllTasks"></i>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row dialog">
@@ -282,14 +305,24 @@
                                                                         </div>
                                                                     </div>
                                                                 </form>
+                                                                <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
+                                                                    <select name="peradresavimoId" required>
+                                                                        <option value="">Pasirinkite skyriu</option>
+                                                                        <?php
+                                                                        $qqq=DB::getAllDepartments();
+                                                                        while ($rvvv=mysqli_fetch_array($qqq)) {
+                                                                            echo '<option value="" style="font-weight: bold;">'.$rvvv['skyrius'].'</option>';
+                                                                            $department = DB::getDepartmentEmployee($rvvv['skyrius']);
+                                                                            while ($qw=mysqli_fetch_array($department)) {
+                                                                                echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
+                                                                        }?>
+                                                                    </select>
+                                                                    <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
+                                                                    <button type="submit" class="button-submit" ><i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i></button>
+                                                                </form>
                                                             </td>
                                                         </tr>
-                                                        <?php $i++; }
-//                                                        else {
-//                                                        echo '<div class="success">';
-//                                                        echo "Nėra įrašų";
-//                                                        echo'</div>';
-//                                                    }
+                                                    <?php $i++; }
                                                 }
                                             }
                                             ?>
