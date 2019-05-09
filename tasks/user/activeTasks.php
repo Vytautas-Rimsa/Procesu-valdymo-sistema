@@ -24,15 +24,38 @@ if(!empty($search)){
 
 if(!empty($_GET['lateTasks'])){
     $taskas = $_POST['task'];
-    DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
-    header('Location: activeTasks.php');
+    if(!empty($taskas)){
+        DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
+    }else{
+        $lateTasksError = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
+    }
+    //header('Location: activeTasks.php');
 }
 
 if(!empty($_GET['activeTasks'])){
     $taskas = $_POST['task'];
-    DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
-    header('Location: activeTasks.php');
+
+    if(empty($taskas)){
+        $error = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
+    }
+
+    if(!empty($taskas)){
+        DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
+        array_push($success, "Sėkmingai išsaugoti užduoties pakeitimai");
+        header('Location: activeTasks.php');
+    }
 }
+
+if(@$_GET['action'] == "darbuPeradresavimas"){
+    $id=$_POST['peradresavimoId'];
+    $uzd_id=intval($_POST['uzd_id']);
+    if($id!="" || is_int($id)){
+        DB::uzduotiesPeradresavimas($uzd_id, $id);
+    }else{
+        echo "nepasirinktas tinkamas variantas";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -49,11 +72,13 @@ if(!empty($_GET['activeTasks'])){
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.14/js/jquery.tablesorter.min.js"></script>
     </head>
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logoutLight"></i></a>
+<!--            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logoutLight"></i></a>-->
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -88,9 +113,10 @@ if(!empty($_GET['activeTasks'])){
                 <!-- Area Chart Example-->
                     <div class="card mb-3">
                         <div class="card-header userCardHeader">Aktyvios užduotys</div>
+                        <?php if(!empty($error)){echo '<div class="errorDiv">'.$error.'</div>';} ?>
+                        <?php echo display_success(); ?>
                         <div class="card-body activeTasksAdmin">
                             <div id="activeTasks">
-                                <?php echo display_success(); ?>
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
@@ -120,8 +146,8 @@ if(!empty($_GET['activeTasks'])){
                                                                     <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                 </div>
                                                                 <div class="col col-md-3 didButtonsFF">
-                                                                    <button type="submit" class="button-submit"> <i class='far fa-check-square userCompleteTask' id="actionsAllTasks"></i></button>
-                                                                    <i class='fas fa-forward didButtonsForwardFinish userForwardTask' id="actionsAllTasks"></i>
+                                                                    <button type="submit" class="button-submit"> <i class='far fa-check-square userCompleteTask' id="actionsAllTasks"></i></button><?php $uzd_id = $row['task_id'] ?>
+<!--                                                                    <i class='fas fa-forward didButtonsForwardFinish userForwardTask' id="actionsAllTasks"></i>-->
                                                                 </div>
                                                             </div>
                                                             <div class="row dialog">
@@ -129,7 +155,10 @@ if(!empty($_GET['activeTasks'])){
                                                                     <?php
                                                                     $task = DB::showResults($row['task_id']);
                                                                     while($row = $task->fetch_assoc()) {
-                                                                        echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                        $q = DB::getUserData($row['reply_by']);
+                                                                        $rowas = $q->fetch_assoc();
+
+                                                                        echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
                                                                         echo '<div class="alert alertUser" role="alert">';
                                                                         echo $row['reply'];
                                                                         echo '</div></div> ';
@@ -138,15 +167,45 @@ if(!empty($_GET['activeTasks'])){
                                                                 </div>
                                                             </div>
                                                         </form>
+                                                        <button type="button" class="btn userTaskButton adminButtonForward btn-lg" data-toggle="modal" data-target="#myModal<?php echo $i; ?>">Peradresuoti</button>
+
+                                                        <div class="modal fade" id="myModal<?php echo $i; ?>" role="dialog">
+                                                            <div class="modal-dialog">
+
+                                                                <!-- Modal content-->
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">Užduoties peradresavimas</h4>
+                                                                    </div>
+                                                                    <div class="modal-body text-center">
+                                                                        <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
+                                                                            <select  class="form-control" name="peradresavimoId" required>
+                                                                                <option value="">Pasirinkite skyrių</option>
+                                                                                <?php
+                                                                                $qqq=DB::getAllDepartments();
+                                                                                while ($rvvv=mysqli_fetch_array($qqq)) {
+                                                                                    echo '<option value="" style="font-weight: bold;">'.$rvvv['skyrius'].'</option>';
+                                                                                    $department = DB::getDepartmentEmployee($rvvv['skyrius']);
+                                                                                    while ($qw=mysqli_fetch_array($department)) {
+                                                                                        echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
+                                                                                }?>
+                                                                            </select>
+                                                                            <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
+                                                                            <button type="submit" class="button-submit" ><i class='fas fa-forward userCompleteTask didButtonsForwardFinish' id="actionsAllTasks"></i></button>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn userTaskButton" data-dismiss="modal">Atšaukti</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <?php $i++;
                                             }
-//                                                else {
-//                                                        echo '<div class="success">';
-//                                                        echo "Nėra įrašų";
-//                                                        echo'</div>';
-//                                                }
+
                                         }
                                     }
                                     ?>
@@ -197,7 +256,9 @@ if(!empty($_GET['activeTasks'])){
                                                                             <?php
                                                                             $task = DB::showResults($row['task_id']);
                                                                             while($row = $task->fetch_assoc()) {
-                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                                $q = DB::getUserData($row['reply_by']);
+                                                                                $rowas = $q->fetch_assoc();
+                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
                                                                                 echo '<div class="alert alertUser" role="alert">';
                                                                                 echo $row['reply'];
                                                                                 echo '</div></div> ';
@@ -209,11 +270,7 @@ if(!empty($_GET['activeTasks'])){
                                                             </td>
                                                         </tr>
                                                         <?php $i++; }
-//                                                        else {
-//                                                        echo '<div class="success">';
-//                                                        echo "Nėra įrašų";
-//                                                        echo'</div>';
-//                                                    }
+
                                                 }
                                             }
                                             ?>
@@ -226,9 +283,16 @@ if(!empty($_GET['activeTasks'])){
                         <div class="col-lg-6">
                             <div class="card mb-3">
                                 <div class="card-header userCardHeader">Pradelstos užduotys</div>
+                                <?php
+
+                                if(!empty($lateTasksError)){
+                                    echo '<div class="errorDiv">'.$lateTasksError.'</div>';
+                                }
+
+                                ?>
                                 <div class="card-body overdueTasksAdmin">
                                     <div id="lateTasks">
-                                        <table class="table table-hover">
+                                        <table class="table table-hover" id="keywords" cellspacing="0" cellpadding="0">
                                             <thead>
                                             <tr>
                                                 <th>Nr.</th>
@@ -259,8 +323,7 @@ if(!empty($_GET['activeTasks'])){
                                                                             <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                         </div>
                                                                         <div class="col col-md-3 didButtonsFF">
-                                                                            <button type="submit" class="button-submit"> <i class='far fa-check-square userCompleteTask' id="actionsAllTasks"></i></button>
-                                                                            <i class='fas fa-forward didButtonsForwardFinishP userForwardTask' id="actionsAllTasks"></i>
+                                                                            <button type="submit" class="button-submit"> <i class='far fa-check-square userCompleteTask' id="actionsAllTasks"></i></button><?php $uzd_id = $row['task_id'] ?>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row dialog">
@@ -268,7 +331,10 @@ if(!empty($_GET['activeTasks'])){
                                                                             <?php
                                                                             $task = DB::showResults($row['task_id']);
                                                                             while($row = $task->fetch_assoc()) {
-                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                                $q = DB::getUserData($row['reply_by']);
+                                                                                $rowas = $q->fetch_assoc();
+
+                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
                                                                                 echo '<div class="alert alertUser" role="alert">';
                                                                                 echo $row['reply'];
                                                                                 echo '</div></div> ';
@@ -277,14 +343,45 @@ if(!empty($_GET['activeTasks'])){
                                                                         </div>
                                                                     </div>
                                                                 </form>
+
+                                                                <button type="button" class="btn userTaskButton adminButtonSmallForward buttonLeft" data-toggle="modal" data-target="#myModal<?php echo $i; ?>">Peradresuoti</button>
+
+                                                                <div class="modal fade" id="myModal<?php echo $i; ?>" role="dialog">
+                                                                    <div class="modal-dialog">
+
+                                                                        <!-- Modal content-->
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h4 class="modal-title">Užduoties peradresavimas</h4>
+                                                                            </div>
+                                                                            <div class="modal-body text-center">
+                                                                                <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
+                                                                                    <select  class="form-control" name="peradresavimoId" required>
+                                                                                        <option value="">Pasirinkite skyrių</option>
+                                                                                        <?php
+                                                                                        $qqq=DB::getAllDepartments();
+                                                                                        while ($rvvv=mysqli_fetch_array($qqq)) {
+                                                                                            echo '<option value="" style="font-weight: bold;">'.$rvvv['skyrius'].'</option>';
+                                                                                            $department = DB::getDepartmentEmployee($rvvv['skyrius']);
+                                                                                            while ($qw=mysqli_fetch_array($department)) {
+                                                                                                echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
+                                                                                        }?>
+                                                                                    </select>
+                                                                                    <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
+                                                                                    <button type="submit" class="button-submit" ><i class='fas fa-forward userCompleteTask didButtonsForwardFinish' id="actionsAllTasks"></i></button>
+                                                                                </form>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn userTaskButton" data-dismiss="modal">Atšaukti</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
                                                             </td>
                                                         </tr>
                                                         <?php $i++; }
-//                                                        else {
-//                                                        echo '<div class="success">';
-//                                                        echo "Nėra įrašų";
-//                                                        echo'</div>';
-//                                                    }
                                                 }
                                             }
                                             ?>
@@ -307,5 +404,10 @@ if(!empty($_GET['activeTasks'])){
         <?php require '../../includes/tools/modalUser.php';?>
         <script src="../../js/cardPopdown.js"></script>
         <script src="../../js/modal.js"></script>
+        <script>
+            $(function(){
+                $('#keywords').tablesorter();
+            });
+        </script>
     </body>        
 </html>

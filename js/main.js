@@ -6,9 +6,9 @@ console.log(document);
 var pavadinimas = document.getElementById("search");
 console.log(pavadinimas);
 
-var link = document.querySelector("a");
-link.getAttribute("href");
-link.setAttribute("href", "www.google.com");
+// var link = document.querySelector("a");
+// //link.getAttribute("href");
+// link.setAttribute("href", "www.google.com");
 
 $(document).ready(function() {
     /******************************

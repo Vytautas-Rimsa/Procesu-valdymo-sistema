@@ -1,11 +1,16 @@
 <?php
 echo "<!-- The Modal -->
-            <div id=\"myModal\" class=\"modal\">
-
-            <!-- Modal content -->
-            <div class=\"modal-content\">
-                <div><span class=\"close\">&times;</span></div>
-                <div>
+            <!-- Modal -->
+  <div class=\"modal fade\" id=\"myMenu\" role=\"dialog\">
+    <div class=\"modal-dialog\">
+    
+      <!-- Modal content-->
+      <div class=\"modal-content2\">
+        <div class=\"modal-header\">
+          <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span class=\"close\">&times;</span></button>
+          <h4 class=\"modal-title\">Modal Header</h4>
+        </div>
+        <div class=\"modal-body\">
                     <ul class=\"manualList\">
                         <li>
                             <i class='fas fa-info-circle manualIcon'></i><span class=\"manualText\">Sutartinių ženklų žinynas</span>
@@ -30,5 +35,11 @@ echo "<!-- The Modal -->
                         </li>
                     </ul>
                 </div>
-            </div>";
+        <div class=\"modal-footer\">
+          <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>";
 

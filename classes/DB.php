@@ -218,7 +218,7 @@ class DB{
     }
 
     public function searchTaskFromActive($search){
-        $sql = "SELECT * FROM `tasks` WHERE `assigned_to` LIKE '".$_SESSION['user']."' AND `tasks`.`title` LIKE '%$search%' OR `tasks`.`task` LIKE '%$search%'";
+        $sql = "SELECT * FROM `tasks` WHERE `title` LIKE '".$search.'%\' AND `task` LIKE \'%'.$search.'%\' AND `assigned_to` = '.$_SESSION['user'].' ORDER BY `finished` DESC';
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
         if ($conn->connect_error) {

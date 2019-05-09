@@ -38,7 +38,8 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
+<!--            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>-->
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -116,7 +117,9 @@
                                                                 <?php
                                                                 $task = DB::showResults($row['task_id']);
                                                                 while($row = $task->fetch_assoc()) {
-                                                                    echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                    $q = DB::getUserData($row['reply_by']);
+                                                                    $rowas = $q->fetch_assoc();
+                                                                    echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
                                                                     echo '<div class="alert alertHead" role="alert">';
                                                                     echo $row['reply'];
                                                                     echo '</div></div> ';

@@ -1,34 +1,45 @@
 <?php
 echo "<!-- The Modal -->
-            <div id=\"myModal\" class=\"modal\">
-
-            <!-- Modal content -->
-            <div class=\"modal-content\">
-                <div><span class=\"close\">&times;</span></div>
-                <div>
+            <!-- Modal -->
+  <div class=\"modal fade\" id=\"myMenu\" role=\"dialog\">
+    <div class=\"modal-dialog\">
+    
+      <!-- Modal content-->
+      <div class=\"modal-content\">
+        <div class=\"modal-header\">
+          <button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>
+          <h4 class=\"modal-title\">Modal Header</h4>
+        </div>
+        <div class=\"modal-body\">
                     <ul class=\"manualList\">
                         <li>
-                            <i class='fas fa-info-circle manualIconUser'></i><span class=\"manualTextUser\">Sutartinių ženklų žinynas</span>
+                            <i class='fas fa-info-circle manualIcon'></i><span class=\"manualText\">Sutartinių ženklų žinynas</span>
                         </li>
                         <li>
-                            <i class='fas fa-sign-out-alt manualIconUser'></i><span class=\"manualTextUser\">Baigti darbą</span>
+                            <i class='fas fa-sign-out-alt manualIcon'></i><span class=\"manualText\">Baigti darbą</span>
                         </li>
                         <li>
-                            <i class='fas fa-forward manualIconUser'></i><span class=\"manualTextUser\">Peradresuoti užduotį kitam darbuotojui</span>
+                            <i class='fas fa-forward manualIcon'></i><span class=\"manualText\">Peradresuoti užduotį kitam darbuotojui</span>
                         </li>
                         <li>
-                            <i class='far fa-check-square manualIconUser'></i><span class=\"manualTextFinishUser\">Atlikti užduotį</span>
+                            <i class='far fa-check-square manualIcon'></i><span class=\"manualTextFinish\">Atlikti užduotį</span>
                         </li>
                         <li>
-                            <i class=\"fas fa-angle-up manualIconUser\"></i><span class=\"manualTextUpUser\">Grįžti į puslapio pradžią</span>
+                            <i class=\"fas fa-angle-up manualIcon\"></i><span class=\"manualTextUp\">Grįžti į puslapio pradžią</span>
                         </li>
                         <li>
-                            <i class='fas fa-edit manualIconUser'></i><span class=\"manualTextEditUser\">Redaguoti įrašą</span>
+                            <i class='fas fa-edit manualIcon'></i><span class=\"manualTextEdit\">Redaguoti įrašą</span>
                         </li>
                         <li>
-                            <i class='fas fa-address-card manualIconUser'></i><span class=\"manualTextInfoUser\">Darbuotojo rekvizitai</span>
+                            <i class='fas fa-trash-alt manualIconCheck'></i><span class=\"manualTextDelete\">Ištrinti įrašą</span>
                         </li>
                     </ul>
                 </div>
-            </div>";
+        <div class=\"modal-footer\">
+          <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>";
 

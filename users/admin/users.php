@@ -38,8 +38,72 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.14/js/jquery.tablesorter.min.js"></script>
     </head>
+<style>
 
+    /*
+	Max width before this PARTICULAR table gets nasty. This query will take effect for any screen smaller than 760px and also iPads specifically.
+	*/
+    @media
+    only screen
+    and (max-width: 760px), (min-device-width: 768px)
+    and (max-device-width: 1024px)  {
+
+        /* Force table to not be like tables anymore */
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+
+        /* Hide table headers (but not display: none;, for accessibility) */
+        thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        tr {
+            margin: 0 0 1rem 0;
+        }
+
+        tr:nth-child(odd) {
+            background: #ccc;
+        }
+
+        td {
+            /* Behave  like a "row" */
+            border: none;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            padding-left: 50%;
+        }
+
+        td:before {
+            /* Now like a table header */
+            /*position: absolute;*/
+            /*!* Top/left values mimic padding *!*/
+            /*top: 0;*/
+            /*left: 6px;*/
+            /*width: 45%;*/
+            padding-right: 15px;
+            /*white-space: nowrap;*/
+            font-weight: bold;
+        }
+
+        /*
+        Label the data
+    You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
+        */
+        td:nth-of-type(1):before { content: "Vardas:"; }
+        td:nth-of-type(2):before { content: "Pavardė:"; }
+        td:nth-of-type(3):before { content: "El. paštas:"; }
+        td:nth-of-type(4):before { content: "Skyrius:"; }
+        td:nth-of-type(5):before { content: "Pareigos:"; }
+        td:nth-of-type(6):before { content: "Keisti:"; }
+        td:nth-of-type(7):before { content: "Trinti:"; }
+    }
+
+</style>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
@@ -72,35 +136,35 @@
 	<body id="page-top">	
         <div class="container">
             <div><h3>Darbuotojų sąrašas</h3></div>
-            <table class="table table-hover ">
-                <thead>
-                    <tr>
-                        <th>Nr.</th>
-                        <th>Vardas</th>
-                        <th>Pavardė</th>
-                        <th>El. paštas</th>
-                        <th>Skyrius</th>
-                        <th>Pareigos</th>
-                        <th></th>
-                        <th></th>
+            <table table class="table table-hover" id="keywords" cellspacing="0" cellpadding="0">
+                <thead role="rowgroup">
+                    <tr  role="row">
+                        <th role="columnheader">Nr.</th>
+                        <th role="columnheader">Vardas</th>
+                        <th role="columnheader">Pavardė</th>
+                        <th role="columnheader">El. paštas</th>
+                        <th role="columnheader">Skyrius</th>
+                        <th role="columnheader">Pareigos</th>
+                        <th role="columnheader"></th>
+                        <th role="columnheader"></th>
                     </tr>
                 </thead>
                 
-                <tbody>
+                <tbody role="rowgroup">
                 <?php if ($data->num_rows > 0) {
                 // output data of each row
                     $i =1;
                     while($row = $data->fetch_assoc()){
                  ?>
-                    <tr class="table-light">
-                        <th scope="row"><?php echo $i; ?></th>
-                        <td ><?php echo $row['vardas']; ?></td>
-                        <td ><?php echo $row['pavarde']; ?></td>
-                        <td ><?php echo $row['elpastas']; ?></td>
-                        <td ><?php echo $row['skyrius']; ?></td>
-                        <td ><?php echo $row['pareigos']; ?></td>
-                        <td class=""><a href="editUser.php?editUser=<?php echo $row['darb_id']; ?>"><i class='fas fa-edit' id="actions"></i></a></td>
-                        <td class="">
+                    <tr class="table-light" role="row">
+                        <th class="employeeList"scope="row"  role="cell"><?php echo $i; ?></th>
+                        <td  class="employeeList" role="cell"><?php echo $row['vardas']; ?></td>
+                        <td  class="employeeList"role="cell"><?php echo $row['pavarde']; ?></td>
+                        <td  class="employeeList"role="cell"><?php echo $row['elpastas']; ?></td>
+                        <td  class="employeeList"role="cell"><?php echo $row['skyrius']; ?></td>
+                        <td  class="employeeList"role="cell"><?php echo $row['pareigos']; ?></td>
+                        <td class="" role="cell"><a href="editUser.php?editUser=<?php echo $row['darb_id']; ?>"><i class='fas fa-edit' id="actions"></i></a></td>
+                        <td class="" role="cell">
                             <a onclick="redirect('<?php echo $row['darb_id'];?>')">
                                 <i class='fas fa-trash-alt' id="actions"></i>
                             </a>
@@ -124,5 +188,10 @@
         <?php require '../../includes/tools/modalAdmin.php';?>
         <script src="../../js/deleteUser.js"></script>
         <script src="../../js/modal.js"></script>
+        <script>
+            $(function(){
+                $('#keywords').tablesorter();
+            });
+        </script>
     </body>
 </html>

@@ -24,16 +24,20 @@
 
     if(!empty($_GET['lateTasks'])){
         $taskas = $_POST['task'];
-        DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
-        header('Location: activeTasks.php');
+        if(!empty($taskas)){
+            DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
+        }else{
+            $lateTasksError = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
+        }
+
+        //header('Location: activeTasks.php');
     }
 
     if(!empty($_GET['activeTasks'])){
         $taskas = $_POST['task'];
 
         if(empty($taskas)){
-            array_push($errors, "Neužpildytas <b>Užduoties komentaro</b> laukelis");
-            header('Location: activeTasks.php');
+            $error = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
         }
 
         if(!empty($taskas)){
@@ -69,11 +73,13 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.14/js/jquery.tablesorter.min.js"></script>
     </head>
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
+<!--            <a class="navbar-brand" href="#"id="myBtn" data-target="#myMenu">-->
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -112,11 +118,11 @@
                 <!-- Area Chart Example-->
                     <div class="card mb-3">
                         <div class="card-header adminCardHeader">Aktyvios užduotys</div>
-<!--                        --><?php //echo display_error(); ?>
+                        <?php if(!empty($error)){echo '<div class="errorDiv">'.$error.'</div>';} ?>
                         <?php echo display_success(); ?>
                         <div class="card-body activeTasksAdmin">
                             <div id="activeTasks">
-                                <table class="table table-hover">
+                                <table class="table table-hover" id="keywords0">
                                     <thead>
                                         <tr>
                                             <th>Nr.</th>
@@ -149,12 +155,17 @@
 
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="row dialog">
                                                                     <div class="col col-md-9">
                                                                         <?php
                                                                         $task = DB::showResults($row['task_id']);
                                                                         while($row = $task->fetch_assoc()) {
-                                                                            echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+
+                                                                            $q = DB::getUserData($row['reply_by']);
+                                                                            $rowas = $q->fetch_assoc();
+
+                                                                            echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
                                                                             echo '<div class="alert alertAdmin" role="alert">';
                                                                             echo $row['reply'];
                                                                             echo '</div></div> ';
@@ -163,21 +174,41 @@
                                                                     </div>
                                                                 </div>
                                                             </form>
-                                                            <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
-                                                                <select name="peradresavimoId" required>
-                                                                    <option value="">Pasirinkite skyriu</option>
-                                                                    <?php
-                                                                    $qqq=DB::getAllDepartments();
-                                                                    while ($rvvv=mysqli_fetch_array($qqq)) {
-                                                                        echo '<option value="" style="font-weight: bold;">'.$rvvv['skyrius'].'</option>';
-                                                                        $department = DB::getDepartmentEmployee($rvvv['skyrius']);
-                                                                        while ($qw=mysqli_fetch_array($department)) {
-                                                                            echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
-                                                                    }?>
-                                                                </select>
-                                                                <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
-                                                                <button type="submit" class="button-submit" ><i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i></button>
-                                                            </form>
+
+                                                            <button type="button" class="btn adminButtonLeft adminButtonForward btn-lg" data-toggle="modal" data-target="#myModal<?php echo $i; ?>">Peradresuoti</button>
+
+                                                            <div class="modal fade" id="myModal<?php echo $i; ?>" role="dialog">
+                                                                <div class="modal-dialog">
+
+                                                                    <!-- Modal content-->
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">Užduoties peradresavimas</h4>
+                                                                        </div>
+                                                                        <div class="modal-body text-center">
+                                                                            <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
+                                                                                <select  class="form-control" name="peradresavimoId" required>
+                                                                                    <option value="">Pasirinkite skyrių</option>
+                                                                                    <?php
+                                                                                    $qqq=DB::getAllDepartments();
+                                                                                    while ($rvvv=mysqli_fetch_array($qqq)) {
+                                                                                        echo '<option value="" style="font-weight: bold;">'.$rvvv['skyrius'].'</option>';
+                                                                                        $department = DB::getDepartmentEmployee($rvvv['skyrius']);
+                                                                                        while ($qw=mysqli_fetch_array($department)) {
+                                                                                            echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
+                                                                                    }?>
+                                                                                </select>
+                                                                                <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
+                                                                                <button type="submit" class="button-submit" ><i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i></button>
+                                                                            </form>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Atšaukti</button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <?php $i++;
@@ -199,12 +230,12 @@
                                     <div id="completedTasks">
                                         <table class="table table-hover">
                                             <thead>
-                                            <tr>
-                                                <th>Nr.</th>
-                                                <th>Užduoties pavadinimas</th>
-                                                <th>Užduoties sukūrimo data</th>
-                                                <th>Atlikimo data</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>Nr.</th>
+                                                    <th>Užduoties pavadinimas</th>
+                                                    <th>Užduoties sukūrimo data</th>
+                                                    <th>Atlikimo data</th>
+                                                </tr>
                                             </thead>
                                             <?php
                                             if ($data3->num_rows > 0) {
@@ -231,7 +262,9 @@
                                                                             <?php
                                                                             $task = DB::showResults($row['task_id']);
                                                                             while($row = $task->fetch_assoc()) {
-                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                                $q = DB::getUserData($row['reply_by']);
+                                                                                $rowas = $q->fetch_assoc();
+                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
                                                                                 echo '<div class="alert alertAdmin" role="alert">';
                                                                                 echo $row['reply'];
                                                                                 echo '</div></div> ';
@@ -255,15 +288,24 @@
                         <div class="col-lg-6">
                             <div class="card mb-3">
                                 <div class="card-header adminCardHeader">Pradelstos užduotys</div>
+
+                                <?php
+
+                                if(!empty($lateTasksError)){
+                                    echo '<div class="errorDiv">'.$lateTasksError.'</div>';
+                                }
+
+                                ?>
+
                                 <div class="card-body overdueTasksAdmin">
                                     <div id="lateTasks">
-                                        <table class="table table-hover">
+                                        <table class="table table-hover" id="keywords" cellspacing="0" cellpadding="0">
                                             <thead>
                                                 <tr>
-                                                    <th>Nr.</th>
-                                                    <th>Užduoties pavadinimas</th>
-                                                    <th>Užduoties sukūrimo data</th>
-                                                    <th>Galutinis terminas</th>
+                                                    <th><span>Nr.</span></th>
+                                                    <th><span>Užduoties pavadinimas</span></th>
+                                                    <th><span>Užduoties sukūrimo data</span></th>
+                                                    <th><span>Galutinis terminas</span></th>
                                                 </tr>
                                             </thead>
                                             <?php
@@ -280,6 +322,7 @@
                                                         </tr>
                                                         <tr class="container activeTasksContainer">
                                                             <td colspan="4">
+
                                                                 <form action="activeTasks.php?lateTasks=<?php echo $row['task_id']?>" method="post">
                                                                     <div class="row">
                                                                         <div class="col col-md-9">
@@ -287,7 +330,7 @@
                                                                             <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                         </div>
                                                                         <div class="col col-md-3 didButtonsFF">
-                                                                            <button type="submit" class="button-submit"> <i class='far fa-check-square ' id="actionsAllTasks"></i></button><?php $uzd_id = $row['task_id'] ?>
+                                                                            <button type="submit" class="button-submit"> <i class='far fa-check-square' id="actionsAllTasks"></i></button><?php $uzd_id = $row['task_id'] ?>
 
                                                                         </div>
                                                                     </div>
@@ -296,7 +339,10 @@
                                                                             <?php
                                                                             $task = DB::showResults($row['task_id']);
                                                                             while($row = $task->fetch_assoc()) {
-                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: ".$row['reply_by']."</div>";
+                                                                            $q = DB::getUserData($row['reply_by']);
+                                                                            $rowas = $q->fetch_assoc();
+
+                                                                                echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
                                                                                 echo '<div class="alert alertAdmin" role="alert">';
                                                                                 echo $row['reply'];
                                                                                 echo '</div></div> ';
@@ -305,21 +351,42 @@
                                                                         </div>
                                                                     </div>
                                                                 </form>
-                                                                <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
-                                                                    <select name="peradresavimoId" required>
-                                                                        <option value="">Pasirinkite skyriu</option>
-                                                                        <?php
-                                                                        $qqq=DB::getAllDepartments();
-                                                                        while ($rvvv=mysqli_fetch_array($qqq)) {
-                                                                            echo '<option value="" style="font-weight: bold;">'.$rvvv['skyrius'].'</option>';
-                                                                            $department = DB::getDepartmentEmployee($rvvv['skyrius']);
-                                                                            while ($qw=mysqli_fetch_array($department)) {
-                                                                                echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
-                                                                        }?>
-                                                                    </select>
-                                                                    <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
-                                                                    <button type="submit" class="button-submit" ><i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i></button>
-                                                                </form>
+
+                                                                <button type="button" class="btn adminButton adminButtonSmallForward buttonLeft" data-toggle="modal" data-target="#myModal<?php echo $i; ?>">Peradresuoti</button>
+
+                                                                <div class="modal fade" id="myModal<?php echo $i; ?>" role="dialog">
+                                                                    <div class="modal-dialog">
+
+                                                                        <!-- Modal content-->
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h4 class="modal-title">Užduoties peradresavimas</h4>
+                                                                            </div>
+                                                                            <div class="modal-body text-center">
+                                                                                <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
+                                                                                                                                                        <select  class="form-control" name="peradresavimoId" required>
+                                                                                                                                                            <option value="">Pasirinkite skyrių</option>
+                                                                                                                                                            <?php
+                                                                                                                                                            $qqq=DB::getAllDepartments();
+                                                                                                                                                            while ($rvvv=mysqli_fetch_array($qqq)) {
+                                                                                                                                                                echo '<option value="" style="font-weight: bold;">'.$rvvv['skyrius'].'</option>';
+                                                                                                                                                                $department = DB::getDepartmentEmployee($rvvv['skyrius']);
+                                                                                                                                                                while ($qw=mysqli_fetch_array($department)) {
+                                                                                                                                                                    echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
+                                                                                                                                                            }?>
+                                                                                                                                                        </select>
+                                                                                                                                                        <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
+                                                                                                                                                        <button type="submit" class="button-submit" ><i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i></button>
+                                                                                                                                                    </form>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Atšaukti</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
                                                             </td>
                                                         </tr>
                                                     <?php $i++; }
@@ -345,5 +412,10 @@
         <?php require '../../includes/tools/modalAdmin.php';?>
         <script src="../../js/cardPopdown.js"></script>
         <script src="../../js/modal.js"></script>
+    <script>
+        $(function(){
+            $('#keywords').tablesorter();
+        });
+    </script>
     </body>    
 </html>
