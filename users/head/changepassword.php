@@ -21,7 +21,7 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
+            <button type="button" class="btn-circle infoButtonHead" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -60,13 +60,6 @@
                                 $validation = $validate->check($_POST, array(
                                     'password_current' => array(
                                         'requiredPassword' => true
-    //                                        'minPassword' => 8,
-    //                                        'maxPassword' => 64,
-    //                                        'oneNumber' => true,
-    //                                        'oneBigLetter' => true,
-    //                                        'oneSmallLetter' => true,
-    //                                        'oneSpecialSymbol' => true,
-    //                                        'noSpaces' => true
                                     ),
                                     'password_new' => array(
                                         'required_password_new' => true,

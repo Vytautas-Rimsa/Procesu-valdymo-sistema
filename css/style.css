@@ -69,6 +69,19 @@
     border-radius: 5px;
     text-align: left;
 }
+
+.errorDivSmallCard{
+    width: 94%;
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-bottom: -20px;
+    padding: 10px 0px 10px 20px;
+    border: 1px solid #a94442;
+    color: #a94442;
+    background: #f2dede;
+    border-radius: 5px;
+    text-align: left;
+}
 .success {
 	width: 92%;
 	margin: 0px auto;
@@ -81,13 +94,26 @@
 	text-align: left;
 }
 
-successDiv{
+.successDiv{
 	width: 97%;
 	margin-top: 10px;
 	margin-left: 20px;
 	margin-bottom: -20px;
 	padding: 10px 0px 10px 20px;
-	border: 1px solid #a94442;
+	border: 1px solid #3c763d;
+	color: #3c763d;
+	background: #dff0d8;
+	border-radius: 5px;
+	text-align: left;
+}
+
+.successDivSmallCard{
+	width: 97%;
+	margin-top: 10px;
+	margin-left: 20px;
+	margin-bottom: -20px;
+	padding: 10px 0px 10px 20px;
+	border: 1px solid #3c763d;
 	color: #3c763d;
 	background: #dff0d8;
 	border-radius: 5px;
@@ -315,10 +341,13 @@ th{text-align: center;}
 	overflow-y: auto;
   }
 
-  .adminCardHeader, .adminButton, .adminButtonLeft{
+  .adminCardHeader, .adminButton{
 	background-color: #555555;
 	color: #fff;  
 	}
+	
+	.adminButtonLeft{background-color: #555555;
+	color: #fff;}
 	
 	.adminButton:hover, .adminButtonLeft:hover{
 	background-color: #708090;
@@ -338,7 +367,7 @@ th{text-align: center;}
 	.userCardHeader{color: black;}
 	.userButton{color: #fff;}
 	.userButton:hover{background-color: #F0F0F0; height: 34px; color: #C0C0C0;}
-	.userTaskButton{background-color: #A9A9A9; color: white}
+	.userTaskButton{background-color: #A9A9A9; color: white;}
 	.userTaskButton:hover{background-color: #696969; height: 34px;}
 	.headCardHeader{background-color: #158CBA; color: #fff;}
 
@@ -558,10 +587,10 @@ th{text-align: center;}
 .whiteLine{border-bottom: 2px solid white;}
 
 .headCompleteTask, .headForwardTask{color: #158CBA !important;}
-.headCompleteTask:hover, .headForwardTask:hover{color: #117298 !important;;}
+.headCompleteTask:hover, .headForwardTask:hover{color: #117298 !important;}
 
 .userCompleteTask, .userForwardTask{color: #A9A9A9 !important;}
-.userCompleteTask:hover, .userForwardTask:hover{color: #696969 !important;;}
+.userCompleteTask:hover, .userForwardTask:hover{color: #696969 !important; cursor: pointer;}
 
 /* The Modal (background) */
 .modal {
@@ -654,7 +683,6 @@ th{text-align: center;}
 	float: right;
 	font-size: 12px;
 	width: 30%;
-	/*text-align: right;*/
 	padding: 15px;
 }
 .dialogWind:nth-child(2n) .alert{
@@ -679,11 +707,6 @@ th{text-align: center;}
 .alertHead{background-color: #158CBA;}
 .alertUser{background-color: #C0C0C0;}
 
-/*.myCreatedTasks, .allTasksAdmin{*/
-	/*height: 1000px;*/
-	/*overflow: auto;*/
-/*}*/
-
 .activeTasksAdmin, .completedTasksAdmin, .overdueTasksAdmin, .allUsersAdmin{overflow: auto;}
 .activeTasksAdmin{height: 400px;}
 .completedTasksAdmin{height: 400px;}
@@ -696,26 +719,25 @@ th{text-align: center;}
 .button-submit:hover{color:#A9A9A9;}
 .departmentBold {font-weight: bold;}
 
-.buttonLeft{
-	float: left !important;
-}
+.buttonLeft{float: left !important;}
 
-.btn.infoButton{ 
+.infoButton, .infoButtonHead{
 	background-color: Transparent;    
     border: none;
     overflow: hidden;
     outline:none;
-height: 45px;}
-
-.btn.infoButton:hover{
-	background-color: Transparent;    
-    border: none;   
-	height: 44px;
-	overflow: hidden;
-    outline:none;
-	text-decoration: none;
-    background-position: 0;
-    transition: none;
 }
 
+.infoButton:hover{background-color: #158CBA; cursor: pointer;}
+.infoButtonHead:hover{background-color: #117298; cursor: pointer;}
+
 .employeeList{ text-align: center;}
+
+.btn-circle {
+	width: 34px;
+	height: 34px;
+	text-align: center;
+	padding-top: 1px;
+	padding-left: 2px;
+	border-radius: 15px;
+}

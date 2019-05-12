@@ -146,7 +146,6 @@ class DB{
 
     public function showEmployees($action, $table, $where){
 
-        //$sql = $action .'FROM'. $table;
         $sql = "$action .'FROM'. $table";
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 // Check connection
@@ -218,7 +217,7 @@ class DB{
     }
 
     public function searchTaskFromActive($search){
-        $sql = "SELECT * FROM `tasks` WHERE `title` LIKE '".$search.'%\' AND `task` LIKE \'%'.$search.'%\' AND `assigned_to` = '.$_SESSION['user'].' ORDER BY `finished` DESC';
+        $sql = "SELECT * FROM `tasks` WHERE `tasks`.`title` LIKE '%".$search.'%\' OR `tasks`.`task` LIKE \'%'.$search.'%\' AND `tasks`.`assigned_to` = '.$_SESSION['user'].' ORDER BY `tasks`.`finished` DESC';
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
         if ($conn->connect_error) {
@@ -232,7 +231,7 @@ class DB{
     }
 
     public function searchMyCreatedTasks($search){
-        $sql = "SELECT * FROM `tasks` WHERE `created_by` LIKE '".$_SESSION['user']."' AND `tasks`.`title` LIKE '%$search%' OR `tasks`.`task` LIKE '%$search%'";
+        $sql = "SELECT * FROM `tasks` WHERE `tasks`.`title` LIKE '%".$search.'%\' OR `tasks`.`task` LIKE \'%'.$search.'%\' AND `tasks`.`created_by` = '.$_SESSION['user'].' ORDER BY `tasks`.`finished` DESC';
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
         if ($conn->connect_error) {

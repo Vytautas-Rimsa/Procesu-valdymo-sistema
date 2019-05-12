@@ -37,7 +37,7 @@
 
 	<header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
+            <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -53,11 +53,7 @@
                         <a class="nav-link" href="#">Duomenų bazė</a>
                     </li>   
                 </ul>               
-                <form class="nav navbar-nav navbar-right" action="search.php" method="POST">				
-<!--                    <li class="form-inline my-2 my-lg-0" >-->
-<!--                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">-->
-<!--                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled>Paieška</button>-->
-<!--                    </li>					-->
+                <form class="nav navbar-nav navbar-right" action="search.php" method="POST">
                     <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logout"></i></a>
                 </form>
             </div>

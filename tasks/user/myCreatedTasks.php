@@ -38,8 +38,7 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-<!--            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logoutLight"></i></a>-->
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
+            <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logoutLight"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -52,15 +51,19 @@
                         <a class="nav-link" href="../../database/user/database.php">Duomenų bazė</a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <li class="nav navbar-nav navbar-right">
                     <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška">
-                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit">Paieška</button>
+                        <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">
+                    <li class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
                     </li>
-                    <li class="nav-item mr-sm-4">
-                        <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
+                <li class="nav-item mr-sm-4">
+                    <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
                     </li>
                     <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logoutLight"></i></a>
+                    </form>
+                </li>
                 </ul>
             </div>
         </nav>
@@ -107,6 +110,11 @@
                                                         <div class="row">
                                                             <div class="col col-md-10">
                                                                 <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
+                                                                <?php
+                                                                $q = DB::getUserData($row['created_by']);
+                                                                $rowas = $q->fetch_assoc();
+                                                                echo "<div class='author'>Užduotį sukūrė: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
+                                                                ?>
                                                             </div>
                                                             <div class="col col-md-2 didButtonsFF">
                                                                 <i class='fas fa-edit userForwardTask' id="actionsAllTasks"></i>
@@ -134,11 +142,6 @@
                                             <?php $i++;
                                         }
                                     }
-                                    //                                        else {
-                                    //                                            echo '<div class="success">';
-                                    //                                            echo "Nėra įrašų";
-                                    //                                            echo'</div>';
-                                    //                                        }
                                     else {
                                         array_push($success, "Lentelėje įrašų nėra");
                                     }
@@ -148,8 +151,6 @@
                         </div>
                         <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
                     </div>
-
-
                     <!-- /.container-fluid -->
                 </div>
                 <!-- /.content-wrapper -->

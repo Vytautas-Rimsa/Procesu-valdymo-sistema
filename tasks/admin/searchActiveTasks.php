@@ -45,7 +45,7 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logout"></i></a>
+            <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -94,11 +94,16 @@
                                                 <td><?php echo $i; ?></td>
                                                 <td><?php echo $row['title']; ?></td>
                                                 <td><?php echo $row['startline']; ?></td>
-                                                <td><?php if(date($row['finished'])=='0000-00-00 00:00:00'){
+                                                <td><?php if(date('Y-m-d H:i:s') < date($row['deadline']) && date($row['finished'])=='0000-00-00 00:00:00'){
                                                         echo "Galiojanti";
-                                                    } else{
+                                                    }
+                                                    if(date($row['finished'])!='0000-00-00 00:00:00'){
                                                         echo "Užbaigta";
-                                                    }?></td>
+                                                    }
+                                                    if(date('Y-m-d H:i:s') > date($row['deadline']) && date($row['finished'])=='0000-00-00 00:00:00'){
+                                                        echo "Pradelsta";
+                                                    }
+                                                    ?></td>
                                             </tr>
                                             <tr class="container activeTasksContainer">
                                                 <td colspan="4">
@@ -106,6 +111,11 @@
                                                         <div class="row">
                                                             <div class="col col-md-10">
                                                                 <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
+                                                                <?php
+                                                                $q = DB::getUserData($row['created_by']);
+                                                                $rowas = $q->fetch_assoc();
+                                                                echo "<div class='author'>Užduotį sukūrė: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
+                                                                ?>
                                                             </div>
                                                             <div class="col col-md-2 didButtons">
                                                                 <i class='fas fa-edit' id="actionsAllTasks"></i>

@@ -1,7 +1,6 @@
 <?php
 require_once('../../core/init.php');
 require_once('../../classes/User.php');
-require_once('../../includes/success/success.php');
 
 $user = new User();
 if(!$user->exists()){
@@ -26,10 +25,10 @@ if(!empty($_GET['lateTasks'])){
     $taskas = $_POST['task'];
     if(!empty($taskas)){
         DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
+        $lateTasksSuccess = "Sėkmingai atlikta užduotis";
     }else{
         $lateTasksError = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
     }
-    //header('Location: activeTasks.php');
 }
 
 if(!empty($_GET['activeTasks'])){
@@ -41,8 +40,7 @@ if(!empty($_GET['activeTasks'])){
 
     if(!empty($taskas)){
         DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
-        array_push($success, "Sėkmingai išsaugoti užduoties pakeitimai");
-        header('Location: activeTasks.php');
+        $success = "Sėkmingai atlikta užduotis";
     }
 }
 
@@ -52,7 +50,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
     if($id!="" || is_int($id)){
         DB::uzduotiesPeradresavimas($uzd_id, $id);
     }else{
-        echo "nepasirinktas tinkamas variantas";
+        echo "Nepasirinktas tinkamas variantas";
     }
 }
 
@@ -77,8 +75,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-<!--            <a class="navbar-brand" href="#"id="myBtn"><i class='fas fa-info-circle' id="logoutLight"></i></a>-->
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
+            <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logoutLight"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -91,15 +88,19 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                         <a class="nav-link" href="../../database/user/database.php">Duomenų bazė</a>
                     </li>                    
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <li class="nav navbar-nav navbar-right">
                     <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška">
-                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit">Paieška</button>
+                        <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">
+                    <li class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
                     </li>
-                    <li class="nav-item mr-sm-4">
-                        <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
-                    </li>
-                    <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logoutLight"></i></a>
+                <li class="nav-item mr-sm-4">
+                <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
+                </li>
+                    <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logoutLight"></i></a>
+                    </form>
+                </li>
                 </ul>                
             </div>
         </nav>
@@ -114,7 +115,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                     <div class="card mb-3">
                         <div class="card-header userCardHeader">Aktyvios užduotys</div>
                         <?php if(!empty($error)){echo '<div class="errorDiv">'.$error.'</div>';} ?>
-                        <?php echo display_success(); ?>
+                        <?php if(!empty($success)){echo '<div class="successDiv">'.$success.'</div>';} ?>
                         <div class="card-body activeTasksAdmin">
                             <div id="activeTasks">
                                 <table class="table table-hover">
@@ -143,11 +144,15 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                                             <div class="row">
                                                                 <div class="col col-md-9">
                                                                     <h4><?php echo $row['task']; ?></h4>
+                                                                    <?php
+                                                                    $q = DB::getUserData($row['created_by']);
+                                                                    $rowas = $q->fetch_assoc();
+                                                                    echo "<div class='author'>Užduotį sukūrė: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
+                                                                    ?>
                                                                     <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                 </div>
                                                                 <div class="col col-md-3 didButtonsFF">
                                                                     <button type="submit" class="button-submit"> <i class='far fa-check-square userCompleteTask' id="actionsAllTasks"></i></button><?php $uzd_id = $row['task_id'] ?>
-<!--                                                                    <i class='fas fa-forward didButtonsForwardFinish userForwardTask' id="actionsAllTasks"></i>-->
                                                                 </div>
                                                             </div>
                                                             <div class="row dialog">
@@ -249,6 +254,11 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                                                         <div class="col col-md-12">
                                                                             <h4><?php echo $row['task']; ?>
                                                                             </h4>
+                                                                            <?php
+                                                                            $q = DB::getUserData($row['created_by']);
+                                                                            $rowas = $q->fetch_assoc();
+                                                                            echo "<div class='author'>Užduotį sukūrė: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
+                                                                            ?>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row dialog">
@@ -284,11 +294,10 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                             <div class="card mb-3">
                                 <div class="card-header userCardHeader">Pradelstos užduotys</div>
                                 <?php
-
                                 if(!empty($lateTasksError)){
-                                    echo '<div class="errorDiv">'.$lateTasksError.'</div>';
+                                    echo '<div class="errorDivSmallCard">'.$lateTasksError.'</div>';
                                 }
-
+                                if(!empty($lateTasksSuccess)){echo '<div class="successDivSmallCard">'.$lateTasksSuccess.'</div>';}
                                 ?>
                                 <div class="card-body overdueTasksAdmin">
                                     <div id="lateTasks">
@@ -320,6 +329,11 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                                                         <div class="col col-md-9">
                                                                             <h4><?php echo $row['task']; ?>
                                                                             </h4>
+                                                                            <?php
+                                                                            $q = DB::getUserData($row['created_by']);
+                                                                            $rowas = $q->fetch_assoc();
+                                                                            echo "<div class='author'>Užduotį sukūrė: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
+                                                                            ?>
                                                                             <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                         </div>
                                                                         <div class="col col-md-3 didButtonsFF">

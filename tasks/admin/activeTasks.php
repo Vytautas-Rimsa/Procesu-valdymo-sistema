@@ -1,7 +1,6 @@
 <?php
     require_once('../../core/init.php');
     require_once('../../classes/User.php');
-    require_once('../../includes/success/success.php');
 
     $user = new User();
     if(!$user->exists()){
@@ -26,11 +25,10 @@
         $taskas = $_POST['task'];
         if(!empty($taskas)){
             DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
+            $lateTasksSuccess = "Sėkmingai atlikta užduotis";
         }else{
             $lateTasksError = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
         }
-
-        //header('Location: activeTasks.php');
     }
 
     if(!empty($_GET['activeTasks'])){
@@ -42,20 +40,48 @@
 
         if(!empty($taskas)){
             DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
-            array_push($success, "Sėkmingai išsaugoti užduoties pakeitimai");
-            header('Location: activeTasks.php');
+            $success = "Sėkmingai atlikta užduotis";
         }
     }
 
-        if(@$_GET['action'] == "darbuPeradresavimas"){
-            $id=$_POST['peradresavimoId'];
-            $uzd_id=intval($_POST['uzd_id']);
-            if($id!="" || is_int($id)){
-                DB::uzduotiesPeradresavimas($uzd_id, $id);
-            }else{
-                echo "nepasirinktas tinkamas variantas";
-            }
+    if(@$_GET['action'] == "darbuPeradresavimas"){
+        $id=$_POST['peradresavimoId'];
+        $uzd_id=intval($_POST['uzd_id']);
+        if($id!="" || is_int($id)){
+            DB::uzduotiesPeradresavimas($uzd_id, $id);
+        }else{
+            echo "Nepasirinktas tinkamas variantas";
         }
+    }
+
+//    if(@$_GET['action'] == "darbuPeradresavimas"){
+//        $id=$_POST['peradresavimoId'];
+//        $uzd_id=intval($_POST['uzd_id']);
+//
+//        if(!empty($_GET['activeTasks'])){
+//            $taskas = $_POST['task'];
+//            if(empty($taskas)){
+//                $error = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
+//            }
+//
+//            if(!empty($taskas) && $id!="" || is_int($id)){
+//                DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
+//                DB::uzduotiesPeradresavimas($uzd_id, $id);
+//                $success = "Sėkmingai peradresuota užduotis";
+//            }
+//        }
+//
+//        if(!empty($_GET['lateTasks'])){
+//            $taskas = $_POST['task'];
+//            if(!empty($taskas)){
+//                DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
+//                DB::uzduotiesPeradresavimas($uzd_id, $id);
+//                $lateTasksSuccess = "Sėkmingai peradresuota užduotis";
+//            }else{
+//                $lateTasksError = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
+//            }
+//        }
+//    }
 
 ?>
 
@@ -78,8 +104,7 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-<!--            <a class="navbar-brand" href="#"id="myBtn" data-target="#myMenu">-->
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
+            <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -119,7 +144,7 @@
                     <div class="card mb-3">
                         <div class="card-header adminCardHeader">Aktyvios užduotys</div>
                         <?php if(!empty($error)){echo '<div class="errorDiv">'.$error.'</div>';} ?>
-                        <?php echo display_success(); ?>
+                        <?php if(!empty($success)){echo '<div class="successDiv">'.$success.'</div>';} ?>
                         <div class="card-body activeTasksAdmin">
                             <div id="activeTasks">
                                 <table class="table table-hover" id="keywords0">
@@ -148,6 +173,11 @@
                                                                 <div class="row">
                                                                     <div class="col col-md-9">
                                                                         <h4><?php echo $row['task']; ?></h4>
+                                                                        <?php
+                                                                        $q = DB::getUserData($row['created_by']);
+                                                                        $rowas = $q->fetch_assoc();
+                                                                        echo "<div class='author'>Užduoties autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
+                                                                        ?>
                                                                         <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                     </div>
                                                                     <div class="col col-md-3 didButtonsFF">
@@ -176,7 +206,6 @@
                                                             </form>
 
                                                             <button type="button" class="btn adminButtonLeft adminButtonForward btn-lg" data-toggle="modal" data-target="#myModal<?php echo $i; ?>">Peradresuoti</button>
-
                                                             <div class="modal fade" id="myModal<?php echo $i; ?>" role="dialog">
                                                                 <div class="modal-dialog">
 
@@ -255,6 +284,11 @@
                                                                     <div class="row">
                                                                         <div class="col col-md-12">
                                                                             <h4><?php echo $row['task']; ?></h4>
+                                                                            <?php
+                                                                            $q = DB::getUserData($row['created_by']);
+                                                                            $rowas = $q->fetch_assoc();
+                                                                            echo "<div class='author'>Užduotį sukūrė: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
+                                                                            ?>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row dialog">
@@ -285,16 +319,16 @@
                                 <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
                             </div>
                         </div>
+
                         <div class="col-lg-6">
                             <div class="card mb-3">
                                 <div class="card-header adminCardHeader">Pradelstos užduotys</div>
 
                                 <?php
-
-                                if(!empty($lateTasksError)){
-                                    echo '<div class="errorDiv">'.$lateTasksError.'</div>';
-                                }
-
+                                    if(!empty($lateTasksError)){
+                                        echo '<div class="errorDivSmallCard">'.$lateTasksError.'</div>';
+                                    }
+                                    if(!empty($lateTasksSuccess)){echo '<div class="successDivSmallCard">'.$lateTasksSuccess.'</div>';}
                                 ?>
 
                                 <div class="card-body overdueTasksAdmin">
@@ -327,6 +361,11 @@
                                                                     <div class="row">
                                                                         <div class="col col-md-9">
                                                                             <h4><?php echo $row['task']; ?></h4>
+                                                                            <?php
+                                                                            $q = DB::getUserData($row['created_by']);
+                                                                            $rowas = $q->fetch_assoc();
+                                                                            echo "<div class='author'>Užduotį sukūrė: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
+                                                                            ?>
                                                                             <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task"></textarea>
                                                                         </div>
                                                                         <div class="col col-md-3 didButtonsFF">
