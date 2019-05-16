@@ -33,9 +33,9 @@ echo "<!-- Sidebar -->
                         <span>Užduočių ataskaita</span>
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"pagesDropdown\">
-                        <a class=\"dropdown-item\" href=\"#\">Dienos</a>
-                        <a class=\"dropdown-item\" href=\"#\">Savaitės</a>
-                        <a class=\"dropdown-item\" href=\"#\">Mėnesio</a>
+                        <a class=\"dropdown-item\" href=\"myTasksReport.php\">Mano užduočių ataskaita</a>
+                        <a class=\"dropdown-item\" href=\"departmentTasksReport.php\">Skyriaus ataskaita</a>
+                        <a class=\"dropdown-item\" href=\"departmentEmployeeReport.php\">Skyriaus darbuotojo ataskaita</a>
                         <a class=\"dropdown-item\" href=\"#\">Pasirinkto laikotarpio</a>
                         <!-- <div class=\"dropdown-divider\"></div> -->
                         <!-- <h6 class=\"dropdown-header\">Other Pages:</h6> -->

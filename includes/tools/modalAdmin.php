@@ -7,8 +7,7 @@ echo "<!-- The Modal -->
       <!-- Modal content-->
       <div class=\"modal-content2\">
         <div class=\"modal-header\">
-          <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span class=\"close\">&times;</span></button>
-          <h4 class=\"modal-title\">Modal Header</h4>
+          <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span class=\"close\">&times;</span></button>          
         </div>
         <div class=\"modal-body\">
                     <ul class=\"manualList\">
@@ -34,10 +33,7 @@ echo "<!-- The Modal -->
                             <i class='fas fa-trash-alt manualIconCheck'></i><span class=\"manualTextDelete\">Ištrinti įrašą</span>
                         </li>
                     </ul>
-                </div>
-        <div class=\"modal-footer\">
-          <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>
-        </div>
+                </div>        
       </div>
       
     </div>

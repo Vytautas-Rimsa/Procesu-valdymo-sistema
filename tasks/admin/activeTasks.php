@@ -12,7 +12,7 @@
     $data = DB::getUserActiveTasks();
     $data2 = DB::getUserActiveTasks();
     $data3 = DB::getUserActiveTasks();
-    $data4 = DB::getUserCreatedTasks();
+    //$data4 = DB::getUserCreatedTasks();
 
     $search = @$_POST['submit-search'];
 
@@ -47,13 +47,15 @@
     if(@$_GET['action'] == "darbuPeradresavimas"){
         $id=$_POST['peradresavimoId'];
         $uzd_id=intval($_POST['uzd_id']);
+        $comment = $_POST['task-comment'];
+
         if($id!="" || is_int($id)){
-            DB::uzduotiesPeradresavimas($uzd_id, $id);
+            DB::uzduotiesPeradresavimas($uzd_id, $id, $_SESSION['user'], $comment);
         }else{
             echo "Nepasirinktas tinkamas variantas";
         }
     }
-
+//--------------
 //    if(@$_GET['action'] == "darbuPeradresavimas"){
 //        $id=$_POST['peradresavimoId'];
 //        $uzd_id=intval($_POST['uzd_id']);
@@ -82,7 +84,7 @@
 //            }
 //        }
 //    }
-
+//------------
 ?>
 
 <!DOCTYPE html>
@@ -227,6 +229,7 @@
                                                                                             echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
                                                                                     }?>
                                                                                 </select>
+                                                                                <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task-comment"></textarea>
                                                                                 <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
                                                                                 <button type="submit" class="button-submit" ><i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i></button>
                                                                             </form>

@@ -99,7 +99,7 @@ $data = DB::searchMyCreatedTasks($_POST['search']);
                                     </tr>
                                     <tr class="container activeTasksContainer">
                                         <td colspan="4">
-                                            <form action="" method="post">
+                                            <form action="activeTasks.php?activeTasks=<?php echo $row['task_id']?>" method="post">
                                                 <div class="row">
                                                     <div class="col col-md-10">
                                                         <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
@@ -109,9 +109,24 @@ $data = DB::searchMyCreatedTasks($_POST['search']);
                                                         echo "<div class='author'>Užduotį sukūrė: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
                                                         ?>
                                                     </div>
-                                                    <div class="col col-md-2 didButtons">
-                                                        <i class='fas fa-edit userCompleteTask' id="actionsAllTasks"></i>
-                                                        <a onclick="redirect('<?php echo $row['task_id'];?>')"><i class='fas fa-trash-alt userCompleteTask' id="actionsAllTasks"></i></a>
+                                                    <div class="col col-md-2 didButtonsFF">
+                                                        <i class='fas fa-edit userForwardTask' id="actionsAllTasks"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="row dialog">
+                                                    <div class="col col-md-10">
+                                                        <?php
+                                                        $task = DB::showResults($row['task_id']);
+                                                        while($row = $task->fetch_assoc()) {
+                                                            $q = DB::getUserData($row['reply_by']);
+                                                            $rowas = $q->fetch_assoc();
+
+                                                            echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
+                                                            echo '<div class="alert alertUser" role="alert">';
+                                                            echo $row['reply'];
+                                                            echo '</div></div> ';
+                                                        }
+                                                        ?>
                                                     </div>
                                                 </div>
                                             </form>
@@ -119,23 +134,27 @@ $data = DB::searchMyCreatedTasks($_POST['search']);
                                     </tr>
                                     <?php $i++;
                                 }
-                            } else {
-                                echo "Nėra įrašų";
-                            } ?>
+                            }
+                            else {
+                                array_push($success, "Lentelėje įrašų nėra");
+                            }
+                            ?>
                         </table>
                     </div>
                 </div>
                 <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
             </div>
+            <!-- /.container-fluid -->
         </div>
+        <!-- /.content-wrapper -->
     </div>
+    <!-- /#wrapper -->
+    <div class="scroll-to-top rounded">
+        <span><a href=""><i class="fas fa-angle-up upDownButton"></i> </a></span>
+    </div>
+    <?php require '../../includes/tools/modalAdmin.php';?>
+    <script src="../../js/cardPopdown.js"></script>
+    <script src="../../js/modal.js"></script>
 </div>
-<div class="scroll-to-top rounded">
-    <span><a href=""><i class="fas fa-angle-up upDownButton"></i> </a></span>
-</div>
-<?php require '../../includes/tools/modalAdmin.php';?>
-<script src="../../js/cardPopdown.js"></script>
-<script src="../../js/modal.js"></script>
-<script src="../../js/deleteTask.js"></script>
 </body>
 </html>

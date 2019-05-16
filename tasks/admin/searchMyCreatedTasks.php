@@ -14,25 +14,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Užduočių sąrašas</title>
+        <title>Aktyvios užduotys</title>
         <link rel="stylesheet" href="../../css/style.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script type="text/javascript" src="../../js/scripts.js"></script>
-        <script type="text/javascript" src="../../js/main.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="../../js/scripts.js"></script>
         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/all.css' integrity='sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU' crossorigin='anonymous'>
         <!-- Dropdown listui -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-        <script type="text/javascript" src="../../js/daterangepicker.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/lt.js" type="text/javascript"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     </head>
 
     <header>
@@ -99,7 +91,7 @@
                                             </tr>
                                             <tr class="container activeTasksContainer">
                                                 <td colspan="4">
-                                                    <form action="" method="post">
+                                                    <form action="activeTasks.php?activeTasks=<?php echo $row['task_id']?>" method="post">
                                                         <div class="row">
                                                             <div class="col col-md-10">
                                                                 <textarea class="activeTasksTextarea form-control" name="task"><?php echo $row['task']; ?></textarea>
@@ -109,9 +101,24 @@
                                                                 echo "<div class='author'>Užduotį sukūrė: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b><hr></div>";
                                                                 ?>
                                                             </div>
-                                                            <div class="col col-md-2 didButtons">
+                                                            <div class="col col-md-2 didButtonsFF">
                                                                 <i class='fas fa-edit' id="actionsAllTasks"></i>
-                                                                <a onclick="redirect('<?php echo $row['task_id'];?>')"><i class='fas fa-trash-alt' id="actionsAllTasks"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row dialog">
+                                                            <div class="col col-md-10">
+                                                                <?php
+                                                                $task = DB::showResults($row['task_id']);
+                                                                while($row = $task->fetch_assoc()) {
+                                                                    $q = DB::getUserData($row['reply_by']);
+                                                                    $rowas = $q->fetch_assoc();
+
+                                                                    echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
+                                                                    echo '<div class="alert alertAdmin" role="alert">';
+                                                                    echo $row['reply'];
+                                                                    echo '</div></div> ';
+                                                                }
+                                                                ?>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -120,22 +127,25 @@
                                             <?php $i++;
                                         }
                                     } else {
-                                        echo "Nėra įrašų";
-                                    } ?>
+                                        array_push($success, "Lentelėje įrašų nėra");
+                                    }
+                                    ?>
                                 </table>
                             </div>
                         </div>
                         <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
                     </div>
+                    <!-- /.container-fluid -->
                 </div>
+                <!-- /.content-wrapper -->
             </div>
+            <!-- /#wrapper -->
+            <div class="scroll-to-top rounded">
+                <span><a href=""><i class="fas fa-angle-up upDownButton"></i> </a></span>
+            </div>
+            <?php require '../../includes/tools/modalAdmin.php';?>
+            <script src="../../js/cardPopdown.js"></script>
+            <script src="../../js/modal.js"></script>
         </div>
-        <div class="scroll-to-top rounded">
-            <span><a href=""><i class="fas fa-angle-up upDownButton"></i> </a></span>
-        </div>
-        <?php require '../../includes/tools/modalAdmin.php';?>
-        <script src="../../js/cardPopdown.js"></script>
-        <script src="../../js/modal.js"></script>
-        <script src="../../js/deleteTask.js"></script>
     </body>
 </html>

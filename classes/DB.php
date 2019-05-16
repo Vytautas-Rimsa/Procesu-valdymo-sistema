@@ -217,7 +217,7 @@ class DB{
     }
 
     public function searchTaskFromActive($search){
-        $sql = "SELECT * FROM `tasks` WHERE `tasks`.`title` LIKE '%".$search.'%\' OR `tasks`.`task` LIKE \'%'.$search.'%\' AND `tasks`.`assigned_to` = '.$_SESSION['user'].' ORDER BY `tasks`.`finished` DESC';
+        $sql = "SELECT * FROM `tasks` WHERE `task` LIKE '%".$search.'%\' OR `tasks`.`task` LIKE \'%'.$search.'%\' AND `assigned_to` = '.$_SESSION['user'].' ORDER BY `assigned_to` DESC';
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
         if ($conn->connect_error) {
@@ -259,19 +259,24 @@ class DB{
         return $result;
     }
 
-    public function uzduotiesPeradresavimas(int $uzd_id, int $darb_id){
+    public function uzduotiesPeradresavimas(int $uzd_id, int $darb_id, int $sender_id, string $taskComment){
         $sql="UPDATE `tasks` SET `assigned_to` = '$darb_id' WHERE `tasks`.`task_id` = $uzd_id;";
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
-        if ($conn->connect_error) {
-            return false;
-            die("Prisijungti nepavyko: " . $conn->connect_error);
+        try{
+            if ($conn->connect_error) {
+                return false;
+                throw new Exception($conn->connect_error);
+            }
+            $result = $conn->query($sql);
+            $this->insertComment($uzd_id, $sender_id, $taskComment);
+        } catch (Exception $e) {
+            die("Prisijungti nepavyko: $e");
         }
-
-        $result = $conn->query($sql);
-
-        return $result;
+        finally{
+            return $result;
+        }
     }
 
     public function getAllDepartments(){
@@ -348,7 +353,23 @@ class DB{
         return $result;
     }
 
-    public static function showResults($id){
+    public function countUserCreatedTasks(){
+        $sql="SELECT `created_by`, count(*) as number FROM `tasks` WHERE `created_by` LIKE '".$_SESSION['user']."'";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
+    public static function showResults($id)
+    {
         $sql = "SELECT * FROM `replies` WHERE `task_id` = $id";
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
@@ -363,9 +384,6 @@ class DB{
         //echo $result['reply'];
 
         return $result;
-
-
-            //INSERT INTO `replies` (`r_id`, `reply`, `task_id`, `reply_by`, `date_time`) VALUES (NULL, 'komentaras', '50', '73', CURRENT_TIMESTAMP);
     }
 
     public function getUserData($id){
@@ -399,6 +417,25 @@ class DB{
             $result = $conn->query($sql);
             $result = $conn->query($sql2);
 
+            return $result;
+        }
+    }
+
+    public function insertComment(int $uzd_id, int $sender_id, string $taskComment){
+        $sql="INSERT INTO `replies` (`r_id`, `reply`, `task_id`, `reply_by`, `date_time`) VALUES (NULL, '".$taskComment."', '".$uzd_id."', '".$sender_id."', CURRENT_TIMESTAMP);";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        try{
+            if ($conn->connect_error) {
+                return false;
+                throw new Exception($conn->connect_error);
+            }
+            $result = $conn->query($sql);
+        } catch (Exception $e) {
+            die("Prisijungti nepavyko: $e");
+        }
+        finally{
             return $result;
         }
     }

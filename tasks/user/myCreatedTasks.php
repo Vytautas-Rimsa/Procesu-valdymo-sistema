@@ -53,7 +53,7 @@
                 </ul>
                 <li class="nav navbar-nav navbar-right">
                     <li class="form-inline my-2 my-lg-0">
-                        <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">
+                        <form class="nav navbar-nav navbar-right" action="searchMyCreatedTasks.php" method="POST">
                     <li class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
                         <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>

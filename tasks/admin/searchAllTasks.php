@@ -117,6 +117,22 @@
                                                                 <a onclick="redirect('<?php echo $row['task_id'];?>')"><i class='fas fa-trash-alt' id="actionsAllTasks"></i></a>
                                                             </div>
                                                         </div>
+                                                        <div class="row dialog">
+                                                            <div class="col col-md-10">
+                                                                <?php
+                                                                $task = DB::showResults($row['task_id']);
+                                                                while($row = $task->fetch_assoc()) {
+                                                                    $q = DB::getUserData($row['reply_by']);
+                                                                    $rowas = $q->fetch_assoc();
+
+                                                                    echo "<div class='dialogWind'><div class='author'>Autorius: <b>".$rowas['vardas']." ".$rowas['pavarde']."</b></div>";
+                                                                    echo '<div class="alert alertAdmin" role="alert">';
+                                                                    echo $row['reply'];
+                                                                    echo '</div></div> ';
+                                                                }
+                                                                ?>
+                                                            </div>
+                                                        </div>
                                                     </form>
                                                 </td>
                                             </tr>

@@ -570,15 +570,15 @@ th{text-align: center;}
 	.manualTextEdit, .manualTextEditHead, .manualTextEditUser, .manualTextInfoHead{margin-left: 28px !important;}
 
 	.alert{width: 70% !important;}
-
-	#actionsAllTasks {
-		font-size: 35px;
-	}
+	#actionsAllTasks {font-size: 35px;}
+	.modal-content2{width: 80% !important;}
+    .reportTableDate{margin-right: 20px;}
+    .reportTableButton{margin-top: 10px; margin-left: 50px !important;}
 }
 
 .didButtons{padding-top: 15px; padding-left: 0px;}
 
-.didButtonsForwardFinish{padding-left: 30px;}
+.didButtonsForwardFinish{padding-left: 30px; float: left;}
 
 .didButtonsForwardFinishP{padding-left: 15px; padding-top: 15px;}
 
@@ -608,13 +608,14 @@ th{text-align: center;}
 }
 
 /* Modal Content */
-.modal-content {
+.modal-content, .modal-content2 {
 	background-color: #fefefe;
 	margin: auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 70%;	
 }
+.modal-content{width: 70%;}
+.modal-content2{width: 180%;}
 
 /* The Close Button */
 .close, .closeHead {
@@ -741,3 +742,7 @@ th{text-align: center;}
 	padding-left: 2px;
 	border-radius: 15px;
 }
+
+.reportTableTh {text-align: left;}
+.reportTableTd {text-align: center;}
+.reportTableButton{margin-left: 20px;}
