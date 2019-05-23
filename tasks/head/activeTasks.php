@@ -414,7 +414,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
         <div class="scroll-to-top rounded">
             <span><a href=""><i class="fas fa-angle-up upDownButton"></i> </a></span>
         </div>
-        <?php require '../../includes/tools/modalHead.php';?>
+        <?php require '../../includes/tools/modalAdmin.php';?>
         <script src="../../js/cardPopdown.js"></script>
         <script src="../../js/modal.js"></script>
         <script>

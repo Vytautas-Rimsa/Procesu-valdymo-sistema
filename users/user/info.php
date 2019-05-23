@@ -101,7 +101,7 @@
                 </form>
             </div>
         </div>
-        <?php require '../../includes/tools/modalUser.php';?>
+        <?php require '../../includes/tools/modalAdmin.php';?>
         <script src="../../js/modal.js"></script>
     </body>
 </html>

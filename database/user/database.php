@@ -17,7 +17,7 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">CRM</a>
+            <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logoutLight"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -51,21 +51,42 @@
                 <div class="container-fluid">
                     <!-- Area Chart Example-->
                     <div class="card mb-3">
-                        <div class="card-header userCardHeader">Aktyvios užduotys
+                        <div class="card-header userCardHeader">SUTARČIŲ SĄRAŠAS
                             <a href="createClient.php"><i class="fas fa-plus-square" id="addLight"></i></a>
                         </div>
                             <div class="card-body">
                                 <div id="activeTasks">
-                                    <p>Tram param param</p>
-                                    <p>Tram param param</p>
-                                    <p>Tram param param</p>
-                                    <p>Tram param param</p>
-                                    <p>Tram param param</p>
-                                    <p>Tram param param</p>
-                                    <p>Tram param param</p>
-                                    <p>Tram param param</p>
-                                    <p>Tram param param</p>
-                                    <p>Tram param param</p>
+
+                                    <table table class="table table-hover" id="keywords" cellspacing="0" cellpadding="0">
+                                        <thead role="rowgroup">
+                                        <tr  role="row">
+                                            <th role="columnheader">Nr.</th>
+                                            <th role="columnheader">Pavadinimas</th>
+                                            <th role="columnheader">Sutarties numeris</th>
+                                            <th role="columnheader">Statusas</th>
+                                            <th role="columnheader"></th>
+                                            <th role="columnheader"></th>
+                                            <th role="columnheader"></th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody role="rowgroup">
+                                                <tr class="table-light" role="row">
+                                                    <th class="employeeList"scope="row"  role="cell"></th>
+                                                    <td  class="employeeList" role="cell"></td>
+                                                    <td  class="employeeList"role="cell"></td>
+                                                    <td  class="employeeList"role="cell"></td>
+                                                    <td  class="employeeList"role="cell"></td>
+                                                    <td  class=""role="cell"><i class='fas fa-paperclip' id="actions"></i></td>
+                                                    <td class="" role="cell"><a href=""><i class='fas fa-edit' id="actions"></i></a></td>
+                                                    <td class="" role="cell">
+                                                        <a onclick="redirect('')">
+                                                            <i class='fas fa-trash-alt' id="actions"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         <div class="card-footer small text-muted"></div>
@@ -77,4 +98,12 @@
             <span><a href=""><i class="fas fa-angle-up upDownButton"></i> </a></span>
         </div>
     </body>
+    <?php require '../../includes/tools/modalAdmin.php';?>
+    <script src="../../js/cardPopdown.js"></script>
+    <script src="../../js/modal.js"></script>
+    <script>
+        $(function(){
+            $('#keywords').tablesorter();
+        });
+    </script>
 </html>

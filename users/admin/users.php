@@ -27,7 +27,7 @@
     <head>
 	    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Darbuotojų sąrašas</title>	
+		<title>Darbuotojų sąrašas</title>
         <link rel="stylesheet" href="../../css/style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="../../js/scripts.js"></script>
@@ -120,20 +120,20 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Duomenų bazė</a>
-                    </li>   
-                </ul>                
-                <form class="nav navbar-nav navbar-right" action="search.php" method="POST">				
+                    </li>
+                </ul>
+                <form class="nav navbar-nav navbar-right" action="search.php" method="POST">
                     <li class="form-inline my-2 my-lg-0" >
                         <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
                         <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled>Paieška</button>
-                    </li>					
+                    </li>
                     <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logout"></i></a>
                 </form>
             </div>
         </nav>
     </header>
 
-	<body id="page-top">	
+	<body id="page-top">
         <div class="container">
             <div><h3>Darbuotojų sąrašas</h3></div>
             <table table class="table table-hover" id="keywords" cellspacing="0" cellpadding="0">
@@ -149,7 +149,7 @@
                         <th role="columnheader"></th>
                     </tr>
                 </thead>
-                
+
                 <tbody role="rowgroup">
                 <?php if ($data->num_rows > 0) {
                 // output data of each row

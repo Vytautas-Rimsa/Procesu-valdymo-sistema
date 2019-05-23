@@ -35,6 +35,17 @@
 }
  .header:hover{color:black;}
 
+.headerUser {
+	margin: 50px auto 0px;
+	color: white;
+	background: #A9A9A9;
+	text-align: center;
+	border: 1px solid #B0C4DE;
+	border-bottom: none;
+	border-radius: 10px 10px 0px 0px;
+	padding: 20px;
+}
+
 .formaAplication, .userFormaAplication{	
 	margin: 0px auto;
 	padding: 20px;
@@ -563,6 +574,11 @@ th{text-align: center;}
 		font-size: 45px;
 	}
 
+	/*#piechart{*/
+		/*width: 360px !important;*/
+		/*height: 360px !important;*/
+	/*}*/
+
 	.manualIcon, .manualIconHead, .manualIconUser, .manualIconCheck, .manualIconCheckHead, .manualIconCheckUser{font-size: 30px !important;}
 	.manualText, .manualTextHead, .manualTextUser, .manualTextFinish, .manualTextFinishHead, .manualTextFinishUser, .manualTextUp, .manualTextUpHead, .manualTextUpUser, .manualTextEdit, .manualTextEditHead, .manualTextEditUser, .manualTextDelete, .manualTextInfoHead, .manualTextInfoUser{font-size: 20px !important;}
 	.manualTextFinish, .manualTextFinishHead, .manualTextFinishUser, .manualTextDelete {margin-left: 35px !important;}
@@ -746,3 +762,9 @@ th{text-align: center;}
 .reportTableTh {text-align: left;}
 .reportTableTd {text-align: center;}
 .reportTableButton{margin-left: 20px;}
+
+
+#piechart{
+	width: 575px;
+	height: 375px;
+}

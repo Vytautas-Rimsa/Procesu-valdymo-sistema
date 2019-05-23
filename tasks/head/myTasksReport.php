@@ -12,10 +12,51 @@
     $data = DB::getUserCreatedTasks();
     $data2 = DB::countUserCreatedTasks();
 
-    $report2 = DB::getUserActiveTasks();
-    $report3 = DB::getUserActiveTasks();
-    $report4 = DB::getUserActiveTasks();
+    if(!empty(@$_POST['datetimes'])){
+
+        $dataPost = explode(" - ", $_POST['datetimes']);
+
+        if(!empty($dataPost[0]) && !empty($dataPost[1])){
+            $report = DB::showTasksByDate($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $connqwe = DB::showTasksByDateCreatedBy($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $d = $connqwe->num_rows;
+        }
+    }else{
+        $report = DB::getUserActiveTasks();
+    }
+
 ?>
+    <?php
+        $a=$report->num_rows;
+    ?>
+
+    <?php
+        $count = 0;
+        $c = 0;
+        if ($report->num_rows > 0) {
+            while ($row = $report->fetch_assoc()) {
+                if (date($row['finished']) > date($row['deadline']) OR date($row['finished'] == '0000-00-00 00:00:00')) {
+                    $count++;
+                }
+                if(date($row['finished']) < date($row['deadline']) OR date($row['finished'] != '0000-00-00 00:00:00')) {
+                    $c++;
+                }
+            }
+        }
+        $b = $count;
+    ?>
+
+    <?php
+        $count =0;
+        if(empty(@$_POST['datetimes'])) {
+            if ($data2->num_rows > 0) {
+                while($row = $data2->fetch_assoc()) {
+                    $count++;
+                }
+            }
+            $d=$count;
+        }
+    ?>
 
 <!DOCTYPE html>
 <html>
@@ -37,13 +78,19 @@
         <script type="text/javascript" src="../../js/daterangepicker.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/lt.js" type="text/javascript"></script>
-        <script type="text/javascript" src="https://www.gstatic.com/charts.com/charts/loader.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             google.charts.load('current', {'packages':['corechart']});
             google.charts.setOnLoadCallback(drawChart);
             function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                    ['Task', 'Number'],
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Element');
+                data.addColumn('number', 'Percentage');
+                data.addRows([
+                    ['Priskirtų užduočių skaičius', <?php print $a ?>],
+                    ['Pradelstų užduočių skaičius', <?php print $b ?>],
+                    ['Atliktų užduočių skaičius', <?php print $c ?>],
+                    ['Sukurtų užduočių skaičius', <?php print $d ?>]
                 ]);
                 var options = {
 
@@ -53,30 +100,28 @@
             }
         </script>
     </head>
-    <?php
-    //                    while ($row = mysqli_fetch_array($data2)){
-    //                        echo "['".$row["task"]."', ".$row["number"]."],";
-    //                    }
-    ?>
+
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <button type="button" class="btn-circle infoButtonHead" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarColor03">
+            <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Užduotys</a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Užduotys</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Duomenų bazė</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="form-inline my-2 my-lg-0" >
-                        <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">                         <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
-                        </form>
+                    <li class="form-inline my-2 my-lg-0">
+                        <li class="nav-item mr-sm-4">
+                            <a href="../../users/head/info.php"><i class='fas fa-address-card'id="info"></i></a>
+                        </li>
+                        <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
                     </li>
                 </ul>
             </div>
@@ -101,70 +146,32 @@
                                             <tr>
                                                 <th class="reportTableTh">Priskirtų užduočių skaičius</th>
                                                 <td class="reportTableTd">
-                                                    <?php
-                                                    if ($report2->num_rows > 0) {
-                                                        $count = 0;
-                                                        while ($row = $report2->fetch_assoc()) {
-                                                            if (date('Y-m-d H:i:s') < date($row['deadline']) && date($row['finished']) == '0000-00-00 00:00:00') {
-                                                                $count++;
-                                                            }
-                                                        }
-                                                        echo $count;
-                                                    }
-                                                    ?>
+                                                    <?php print $a ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="reportTableTh">Pradelstų užduočių skaičius</th>
                                                 <td class="reportTableTd">
-                                                    <?php
-                                                    if ($report3->num_rows > 0) {
-                                                        $count = 0;
-                                                        while ($row = $report3->fetch_assoc()) {
-                                                            if (date('Y-m-d H:i:s') > date($row['deadline']) && date($row['finished'])=='0000-00-00 00:00:00') {
-                                                                $count++;
-                                                            }
-                                                        }
-                                                        echo $count;
-                                                    }
-                                                    ?>
+                                                    <?php print $b ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="reportTableTh">Atliktų užduočių skaičius</th>
                                                 <td class="reportTableTd">
-                                                    <?php
-                                                    if ($report4->num_rows > 0) {
-                                                        $count = 0;
-                                                        while ($row = $report4->fetch_assoc()) {
-                                                            if(date($row['finished'])!='0000-00-00 00:00:00') {
-                                                                $count++;
-                                                            }
-                                                        }
-                                                        echo $count;
-                                                    }
-                                                    ?>
+                                                    <?php print $c ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="reportTableTh">Sukurtų užduočių skaičius</th>
                                                 <td class="reportTableTd">
-                                                    <?php
-                                                    if ($data->num_rows > 0) {
-                                                        $count =0;
-                                                        while($row = $data->fetch_assoc()) {
-                                                            $count++;
-                                                        }
-                                                        echo $count;
-                                                    }
-                                                    ?>
+                                                    <?php print $d ?>
                                                 </td>
                                             </tr>
                                             </tbody>
                                             <tfoot>
                                             <tr>
                                                 <th class="reportTableTh">Pasirinkite ataskaitos laikotarpį</th>
-                                                <td><form action="newTaskAdministration.php?newtask=<?php echo $row['darb_id']?>" method="post">
+                                                <td><form action="myTasksReport.php" method="post">
                                                         <div class="row">
                                                             <div class="reportTableDate">
                                                                 <input type="text" name="datetimes" class="dateAndTime form-control" name="save_task_btn">
@@ -188,7 +195,7 @@
                             <div class="card mb-3">
                                 <div class="card-header headCardHeader">Skritulinė diagrama</div>
                                 <div class="card-body overdueTasksAdmin">
-                                    <div id="piechart" style="width: 500px; height: 300px;"></div>
+                                    <div id="piechart"></div>
                                 </div>
                                 <div class="card-footer small text-muted"></div>
                             </div>

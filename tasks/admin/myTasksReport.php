@@ -12,56 +12,50 @@
     $data = DB::getUserCreatedTasks();
     $data2 = DB::countUserCreatedTasks();
 
-    $report2 = DB::getUserActiveTasks();
-    $report3 = DB::getUserActiveTasks();
-    $report4 = DB::getUserActiveTasks();
+    if(!empty(@$_POST['datetimes'])){
+
+        $dataPost = explode(" - ", $_POST['datetimes']);
+
+        if(!empty($dataPost[0]) && !empty($dataPost[1])){
+            $report = DB::showTasksByDate($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $connqwe = DB::showTasksByDateCreatedBy($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $d = $connqwe->num_rows;
+        }
+    }else{
+        $report = DB::getUserActiveTasks();
+    }
 
 ?>
 <?php
-if ($report2->num_rows > 0) {
+    $a=$report->num_rows;
+?>
+<?php
     $count = 0;
-    while ($row = $report2->fetch_assoc()) {
-        if (date('Y-m-d H:i:s') < date($row['deadline']) && date($row['finished']) == '0000-00-00 00:00:00') {
-            $count++;
+    $c = 0;
+    if ($report->num_rows > 0) {
+        while ($row = $report->fetch_assoc()) {
+            if (date($row['finished']) > date($row['deadline']) OR date($row['finished'] == '0000-00-00 00:00:00')) {
+                $count++;
+            }
+            if(date($row['finished']) < date($row['deadline']) OR date($row['finished'] != '0000-00-00 00:00:00')) {
+                $c++;
+            }
         }
     }
-}
-$a=$count;
+    $b = $count;
 ?>
 <?php
-$count = 0;
-if ($report3->num_rows > 0) {
-
-    while ($row = $report3->fetch_assoc()) {
-        if (date('Y-m-d H:i:s') > date($row['deadline']) && date($row['finished'])=='0000-00-00 00:00:00') {
-            $count++;
+    $count =0;
+    if(empty(@$_POST['datetimes'])) {
+        if ($data2->num_rows > 0) {
+            while($row = $data2->fetch_assoc()) {
+                $count++;
+            }
         }
+        $d=$count;
     }
-}
-$b = $count;
 ?>
-<?php
-$count = 0;
-if ($report4->num_rows > 0) {
 
-    while ($row = $report4->fetch_assoc()) {
-        if(date($row['finished'])!='0000-00-00 00:00:00') {
-            $count++;
-        }
-    }
-}
-$c = $count;
-?>
-<?php
-$count =0;
-if ($data->num_rows > 0) {
-
-    while($row = $data->fetch_assoc()) {
-        $count++;
-    }
-}
-$d=$count;
-?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -104,11 +98,7 @@ $d=$count;
             }
         </script>
     </head>
-    <?php
-//                            while ($row = mysqli_fetch_array($data2)){
-//                                echo "['".$row["task"]."', ".$row["number"]."],";
-//                            }
-    ?>
+
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
@@ -181,7 +171,7 @@ $d=$count;
                                             <tfoot>
                                                 <tr>
                                                     <th class="reportTableTh">Pasirinkite ataskaitos laikotarpį</th>
-                                                    <td><form action="newTaskAdministration.php?newtask=<?php echo $row['darb_id']?>" method="post">
+                                                    <td><form action="myTasksReport.php" method="post">
                                                             <div class="row">
                                                                 <div class="reportTableDate">
                                                                     <input type="text" name="datetimes" class="dateAndTime form-control" name="save_task_btn">
@@ -205,7 +195,7 @@ $d=$count;
                             <div class="card mb-3">
                                 <div class="card-header adminCardHeader">Skritulinė diagrama</div>
                                 <div class="card-body overdueTasksAdmin">
-                                    <div id="piechart" style="width: 500px; height: 300px;"></div>
+                                    <div id="piechart"></div>
                                 </div>
                                 <div class="card-footer small text-muted"></div>
                             </div>

@@ -17,7 +17,7 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">CRM</a>
+            <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logoutLight"></i></a></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -48,112 +48,109 @@
         <div id="wrapper">
         <!-- Sidebar -->
             <ul class="sidebar userSidebar navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="createCompany.php">
-                        <span>Juridinis asmuo</span>
-                    </a>
-                </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="#">
                         <span>Fizinis asmuo</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="createCompany.php">
+                        <span>Juridinis asmuo</span>
+                    </a>
+                </li>
             </ul>
 
-            <form method="post" action="" class="">
-                <div id="content-wrapper">
-                    <div class="container-fluid">
-                        <!-- Area Chart Example-->
-                        <div class="card mb-3">
-                            <div class="card-header userCardHeader">Fizinis asmuo</div>
-                            <div class="card-body">
-                                <fieldset>
-                                    <div class="form-group row">
-                                        <label for="" class="col-sm-2 col-form-label userWords">Sutarties numeris</label>
-                                        <div class="col-sm-2">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-2 col-form-label userWords">Sutarties pasirašymo data</label>
-                                        <div class="col-sm-2">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="form-group row">
-                                        <label for="" class="col-sm-1 col-form-label userWords">Vardas</label>
-                                        <div class="col-sm-3.5">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-1 col-form-label userWords">Pavardė</label>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-1.5 col-form-label userWords">Asmens kodas</label>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-sm-1 col-form-label userWords">El. paštas</label>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-1.5 col-form-label userWords">Telefono nr.</label>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="form-group row">
-                                        <label for="" class="col-sm-2 col-form-label userWords"><b>Gevanamoji vieta</b></label>
-                                        <label for="" class="col-sm-0.5 col-form-label userWords">Gatvė</label>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-0.5 col-form-label userWords">Namo nr.</label>
-                                        <div class="col-sm-1">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-0.5 col-form-label userWords">Buto nr.</label>
-                                        <div class="col-sm-1">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-0.5 col-form-label userWords">Miestas</label>
-                                        <div class="col-sm-2">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="" class="col-sm-2 col-form-label userWords"><b>Adresas korespondencijai</b></label>
-                                        <label for="" class="col-sm-0.5 col-form-label userWords">Gatvė</label>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-0.5 col-form-label userWords">Namo nr.</label>
-                                        <div class="col-sm-1">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-0.5 col-form-label userWords">Buto nr.</label>
-                                        <div class="col-sm-1">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                        <label for="" class="col-sm-0.5 col-form-label userWords">Miestas</label>
-                                        <div class="col-sm-2">
-                                            <input type="text" class="form-control" name="" id="" placeholder="" value="">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-inline my-2 my-lg-0" style="float: right;">
-                                        <a href="" class="btn userButton my-2 my-sm-0">Sukurti klientą</a>
-                                    </div>
-                                </fieldset>
-                            </div>
-                            <div class="card-footer small text-muted"></div>
-                        </div>
+            <div class="container">
+                <div class="col-sm-6 offset-sm-3">
+                    <div class="headerUser">
+                        <h2>Sukurti naują klientą</h2>
                     </div>
+
+                    <form method="post" action="createClient.php" class="formaAplication">
+
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Sutarties nr.</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="contractNb" id="" placeholder="Sutarties numeris" value="" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Vardas</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="vardas" id="" placeholder="Vardas" value="" >
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Pavardė</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="pavarde" id="" placeholder="Pavardė" value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Asmens kodas</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" name="code" id="" placeholder="Asmens kodas" value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">El. paštas</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="elpastas" id="" placeholder="El. pašto adresas"  value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Telefono nr.</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="phone" id="" placeholder="Telefono numeris"  value="">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group row">
+                                <label class="col-sm-12 col-form-label"><b>Adresas korespondencijai</b></label>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label  class="col-sm-3 col-form-label">Gatvė</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" name="street" id="" value="">
+                                        <option value="">Pasirinkite gatvę</option>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                                <label  class="col-sm-1 col-form-label">Nr.</label>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control" name="number" id="" placeholder=""  value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Miestas</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control subcat" name="miestas" id="" value="">
+                                        <option value="">Pasirinkite miestą</option>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form my-2 my-lg-0">
+                                <i class='fas fa-paperclip' id="infoLight"></i>
+                                <button type="reset" class="btn btn-default mr-sm-2 createUserBtn">Atšaukti</button>
+                                <button type="submit" class="btn userTaskButton mr-sm-2 createUserBtn" name="register_btn">Patvirtinti</button>
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
+        <?php require '../../includes/tools/modalAdmin.php';?>
+        <script src="../../js/cardPopdown.js"></script>
+        <script src="../../js/modal.js"></script>
     </body>
 </html>

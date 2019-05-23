@@ -15,6 +15,22 @@
     $report2 = DB::getUserActiveTasks();
     $report3 = DB::getUserActiveTasks();
     $report4 = DB::getUserActiveTasks();
+
+    $userDetails = DB::userDetails($_SESSION['user']);
+    $employeesList = DB::getDepartmenEmployees($userDetails['skyrius_id']);
+
+    if(!empty(@$_POST['datetimes']) && !empty(@$_POST['employeeId'])){
+
+        $dataPost = explode(" - ", $_POST['datetimes']);
+
+        if(!empty($dataPost[0]) && !empty($dataPost[1])){
+            $report = DB::showTasksByDate($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $connqwe = DB::showTasksByDateCreatedBy($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $d = $connqwe->num_rows;
+        }
+    }else{
+        $report = DB::getUserActiveTasks();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +112,17 @@
                                 <div class="card-header headCardHeader">Užduočių statistika</div>
                                 <div class="card-body completedTasksAdmin">
                                     <div id="completedTasks">
-
+                                        <form action="departmentTasksReport.php" method="post">
+<!--                                        <label>-->
+<!--                                            <p>Darbuotojas:</p>-->
+<!--                                            <select name="employeeId">-->
+<!--                                                --><?php
+//                                                while($row = $employeesList->fetch_assoc()) {
+//                                                    echo "<option value='" . $row['id'] . "'>" . $row['vardas'] . " " . $row['pavarde'] . "</option>";
+//                                                }
+//                                                ?>
+<!--                                            </select>-->
+<!--                                        </label>-->
                                         <table class="table table-hover">
                                             <tbody>
                                             <tr>
@@ -168,7 +194,7 @@
                                             <tfoot>
                                             <tr>
                                                 <th class="reportTableTh">Pasirinkite ataskaitos laikotarpį</th>
-                                                <td><form action="newTaskAdministration.php?newtask=<?php echo $row['darb_id']?>" method="post">
+                                                <td>
                                                         <div class="row">
                                                             <div class="reportTableDate">
                                                                 <input type="text" name="datetimes" class="dateAndTime form-control" name="save_task_btn">

@@ -7,7 +7,7 @@ class DB{
             $_result,
             $_count = 0;
     
-    private function __construct(){
+    public function __construct(){
         try{
             $this->_pdo = new PDO('mysql:host=' . Config::get('mysql/host') . ';dbname=' . Config::get('mysql/db'), Config::get('mysql/username'), Config::get('mysql/password'));
         } catch (PDOException $e){
@@ -133,6 +133,8 @@ class DB{
     public function showUsers($action, $table){
 
         $sql = $action .'FROM'. $table;
+        //;
+
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 // Check connection
         if ($conn->connect_error) {
@@ -438,5 +440,77 @@ class DB{
         finally{
             return $result;
         }
+    }
+
+    private function mysql(string $query){
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        try{
+            if ($conn->connect_error) {
+                return false;
+                throw new Exception($conn->connect_error);
+            }
+            $result = $conn->query($query);
+        } catch (Exception $e) {
+            die("Prisijungti nepavyko: $e");
+        }
+        finally{
+            return $result;
+        }
+    }
+
+    public static function showTasksByDate(string $start, string $end, int $userId){
+        $sql = "SELECT * FROM `tasks` WHERE `startline` BETWEEN '".$start."' AND '".$end."' AND `deadline` BETWEEN '".$start."' AND '".$end."' AND `finished` BETWEEN '".$start."' AND '".$end."' AND `assigned_to` LIKE '".$userId."' ORDER BY `assigned_to` ASC";
+        //return (new self)->mysql($sql);
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public static function showTasksByDateCreatedBy(string $start, string $end, int $userId){
+        $sql = "SELECT * FROM `tasks` WHERE `startline` BETWEEN '".$start."' AND '".$end."' AND `deadline` BETWEEN '".$start."' AND '".$end."' AND `finished` BETWEEN '".$start."' AND '".$end."' AND `created_by` LIKE '".$userId."' ORDER BY `created_by` ASC";
+        //return (new self)->mysql($sql);
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public static function userDetails($userId){
+        $sql = "SELECT * FROM `users` WHERE `darb_id` = ".$userId." ORDER BY `pavarde` DESC";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result->fetch_assoc();
+    }
+
+    public static function getDepartmenEmployees($departmentId){
+        $sql = "SELECT * FROM `users` WHERE `skyrius_id` = ".$departmentId." ORDER BY `pavarde` DESC";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result;
     }
 }
