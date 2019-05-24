@@ -9,54 +9,66 @@
 
     }
 
-    $data = DB::getUserCreatedTasks();
-    $data2 = DB::countUserCreatedTasks();
-
     if(!empty(@$_POST['datetimes'])){
-
         $dataPost = explode(" - ", $_POST['datetimes']);
-
         if(!empty($dataPost[0]) && !empty($dataPost[1])){
+            //rodome visas uzduotis pagal data by assigned_to
             $report = DB::showTasksByDate($dataPost[0], $dataPost[1], $_SESSION['user']);
-            $connqwe = DB::showTasksByDateCreatedBy($dataPost[0], $dataPost[1], $_SESSION['user']);
-            $d = $connqwe->num_rows;
+            //rodome pradelstas uzduotis pagal data
+            $pradelstosUzduotys = DB::pradelstosUzduotys($dataPost[0], $dataPost[1], $_SESSION['user']);
+            //Atliktų užduočių skaičius
+            $atliktosUzduociuSkaicius = DB::atliktuUzduociuSkaicius($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $sukurtuUzduociuSkaicius = DB::showTasksByDateCreatedBy($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $d = $sukurtuUzduociuSkaicius->num_rows;
         }
     }else{
+        //kam priskirta by `assigned_to`
         $report = DB::getUserActiveTasks();
+
+        $pradelstosUzduotys = DB::getUserActiveTasks();
+
+        $atliktosUzduociuSkaicius = DB::getUserActiveTasks();
+        //kieno sukurta `created_by`
+        $sukurtuUzduociuSkaicius = DB::getUserCreatedTasks();
     }
 
+    $a=$report->num_rows;
+
+//pradelstu uzduociu skaiciavimas
+    $count = 0;
+    if ($pradelstosUzduotys->num_rows > 0) {
+        while ($row = $pradelstosUzduotys->fetch_assoc()) {
+            if(date($row['finished']) > date($row['deadline'])) {
+                $count++;
+            }
+            if(date($row['finished']) == '0000-00-00 00:00:00'){
+                if(date("YYYY-MM-DD HH:mm") > date($row['deadline'])){
+                    $count++;
+                }
+            }
+        }
+    }
+    $b = $count;
+    //veliau c kintamajam
+    $count = 0;
+
+    if(empty(@$_POST['datetimes'])) {
+        if ($atliktosUzduociuSkaicius->num_rows > 0) {
+            while ($row = $atliktosUzduociuSkaicius->fetch_assoc()) {
+                if(date($row['finished'] != '0000-00-00 00:00:00')) {
+                    $count++;
+                }
+            }
+        }
+        $c = $count;
+    }else{
+        $c = $atliktosUzduociuSkaicius->num_rows;
+    }
 ?>
-    <?php
-        $a=$report->num_rows;
-    ?>
 
-    <?php
-        $count = 0;
-        $c = 0;
-        if ($report->num_rows > 0) {
-            while ($row = $report->fetch_assoc()) {
-                if (date($row['finished']) > date($row['deadline']) OR date($row['finished'] == '0000-00-00 00:00:00')) {
-                    $count++;
-                }
-                if(date($row['finished']) < date($row['deadline']) OR date($row['finished'] != '0000-00-00 00:00:00')) {
-                    $c++;
-                }
-            }
-        }
-        $b = $count;
-    ?>
-
-    <?php
-        $count =0;
-        if(empty(@$_POST['datetimes'])) {
-            if ($data2->num_rows > 0) {
-                while($row = $data2->fetch_assoc()) {
-                    $count++;
-                }
-            }
-            $d=$count;
-        }
-    ?>
+<?php
+    $d=$sukurtuUzduociuSkaicius->num_rows;
+?>
 
 <!DOCTYPE html>
 <html>
