@@ -119,7 +119,7 @@
                         <a class="nav-link active" href="#">Darbuotojai</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Duomenų bazė</a>
+                        <a class="nav-link" href="../../database/admin/database.php">Duomenų bazė</a>
                     </li>
                 </ul>
                 <form class="nav navbar-nav navbar-right" action="search.php" method="POST">

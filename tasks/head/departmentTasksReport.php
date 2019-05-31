@@ -8,29 +8,71 @@
     } else{
 
     }
-
-    $data = DB::getUserCreatedTasks();
-    $data2 = DB::countUserCreatedTasks();
-
-    $report2 = DB::getUserActiveTasks();
-    $report3 = DB::getUserActiveTasks();
-    $report4 = DB::getUserActiveTasks();
-
     $userDetails = DB::userDetails($_SESSION['user']);
-    $employeesList = DB::getDepartmenEmployees($userDetails['skyrius_id']);
-
-    if(!empty(@$_POST['datetimes']) && !empty(@$_POST['employeeId'])){
-
+    if(!empty(@$_POST['datetimes'])){
         $dataPost = explode(" - ", $_POST['datetimes']);
-
         if(!empty($dataPost[0]) && !empty($dataPost[1])){
+            //rodome visas uzduotis pagal data by assigned_to
             $report = DB::showTasksByDate($dataPost[0], $dataPost[1], $_SESSION['user']);
-            $connqwe = DB::showTasksByDateCreatedBy($dataPost[0], $dataPost[1], $_SESSION['user']);
-            $d = $connqwe->num_rows;
+            //rodome pradelstas uzduotis pagal data
+            $pradelstosUzduotys = DB::pradelstosUzduotys($dataPost[0], $dataPost[1], $_SESSION['user']);
+            //Atliktų užduočių skaičius
+            $atliktosUzduociuSkaicius = DB::atliktuUzduociuSkaicius($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $sukurtuUzduociuSkaicius = DB::showTasksByDateCreatedBy($dataPost[0], $dataPost[1], $_SESSION['user']);
+            $d = $sukurtuUzduociuSkaicius->num_rows;
         }
     }else{
-        $report = DB::getUserActiveTasks();
+        //kam priskirta by `assigned_to`
+        $employeesList = DB::getDepartmenEmployees($userDetails['skyrius_id']);
+        $arr = [];
+        while($employeesListRow = $employeesList->fetch_assoc()) {
+            array_push($arr, $employeesListRow['darb_id']);
+        }
+        $report = DB::getDepartmentActiveTasksList($arr);
+
+        $pradelstosUzduotys = DB::getUserActiveTasks($_SESSION['user']);
+
+        $atliktosUzduociuSkaicius = DB::getUserActiveTasks($_SESSION['user']);
+        //kieno sukurta `created_by`
+        $sukurtuUzduociuSkaicius = DB::getUserCreatedTasks($_SESSION['user']);
     }
+
+    $a=$report->num_rows;
+
+    //pradelstu uzduociu skaiciavimas
+    $count = 0;
+    if ($pradelstosUzduotys->num_rows > 0) {
+        while ($row = $pradelstosUzduotys->fetch_assoc()) {
+            if(date($row['finished']) > date($row['deadline'])) {
+                $count++;
+            }
+            if(date($row['finished']) == '0000-00-00 00:00:00'){
+                if(date("YYYY-MM-DD HH:mm") > date($row['deadline'])){
+                    $count++;
+                }
+            }
+        }
+    }
+    $b = $count;
+    //veliau c kintamajam
+    $count = 0;
+
+    if(empty(@$_POST['datetimes'])) {
+        if ($atliktosUzduociuSkaicius->num_rows > 0) {
+            while ($row = $atliktosUzduociuSkaicius->fetch_assoc()) {
+                if(date($row['finished'] != '0000-00-00 00:00:00')) {
+                    $count++;
+                }
+            }
+        }
+        $c = $count;
+    }else{
+        $c = $atliktosUzduociuSkaicius->num_rows;
+    }
+?>
+
+<?php
+    $d=$sukurtuUzduociuSkaicius->num_rows;
 ?>
 
 <!DOCTYPE html>
@@ -53,18 +95,19 @@
         <script type="text/javascript" src="../../js/daterangepicker.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/lt.js" type="text/javascript"></script>
-        <script type="text/javascript" src="https://www.gstatic.com/charts.com/charts/loader.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             google.charts.load('current', {'packages':['corechart']});
             google.charts.setOnLoadCallback(drawChart);
             function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                    ['Task', 'Number'],
-                    <?php
-                    while ($row = mysqli_fetch_array($data2)){
-                        echo "['".$row["task"]."', ".$row["number"]."],";
-                    }
-                    ?>
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Element');
+                data.addColumn('number', 'Percentage');
+                data.addRows([
+                    ['Priskirtų užduočių skaičius', <?php print $a ?>],
+                    ['Pradelstų užduočių skaičius', <?php print $b ?>],
+                    ['Atliktų užduočių skaičius', <?php print $c ?>],
+                    ['Sukurtų užduočių skaičius', <?php print $d ?>]
                 ]);
                 var options = {
 
@@ -77,23 +120,25 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <button type="button" class="btn-circle infoButton" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <button type="button" class="btn-circle infoButtonHead" data-toggle="modal" data-target="#myMenu"><i class='fas fa-info-circle' id="logout"></i></a></button>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarColor03">
+            <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Užduotys</a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Užduotys</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Duomenų bazė</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="form-inline my-2 my-lg-0" >
-                        <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">                         <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
-                        </form>
+                    <li class="form-inline my-2 my-lg-0">
+                    <li class="nav-item mr-sm-4">
+                        <a href="../../users/head/info.php"><i class='fas fa-address-card'id="info"></i></a>
+                    </li>
+                    <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
                     </li>
                 </ul>
             </div>
@@ -109,157 +154,74 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card mb-3">
-                                <div class="card-header headCardHeader">Užduočių statistika</div>
+                                <div class="card-header headCardHeader">Skyriaus užduočių statistika</div>
                                 <div class="card-body completedTasksAdmin">
                                     <div id="completedTasks">
-                                        <form action="departmentTasksReport.php" method="post">
-<!--                                        <label>-->
-<!--                                            <p>Darbuotojas:</p>-->
-<!--                                            <select name="employeeId">-->
-<!--                                                --><?php
-//                                                while($row = $employeesList->fetch_assoc()) {
-//                                                    echo "<option value='" . $row['id'] . "'>" . $row['vardas'] . " " . $row['pavarde'] . "</option>";
-//                                                }
-//                                                ?>
-<!--                                            </select>-->
-<!--                                        </label>-->
+
                                         <table class="table table-hover">
                                             <tbody>
                                             <tr>
-                                                <th>Skyriaus darbuotojas</th>
-                                            </tr>
-                                            <tr>
                                                 <th class="reportTableTh">Priskirtų užduočių skaičius</th>
                                                 <td class="reportTableTd">
-                                                    <?php
-                                                    if ($report2->num_rows > 0) {
-                                                        $count = 0;
-                                                        while ($row = $report2->fetch_assoc()) {
-                                                            if (date('Y-m-d H:i:s') < date($row['deadline']) && date($row['finished']) == '0000-00-00 00:00:00') {
-                                                                $count++;
-                                                            }
-                                                        }
-                                                        echo $count;
-                                                    }
-                                                    ?>
+                                                    <?php print $a ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="reportTableTh">Pradelstų užduočių skaičius</th>
                                                 <td class="reportTableTd">
-                                                    <?php
-                                                    if ($report3->num_rows > 0) {
-                                                        $count = 0;
-                                                        while ($row = $report3->fetch_assoc()) {
-                                                            if (date('Y-m-d H:i:s') > date($row['deadline']) && date($row['finished'])=='0000-00-00 00:00:00') {
-                                                                $count++;
-                                                            }
-                                                        }
-                                                        echo $count;
-                                                    }
-                                                    ?>
+                                                    <?php print $b ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="reportTableTh">Atliktų užduočių skaičius</th>
                                                 <td class="reportTableTd">
-                                                    <?php
-                                                    if ($report4->num_rows > 0) {
-                                                        $count = 0;
-                                                        while ($row = $report4->fetch_assoc()) {
-                                                            if(date($row['finished'])!='0000-00-00 00:00:00') {
-                                                                $count++;
-                                                            }
-                                                        }
-                                                        echo $count;
-                                                    }
-                                                    ?>
+                                                    <?php print $c ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="reportTableTh">Sukurtų užduočių skaičius</th>
                                                 <td class="reportTableTd">
-                                                    <?php
-                                                    if ($data->num_rows > 0) {
-                                                        $count =0;
-                                                        while($row = $data->fetch_assoc()) {
-                                                            $count++;
-                                                        }
-                                                        echo $count;
-                                                    }
-                                                    ?>
+                                                    <?php print $d ?>
                                                 </td>
                                             </tr>
                                             </tbody>
                                             <tfoot>
                                             <tr>
                                                 <th class="reportTableTh">Pasirinkite ataskaitos laikotarpį</th>
-                                                <td>
+                                                <td><form action="myTasksReport.php" method="post">
                                                         <div class="row">
                                                             <div class="reportTableDate">
                                                                 <input type="text" name="datetimes" class="dateAndTime form-control" name="save_task_btn">
                                                                 <script src="../../js/dateTime.js"></script>
                                                             </div>
                                                             <div class="reportTableButton"">
-                                                                <input type="submit" value="Pasirinkti" class="btn btn-primary">
-                                                            </div>
+                                                            <input type="submit" value="Pasirinkti" class="btn btn-primary">
                                                         </div>
-                                                    </form></td>
-                                            </tr>
-                                            </tfoot>
-                                        </table>
                                     </div>
+                                    </form></td>
+                                    </tr>
+                                    </tfoot>
+                                    </table>
                                 </div>
-                                <div class="card-footer small text-muted"></div>
                             </div>
+                            <div class="card-footer small text-muted"></div>
                         </div>
-
-                        <div class="col-lg-6">
-                            <div class="card mb-3">
-                                <div class="card-header headCardHeader">Priskirtų užduočių skritulinė diagrama</div>
-                                <div class="card-body overdueTasksAdmin">
-                                    <div id="piechart" style="width: 500px; height: 300px;"></div>
-                                </div>
-                                <div class="card-footer small text-muted"></div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="card mb-3">
-                                <div class="card-header headCardHeader">Pradelstų užduočių skritulinė diagrama</div>
-                                <div class="card-body overdueTasksAdmin">
-                                    <div id="piechart" style="width: 500px; height: 300px;"></div>
-                                </div>
-                                <div class="card-footer small text-muted"></div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="card mb-3">
-                                <div class="card-header headCardHeader">Atliktų užduočių skritulinė diagrama</div>
-                                <div class="card-body overdueTasksAdmin">
-                                    <div id="piechart" style="width: 500px; height: 300px;"></div>
-                                </div>
-                                <div class="card-footer small text-muted"></div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="card mb-3">
-                                <div class="card-header headCardHeader">Sukurtų užduočių skritulinė diagrama</div>
-                                <div class="card-body overdueTasksAdmin">
-                                    <div id="piechart" style="width: 500px; height: 300px;"></div>
-                                </div>
-                                <div class="card-footer small text-muted"></div>
-                            </div>
-                        </div>
-
                     </div>
+
+                    <div class="col-lg-6 float-right">
+                        <div class="card mb-3">
+                            <div class="card-header headCardHeader">Skyriaus užduočių skritulinė diagrama</div>
+                            <div class="card-body overdueTasksAdmin">
+                                <div id="piechart"></div>
+                            </div>
+                            <div class="card-footer small text-muted"></div>
+                        </div>
                     </div>
                 </div>
-                <!-- /.container-fluid -->
             </div>
-            <!-- /.content-wrapper -->
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-wrapper -->
         </div>
         <!-- /#wrapper -->
         <div class="scroll-to-top rounded">

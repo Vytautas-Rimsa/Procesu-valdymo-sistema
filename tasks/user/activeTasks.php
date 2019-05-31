@@ -9,10 +9,10 @@ if(!$user->exists()){
 
 }
 
-$data = DB::getUserActiveTasks();
-$data2 = DB::getUserActiveTasks();
-$data3 = DB::getUserActiveTasks();
-$data4 = DB::getUserCreatedTasks();
+$data = DB::getUserActiveTasks($_SESSION['user']);
+$data2 = DB::getUserActiveTasks($_SESSION['user']);
+$data3 = DB::getUserActiveTasks($_SESSION['user']);
+$data4 = DB::getUserCreatedTasks($_SESSION['user']);
 
 $search = @$_POST['submit-search'];
 
@@ -47,13 +47,14 @@ if(!empty($_GET['activeTasks'])){
 if(@$_GET['action'] == "darbuPeradresavimas"){
     $id=$_POST['peradresavimoId'];
     $uzd_id=intval($_POST['uzd_id']);
+    $comment = $_POST['task-comment'];
+
     if($id!="" || is_int($id)){
-        DB::uzduotiesPeradresavimas($uzd_id, $id);
+        DB::uzduotiesPeradresavimas($uzd_id, $id, $_SESSION['user'], $comment);
     }else{
         echo "Nepasirinktas tinkamas variantas";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -185,7 +186,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                                                     <div class="modal-body text-center">
                                                                         <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
                                                                             <select  class="form-control" name="peradresavimoId" required>
-                                                                                <option value="">Pasirinkite skyrių</option>
+                                                                                <option value="">Pasirinkite darbuotoją</option>
                                                                                 <?php
                                                                                 $qqq=DB::getAllDepartments();
                                                                                 while ($rvvv=mysqli_fetch_array($qqq)) {
@@ -195,6 +196,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                                                                         echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
                                                                                 }?>
                                                                             </select>
+                                                                            <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task-comment"></textarea>
                                                                             <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
                                                                             <button type="submit" class="button-submit" ><i class='fas fa-forward userCompleteTask didButtonsForwardFinish' id="actionsAllTasks"></i></button>
                                                                         </form>
@@ -217,7 +219,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                 </table>
                             </div>
                         </div>
-                        <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
+                        <div class="card-footer small text-muted"></div>
                     </div>
 
                     <div class="row">
@@ -287,7 +289,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                         </table>
                                     </div>
                                 </div>
-                                <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
+                                <div class="card-footer small text-muted"></div>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -371,7 +373,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                                                             <div class="modal-body text-center">
                                                                                 <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
                                                                                     <select  class="form-control" name="peradresavimoId" required>
-                                                                                        <option value="">Pasirinkite skyrių</option>
+                                                                                        <option value="">Pasirinkite darbuotoją</option>
                                                                                         <?php
                                                                                         $qqq=DB::getAllDepartments();
                                                                                         while ($rvvv=mysqli_fetch_array($qqq)) {
@@ -381,6 +383,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                                                                                 echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
                                                                                         }?>
                                                                                     </select>
+                                                                                    <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task-comment"></textarea>
                                                                                     <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
                                                                                     <button type="submit" class="button-submit" ><i class='fas fa-forward userCompleteTask didButtonsForwardFinish' id="actionsAllTasks"></i></button>
                                                                                 </form>
@@ -402,7 +405,7 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                                         </table>
                                     </div>
                                 </div>
-                                <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
+                                <div class="card-footer small text-muted"></div>
                             </div>
                         </div>
                     </div>                    

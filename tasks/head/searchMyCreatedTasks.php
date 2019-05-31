@@ -138,7 +138,7 @@ $data = DB::searchMyCreatedTasks($_POST['search']);
                         </table>
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
+                <div class="card-footer small text-muted"></div>
             </div>
             <!-- /.container-fluid -->
         </div>

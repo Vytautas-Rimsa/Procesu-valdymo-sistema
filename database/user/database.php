@@ -1,4 +1,8 @@
+<?php
 
+    $rowas = DB::getContractList();
+
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -52,7 +56,7 @@
                     <!-- Area Chart Example-->
                     <div class="card mb-3">
                         <div class="card-header userCardHeader">SUTARČIŲ SĄRAŠAS
-                            <a href="createClient.php"><i class="fas fa-plus-square" id="addLight"></i></a>
+                            <a href="createCompany.php"><i class="fas fa-plus-square" id="addLight"></i></a>
                         </div>
                             <div class="card-body">
                                 <div id="activeTasks">
@@ -69,22 +73,27 @@
                                             <th role="columnheader"></th>
                                         </tr>
                                         </thead>
-
                                         <tbody role="rowgroup">
-                                                <tr class="table-light" role="row">
-                                                    <th class="employeeList"scope="row"  role="cell"></th>
-                                                    <td  class="employeeList" role="cell"></td>
-                                                    <td  class="employeeList"role="cell"></td>
-                                                    <td  class="employeeList"role="cell"></td>
-                                                    <td  class="employeeList"role="cell"></td>
-                                                    <td  class=""role="cell"><i class='fas fa-paperclip' id="actions"></i></td>
-                                                    <td class="" role="cell"><a href=""><i class='fas fa-edit' id="actions"></i></a></td>
-                                                    <td class="" role="cell">
-                                                        <a onclick="redirect('')">
-                                                            <i class='fas fa-trash-alt' id="actions"></i>
+                                            <?php
+
+                                            $i = 1;
+
+                                            while($row = $rowas->fetch_assoc()){
+                                                echo "<tr class=\"table-light\" role=\"row\">
+                                                    <th class=\"employeeList\"scope=\"row\"  role=\"cell\">$i</th>
+                                                    <td  class=\"employeeList\" role=\"cell\">ytu</td>
+                                                    <td  class=\"employeeList\"role=\"cell\">".$row['']."</td>
+                                                    <td  class=\"employeeList\"role=\"cell\"></td>
+                                                    <td  class=\"employeeList\"role=\"cell\"></td>
+                                                    <td  class=\"\"role=\"cell\"><i class='fas fa-paperclip' id=\"actions\"></i></td>
+                                                    <td class=\"\" role=\"cell\"><a href=\"\"><i class='fas fa-edit' id=\"actions\"></i></a></td>
+                                                    <td class=\"\" role=\"cell\">
+                                                        <a onclick=\"redirect('')\">
+                                                            <i class='fas fa-trash-alt' id=\"actions\"></i>
                                                         </a>
                                                     </td>
-                                                </tr>
+                                                </tr>";
+                                            }?>
                                         </tbody>
                                     </table>
                                 </div>

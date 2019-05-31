@@ -9,9 +9,9 @@
 
     }
 
-    $data = DB::getUserActiveTasks();
-    $data2 = DB::getUserActiveTasks();
-    $data3 = DB::getUserActiveTasks();
+    $data = DB::getUserActiveTasks($_SESSION['user']);
+    $data2 = DB::getUserActiveTasks($_SESSION['user']);
+    $data3 = DB::getUserActiveTasks($_SESSION['user']);
     //$data4 = DB::getUserCreatedTasks();
 
     $search = @$_POST['submit-search'];
@@ -119,7 +119,7 @@
                         <a class="nav-link" href="../../users/admin/users.php">Darbuotojai</a>
                     </li>     
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Duomenų bazė</a>
+                        <a class="nav-link" href="../../database/admin/database.php">Duomenų bazė</a>
                     </li>                     
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -219,7 +219,7 @@
                                                                         <div class="modal-body text-center">
                                                                             <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
                                                                                 <select  class="form-control" name="peradresavimoId" required>
-                                                                                    <option value="">Pasirinkite skyrių</option>
+                                                                                    <option value="">Pasirinkite darbuotoją</option>
                                                                                     <?php
                                                                                     $qqq=DB::getAllDepartments();
                                                                                     while ($rvvv=mysqli_fetch_array($qqq)) {
@@ -251,7 +251,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
+                        <div class="card-footer small text-muted"></div>
                     </div>
 
                     <div class="row">
@@ -319,7 +319,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
+                                <div class="card-footer small text-muted"></div>
                             </div>
                         </div>
 
@@ -407,7 +407,7 @@
                                                                             <div class="modal-body text-center">
                                                                                 <form action="activeTasks.php?action=darbuPeradresavimas" method="post">
                                                                                                                                                         <select  class="form-control" name="peradresavimoId" required>
-                                                                                                                                                            <option value="">Pasirinkite skyrių</option>
+                                                                                                                                                            <option value="">Pasirinkite darbuotoją</option>
                                                                                                                                                             <?php
                                                                                                                                                             $qqq=DB::getAllDepartments();
                                                                                                                                                             while ($rvvv=mysqli_fetch_array($qqq)) {
@@ -417,7 +417,7 @@
                                                                                                                                                                     echo '<option value="'. $qw['darb_id'] .'"><span style="margin-left: 15px">'.$qw['vardas'].' '.$qw['pavarde'].'</span></option>';}
                                                                                                                                                             }?>
                                                                                                                                                         </select>
-                                                                                                                                                        <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
+                                                                                    <textarea class="activeTasksTextareaComent form-control" placeholder="Užduoties komentaras" name="task-comment"></textarea>                                                                                       <input type="hidden" value="<?php echo $uzd_id ?>" name="uzd_id">
                                                                                                                                                         <button type="submit" class="button-submit" ><i class='fas fa-forward didButtonsForwardFinish' id="actionsAllTasks"></i></button>
                                                                                                                                                     </form>
                                                                             </div>
@@ -438,7 +438,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
+                                <div class="card-footer small text-muted"></div>
                             </div>
                         </div>
                     </div>                    

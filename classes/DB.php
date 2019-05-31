@@ -325,8 +325,8 @@ class DB{
         return $result;
     }
 
-    public function getUserActiveTasks(){
-        $sql="SELECT * FROM `tasks` WHERE `assigned_to` LIKE '".$_SESSION['user']."'";
+    public function getUserActiveTasks(int $id){
+        $sql="SELECT * FROM `tasks` WHERE `assigned_to` LIKE '".$id."'";
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
@@ -340,8 +340,8 @@ class DB{
         return $result;
     }
 
-    public function getUserCreatedTasks(){
-        $sql="SELECT * FROM `tasks` WHERE `created_by` LIKE '".$_SESSION['user']."'";
+    public function getUserCreatedTasks(int $id){
+        $sql="SELECT * FROM `tasks` WHERE `created_by` LIKE '".$id."'";
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
@@ -539,6 +539,123 @@ class DB{
             die("Prisijungti nepavyko: " . $conn->connect_error);
         }
         $result = $conn->query($sql);
+        return $result;
+    }
+
+    public static function getDepartmentActiveTasksList(array $arr){
+        $sql = "SELECT * FROM `tasks` WHERE `assigned_to` = ".$arr[0]." ";
+
+        for($i =1; $i < count($arr);$i++){
+            $sql = $sql."OR `assigned_to` = ".$arr[$i]." ";
+        }
+
+        $sql = $sql."ORDER BY `assigned_to` DESC";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public static function getClientTypeList(){
+        $sql = "SELECT * FROM `clienttypes`";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
+    public static function getCityList(){
+        $sql = "SELECT * FROM `city`";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
+    public static function getStreetsList(){
+        $sql = "SELECT * FROM `addresses`";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+
+        return $result;
+    }
+
+    public static function saveClientData(int $type, String $title, String $email, String $phone, String $code, String $contract_code, String $city, String $street, String $file, String $house_nr, String $vat, int $contract_status){
+
+        $sql = "INSERT INTO `clients` (`client_id`, `client_type_id`, `title`, `email`, `phone`, `city_id`, `street_id`, `house_nb`, `identification_code`, `vat`, `time`) VALUES (NULL, '$type', '$title', '$email', '$phone', '$city', '$street', '$house_nr', '$code', '$vat', CURRENT_TIMESTAMP);";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        $sql2 ="INSERT INTO `contracts` (`contract_id`, `status_id`, `file_path`, `time`) VALUES (NULL, '$contract_status', '$file', CURRENT_TIMESTAMP);";
+
+
+
+        try {
+            if ($conn->connect_error) {throw new Exception('Nepavyko prisijungti prie DB');}
+            $conn->query($sql);
+            $conn->query($sql2);
+            $row = $conn->query($sql);
+            $row2 = $conn->query($sql2);
+
+            $sql3 ="INSERT INTO `clientcontracts` (`clientContracts_id`, `client_id`, `contract_id`, `time`) VALUES (NULL, '".$row['client_id']."', '".$row2['contract_id']."', CURRENT_TIMESTAMP);";
+
+            $conn->query($sql3);
+
+        } catch (Exception $e) {
+            $result = die($e->getMessage());
+        }
+
+        return 'OK';
+    }
+
+    public static function getContractList(int $type, String $title, String $email, String $phone, String $code, String $contract_code, String $city, String $street, String $file, String $house_nr, String $vat, int $contract_status){
+
+        $sql = "SELECT * FROM `contracts`";
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        //$sql2 ="INSERT INTO `contracts` (`contract_id`, `status_id`, `file_path`, `time`) VALUES (NULL, '$contract_status', '$file', CURRENT_TIMESTAMP);";
+
+
+
+        try {
+            if ($conn->connect_error) {throw new Exception('Nepavyko prisijungti prie DB');}
+            $result = $conn->query($sql);
+            //$conn->query($sql2);
+            //$row = $conn->query($sql);
+           // $row2 = $conn->query($sql2);
+
+            //$sql3 ="INSERT INTO `clientcontracts` (`clientContracts_id`, `client_id`, `contract_id`, `time`) VALUES (NULL, '".$row['client_id']."', '".$row2['contract_id']."', CURRENT_TIMESTAMP);";
+
+            //$conn->query($sql3);
+
+        } catch (Exception $e) {
+            $result = die($e->getMessage());
+        }
+
         return $result;
     }
 }

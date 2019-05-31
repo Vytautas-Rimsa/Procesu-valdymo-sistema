@@ -67,7 +67,7 @@
                             <a class="nav-link" href="../../users/admin/users.php">Darbuotojai</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Duomenų bazė</a>
+                            <a class="nav-link" href="../../database/admin/database.php">Duomenų bazė</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -133,7 +133,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="card-footer small text-muted">Paskutinis įrašas 11:59 PM</div>
+                            <div class="card-footer small text-muted"></div>
                         </div>
                     </div>
                 </div>

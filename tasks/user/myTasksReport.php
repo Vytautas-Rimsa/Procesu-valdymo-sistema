@@ -23,13 +23,13 @@
         }
     }else{
         //kam priskirta by `assigned_to`
-        $report = DB::getUserActiveTasks();
+        $report = DB::getUserActiveTasks($_SESSION['user']);
 
-        $pradelstosUzduotys = DB::getUserActiveTasks();
+        $pradelstosUzduotys = DB::getUserActiveTasks($_SESSION['user']);
 
-        $atliktosUzduociuSkaicius = DB::getUserActiveTasks();
+        $atliktosUzduociuSkaicius = DB::getUserActiveTasks($_SESSION['user']);
         //kieno sukurta `created_by`
-        $sukurtuUzduociuSkaicius = DB::getUserCreatedTasks();
+        $sukurtuUzduociuSkaicius = DB::getUserCreatedTasks($_SESSION['user']);
     }
 
     $a=$report->num_rows;

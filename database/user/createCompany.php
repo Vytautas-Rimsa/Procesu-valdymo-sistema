@@ -1,4 +1,52 @@
+<?php
+    require_once('../../core/init.php');
+    require_once('../../classes/User.php');
 
+    $notification = "";
+
+    if(!empty(@$_GET['new_contract'])){
+        if(empty($_POST['client_type'])
+            OR empty($_POST['title'])
+            OR empty($_POST['email'])
+            OR empty($_POST['phone'])
+            OR empty($_POST['code'])
+            OR empty($_POST['contract_code'])
+            OR empty($_POST['city'])
+            OR empty($_POST['street'])
+//            OR empty($_POST['file'])
+        ){
+            $notification = "<div class=\"alert alert-danger\" role=\"alert\">
+        Prašome užpildyti laukelius
+    </div>";
+        }else{
+            try{
+                DB::saveClientData($_POST['client_type'],
+                    $_POST['title'],
+                    $_POST['email'],
+                    $_POST['phone'],
+                    $_POST['code'],
+                    $_POST['contract_code'],
+                    $_POST['city'],
+                    $_POST['street'],
+                    $_POST['contract_file'],
+                    $_POST['house_nr'],
+                    $_POST['vat'],
+                    $_POST['contract_status']);
+
+                $notification = "<div class=\"alert alert-success\" role=\"alert\">
+        Įrašas sėkmingai sukurtas.
+    </div>";
+            }
+            catch (Exception $e){
+                $notification = "<div class=\"alert alert-danger\" role=\"alert\">
+                Klaida: $e;
+            </div>";
+            }
+        }
+    }
+
+
+    ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -46,101 +94,123 @@
 
     <body id="page-top">
         <div id="wrapper">
-            <!-- Sidebar -->
-            <ul class="sidebar userSidebar navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="createClient.php">
-                        <span>Fizinis asmuo</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span>Juridinis asmuo</span>
-                    </a>
-                </li>
-            </ul>
 
             <div class="container">
                 <div class="col-sm-6 offset-sm-3">
                     <div class="headerUser">
                         <h2>Sukurti naują klientą</h2>
                     </div>
-
-                    <form method="post" action="createClient.php" class="formaAplication">
+<?php echo "$notification"; ?>
+                    <form method="post" action="createCompany.php?new_contract=create" class="formaAplication">
 
                         <fieldset>
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Sutarties nr.</label>
+                                <label class="col-sm-3 col-form-label">Kliento tipas</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="contractNb" id="" placeholder="Sutarties numeris" value="" >
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Pavadinimas</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="comapny" id="" placeholder="Įmonės pavadinimas" value="" >
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Įmonės kodas</label>
-                                <div class="col-sm-9">
-                                    <input type="password" class="form-control" name="code" id="" placeholder="Įmonės kodas" value="">
+                                    <select class="form-control" name="client_type">
+                                        <?php
+                                        $rowas = DB::getClientTypeList();
+                                        while($row = $rowas->fetch_assoc()){
+                                            echo "<option value='".$row['type_id']."'>".$row['title']."</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">PVM kodas</label>
-                                <div class="col-sm-9">
+                                <label class="col-sm-5 col-form-label">Įmonės pavadinimas (vardas, pavardė)</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="title" id="" placeholder="Įmonės pavadinimas/ vardas pavardė" value="" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-5 col-form-label">El. paštas</label>
+                                <div class="col-sm-7">
+                                    <input type="email" class="form-control" name="email" id="" placeholder="El. pašto adresas"  value="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-5 col-form-label">Telefono nr.</label>
+                                <div class="col-sm-7">
+                                    <input type="tel" class="form-control" name="phone" id="" placeholder="Telefono numeris"  value="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-5 col-form-label">Įmonės (asmens) kodas</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="code" id="" placeholder="Įmonės (asmens) kodas" value="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-5 col-form-label">PVM kodas</label>
+                                <div class="col-sm-7">
                                     <input type="text" class="form-control" name="vat" id="" placeholder="PVM mokėtojo kodas" value="">
                                 </div>
                             </div>
-
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">El. paštas</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="elpastas" id="" placeholder="El. pašto adresas"  value="">
+                                <label class="col-sm-5 col-form-label">Sutarties nr.</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="contract_code" id="" placeholder="Sutarties numeris" value="" >
                                 </div>
                             </div>
-
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Telefono nr.</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="phone" id="" placeholder="Telefono numeris"  value="">
+                                <label class="col-sm-5 col-form-label">Sutarties statusas.</label>
+                                <div class="col-sm-7">
+                                    <select name="contract_status" class="form-control">
+                                        <option value="1">Galiojanti</option>
+                                        <option value="0">Nutraukta</option>
+                                        <option value="2">Sustabdyta</option>
+                                    </select>
                                 </div>
                             </div>
-                            <hr>
                             <div class="form-group row">
                                 <label class="col-sm-12 col-form-label"><b>Adresas korespondencijai</b></label>
                             </div>
+                            <hr>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Miestas</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="city">
+                                        <?php
+                                        $rowas = DB::getCityList();
+                                        while($row = $rowas->fetch_assoc()){
+                                            echo "<option value='".$row['city_id']."'>".$row['city_name']."</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
 
 
                             <div class="form-group row">
                                 <label  class="col-sm-3 col-form-label">Gatvė</label>
                                 <div class="col-sm-6">
-                                    <select class="form-control" name="street" id="" value="">
-                                        <option value="">Pasirinkite gatvę</option>
-                                        <option value=""></option>
+                                    <select class="form-control" name="street">
+                                        <?php
+                                        $rowas = DB::getStreetsList();
+                                        while($row = $rowas->fetch_assoc()){
+                                            echo "<option value='".$row['address_id']."'>".$row['address']."</option>";
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                                 <label  class="col-sm-1 col-form-label">Nr.</label>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control" name="number" id="" placeholder=""  value="">
+                                    <input type="text" class="form-control" name="house_nr" id="" placeholder=""  value="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Sutarties failas</label>
+                                <div class="col-sm-9">
+                                    <input type="file" class="form-control-file" name="contract_file" id="" placeholder="Sutarties numeris" value="" accept="document/png, image/jpeg, application/pdf">
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Miestas</label>
-                                <div class="col-sm-9">
-                                    <select class="form-control subcat" name="miestas" id="" value="">
-                                        <option value="">Pasirinkite miestą</option>
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-                            </div>
+
 
                             <div class="form my-2 my-lg-0">
-                                <i class='fas fa-paperclip' id="infoLight"></i>
                                 <button type="reset" class="btn btn-default mr-sm-2 createUserBtn">Atšaukti</button>
                                 <button type="submit" class="btn userTaskButton mr-sm-2 createUserBtn" name="register_btn">Patvirtinti</button>
                             </div>
