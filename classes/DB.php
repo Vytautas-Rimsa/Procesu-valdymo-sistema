@@ -609,20 +609,26 @@ class DB{
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
-        $sql2 ="INSERT INTO `contracts` (`contract_id`, `status_id`, `file_path`, `time`) VALUES (NULL, '$contract_status', '$file', CURRENT_TIMESTAMP);";
+        $sql2 ="INSERT INTO `contracts` (`contract_id`, `status_id`, `contract_code`, `file_path`, `time`) VALUES (NULL, '$contract_status', '$contract_code', '$file', CURRENT_TIMESTAMP);";
 
 
 
         try {
             if ($conn->connect_error) {throw new Exception('Nepavyko prisijungti prie DB');}
-            $conn->query($sql);
-            $conn->query($sql2);
-            $row = $conn->query($sql);
-            $row2 = $conn->query($sql2);
 
-            $sql3 ="INSERT INTO `clientcontracts` (`clientContracts_id`, `client_id`, `contract_id`, `time`) VALUES (NULL, '".$row['client_id']."', '".$row2['contract_id']."', CURRENT_TIMESTAMP);";
+            //ivykde uzklausa pasiimame eiluciu duomenis
+            if ($conn->query($sql) === TRUE){
 
-            $conn->query($sql3);
+                $client_id = $conn->insert_id;
+                if($conn->query($sql2) === TRUE){
+                    $contract_id = $conn->insert_id;
+
+                    $sql3 ="INSERT INTO `clientcontracts` (`clientContracts_id`, `client_id`, `contract_id`, `time`) VALUES (NULL, '".$client_id."', '".$contract_id."', CURRENT_TIMESTAMP);";
+
+                    $conn->query($sql3);
+                }
+
+            }
 
         } catch (Exception $e) {
             $result = die($e->getMessage());
@@ -630,32 +636,44 @@ class DB{
 
         return 'OK';
     }
+    public static function getContractList(){
 
-    public static function getContractList(int $type, String $title, String $email, String $phone, String $code, String $contract_code, String $city, String $street, String $file, String $house_nr, String $vat, int $contract_status){
-
-        $sql = "SELECT * FROM `contracts`";
+        $sql = "SELECT * FROM `clientcontracts`";
 
         $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
 
-        //$sql2 ="INSERT INTO `contracts` (`contract_id`, `status_id`, `file_path`, `time`) VALUES (NULL, '$contract_status', '$file', CURRENT_TIMESTAMP);";
-
-
-
         try {
             if ($conn->connect_error) {throw new Exception('Nepavyko prisijungti prie DB');}
-            $result = $conn->query($sql);
-            //$conn->query($sql2);
-            //$row = $conn->query($sql);
-           // $row2 = $conn->query($sql2);
+//WHILE ideti...
 
-            //$sql3 ="INSERT INTO `clientcontracts` (`clientContracts_id`, `client_id`, `contract_id`, `time`) VALUES (NULL, '".$row['client_id']."', '".$row2['contract_id']."', CURRENT_TIMESTAMP);";
+            $pivotTableMasyvasResult = $conn->query($sql);
+            $array = [];
+            $i = 0;
 
-            //$conn->query($sql3);
+            while($pivotTableMasyvas = $pivotTableMasyvasResult->fetch_assoc()){
+
+                //isitrauksime paiseme to pivot table klinto ID kliento lenteles to iraso info
+                $client_sql = "SELECT * FROM `clients` WHERE `client_id` = ".$pivotTableMasyvas['client_id'];
+                    if ($client_arr = $conn->query($client_sql)) {
+                        $contract_data = $client_arr->fetch_assoc();
+
+                        $array[$i]['client'] = $contract_data;
+                    }
+                //isitrauksime paiseme to pivot table klinto ID contract lenteles to iraso info
+
+                $contract_sql = "SELECT * FROM `contracts` WHERE `contract_id` = ".$pivotTableMasyvas['contract_id'];
+                    if ($contract_arr = $conn->query($contract_sql)) {
+                        $contract_data = $contract_arr->fetch_assoc();
+
+                        $array[$i]['contract'] = $contract_data;
+                    }
+
+                $i++;
+            }
+            return $array;
 
         } catch (Exception $e) {
             $result = die($e->getMessage());
         }
-
-        return $result;
     }
 }

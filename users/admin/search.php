@@ -62,7 +62,7 @@
 	
 	<body id="page-top">
 		<div class="container">            
-            <h3>Paieškos rezultatai: <!--<?php echo $queryResult." ".$resultCount; ?>--></h3>
+            <h3>Paieškos rezultatai: </h3>
             <table class="table table-hover">
                 <thead>
                 <tr>

@@ -15,7 +15,7 @@
             OR empty($_POST['street'])
 //            OR empty($_POST['file'])
         ){
-            $notification = "<div class=\"alert alert-danger\" role=\"alert\">
+            $notification = "<div class=\"alert alert-danger allert__modfificator\" role=\"alert\">
         Prašome užpildyti laukelius
     </div>";
         }else{
@@ -28,17 +28,21 @@
                     $_POST['contract_code'],
                     $_POST['city'],
                     $_POST['street'],
-                    $_POST['contract_file'],
+                    $_FILES['contract_file']['name'],
                     $_POST['house_nr'],
                     $_POST['vat'],
                     $_POST['contract_status']);
 
-                $notification = "<div class=\"alert alert-success\" role=\"alert\">
+                $target_Path = "../../contractFiles/";
+                $target_Path = $target_Path.basename( $_FILES['contract_file']['name'] );
+                move_uploaded_file( $_FILES['contract_file']['tmp_name'], $target_Path );
+
+                $notification = "<div class=\"alert alert-success allert__modfificator\" role=\"alert\">
         Įrašas sėkmingai sukurtas.
     </div>";
             }
             catch (Exception $e){
-                $notification = "<div class=\"alert alert-danger\" role=\"alert\">
+                $notification = "<div class=\"alert alert-danger allert__modfificator\" role=\"alert\">
                 Klaida: $e;
             </div>";
             }
@@ -101,7 +105,7 @@
                         <h2>Sukurti naują klientą</h2>
                     </div>
 <?php echo "$notification"; ?>
-                    <form method="post" action="createCompany.php?new_contract=create" class="formaAplication">
+                    <form method="post" action="createCompany.php?new_contract=create" class="formaAplication" enctype='multipart/form-data'>
 
                         <fieldset>
                             <div class="form-group row">

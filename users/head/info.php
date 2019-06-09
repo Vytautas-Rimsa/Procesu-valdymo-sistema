@@ -4,10 +4,8 @@
 
     $user = new User();
     if(!$user->exists()){
-        //Redirect::to(404);
-    } else{
-        $data = $user->data();
-    }
+
+    } else{$data = $user->data();}
 ?>
 <!DOCTYPE html>
 <html>

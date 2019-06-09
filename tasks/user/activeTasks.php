@@ -1,60 +1,60 @@
 <?php
-require_once('../../core/init.php');
-require_once('../../classes/User.php');
+    require_once('../../core/init.php');
+    require_once('../../classes/User.php');
 
-$user = new User();
-if(!$user->exists()){
-    //Redirect::to(404);
-} else{
+    $user = new User();
+    if(!$user->exists()){
+        //Redirect::to(404);
+    } else{
 
-}
-
-$data = DB::getUserActiveTasks($_SESSION['user']);
-$data2 = DB::getUserActiveTasks($_SESSION['user']);
-$data3 = DB::getUserActiveTasks($_SESSION['user']);
-$data4 = DB::getUserCreatedTasks($_SESSION['user']);
-
-$search = @$_POST['submit-search'];
-
-if(!empty($search)){
-    DB::searchTaskFromActive($search);
-    header('Location: searchActiveTasks.php');
-}
-
-if(!empty($_GET['lateTasks'])){
-    $taskas = $_POST['task'];
-    if(!empty($taskas)){
-        DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
-        $lateTasksSuccess = "Sėkmingai atlikta užduotis";
-    }else{
-        $lateTasksError = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
-    }
-}
-
-if(!empty($_GET['activeTasks'])){
-    $taskas = $_POST['task'];
-
-    if(empty($taskas)){
-        $error = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
     }
 
-    if(!empty($taskas)){
-        DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
-        $success = "Sėkmingai atlikta užduotis";
-    }
-}
+    $data = DB::getUserActiveTasks($_SESSION['user']);
+    $data2 = DB::getUserActiveTasks($_SESSION['user']);
+    $data3 = DB::getUserActiveTasks($_SESSION['user']);
+    $data4 = DB::getUserCreatedTasks($_SESSION['user']);
 
-if(@$_GET['action'] == "darbuPeradresavimas"){
-    $id=$_POST['peradresavimoId'];
-    $uzd_id=intval($_POST['uzd_id']);
-    $comment = $_POST['task-comment'];
+    $search = @$_POST['submit-search'];
 
-    if($id!="" || is_int($id)){
-        DB::uzduotiesPeradresavimas($uzd_id, $id, $_SESSION['user'], $comment);
-    }else{
-        echo "Nepasirinktas tinkamas variantas";
+    if(!empty($search)){
+        DB::searchTaskFromActive($search);
+        header('Location: searchActiveTasks.php');
     }
-}
+
+    if(!empty($_GET['lateTasks'])){
+        $taskas = $_POST['task'];
+        if(!empty($taskas)){
+            DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
+            $lateTasksSuccess = "Sėkmingai atlikta užduotis";
+        }else{
+            $lateTasksError = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
+        }
+    }
+
+    if(!empty($_GET['activeTasks'])){
+        $taskas = $_POST['task'];
+
+        if(empty($taskas)){
+            $error = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
+        }
+
+        if(!empty($taskas)){
+            DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
+            $success = "Sėkmingai atlikta užduotis";
+        }
+    }
+
+    if(@$_GET['action'] == "darbuPeradresavimas"){
+        $id=$_POST['peradresavimoId'];
+        $uzd_id=intval($_POST['uzd_id']);
+        $comment = $_POST['task-comment'];
+
+        if($id!="" || is_int($id)){
+            DB::uzduotiesPeradresavimas($uzd_id, $id, $_SESSION['user'], $comment);
+        }else{
+            echo "Nepasirinktas tinkamas variantas";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -89,20 +89,20 @@ if(@$_GET['action'] == "darbuPeradresavimas"){
                         <a class="nav-link" href="../../database/user/database.php">Duomenų bazė</a>
                     </li>                    
                 </ul>
-                <li class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">
                     <li class="form-inline my-2 my-lg-0">
                         <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">
-                    <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
-                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                            <li class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                                <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                            </li>
+                            <li class="nav-item mr-sm-4">
+                                <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
+                            </li>
+                            <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logoutLight"></i></a>
+                        </form>
                     </li>
-                <li class="nav-item mr-sm-4">
-                <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
-                </li>
-                    <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logoutLight"></i></a>
-                    </form>
-                </li>
-                </ul>                
+                </ul>
             </div>
         </nav>
     </header>
