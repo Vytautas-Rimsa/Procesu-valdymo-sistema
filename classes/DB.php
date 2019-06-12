@@ -676,4 +676,72 @@ class DB{
             $result = die($e->getMessage());
         }
     }
+
+    public static function getCityName(int $cityId){
+        $sql = "SELECT * FROM `city` WHERE `city_id` = $cityId";
+        //return (new self)->mysql($sql);
+
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public static function getClientTypeName(int $clientTypeId){
+        $sql = "SELECT * FROM `clienttypes` WHERE `type_id` = $clientTypeId";
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public static function getStreetName(int $streetId){
+        $sql = "SELECT * FROM `addresses` WHERE `address_id` = $streetId";
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public static function getContractInfo(int $contractId){
+        $sql = "SELECT * FROM `contracts` WHERE `contract_id` = $contractId";
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result;
+    }
+
+    public static function deleteContract(int $contractId){
+        $sql = "START TRANSACTION;
+
+        DELETE FROM `clientcontracts` WHERE `clientcontracts`.`contract_id` = $contractId;
+        
+        DELETE FROM `contracts` WHERE `contracts`.`contract_id` = $contractId;
+        
+        COMMIT;";
+        $conn = new mysqli(Config::get('mysql/host'), Config::get('mysql/username'), Config::get('mysql/password'), Config::get('mysql/db'));
+
+        if ($conn->connect_error) {
+            return false;
+            die("Prisijungti nepavyko: " . $conn->connect_error);
+        }
+        $result = $conn->query($sql);
+        return $result;
+    }
 }

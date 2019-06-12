@@ -1,4 +1,9 @@
+<?php
+    require_once('../../core/init.php');
+    require_once('../../classes/User.php');
 
+    $duomArr = DB::getContractList();
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -34,15 +39,13 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="form-inline my-2 my-lg-0" >
-                        <form class="nav navbar-nav navbar-right" action="searchClients.php" method="POST">
                     <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
-                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                        <form class="nav navbar-nav navbar-right" action="searchClients.php" method="POST">
+                            <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                            <button class="btn btn-secondary mr-sm-4" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                        </form>
                     </li>
                     <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
-                    </form>
-                    </li>
                 </ul>
             </div>
         </nav>
@@ -50,13 +53,11 @@
 
     <body id="page-top">
         <div id="wrapper">
-
             <div id="content-wrapper">
                 <div class="container-fluid">
                     <!-- Area Chart Example-->
                     <div class="card mb-3">
                         <div class="card-header adminCardHeader">SUTARČIŲ SĄRAŠAS
-                            <a href="addCity.php"><i class='fas fa-city' id="addLight"></i></a>
                             <a href="addStreet.php"><i class='fas fa-road' id="addLight"></i></a>
                         </div>
                         <div class="card-body">
@@ -64,32 +65,76 @@
 
                                 <table table class="table table-hover" id="keywords" cellspacing="0" cellpadding="0">
                                     <thead role="rowgroup">
-                                    <tr  role="row">
-                                        <th role="columnheader">Nr.</th>
-                                        <th role="columnheader">Pavadinimas</th>
-                                        <th role="columnheader">Sutarties numeris</th>
-                                        <th role="columnheader">Statusas</th>
-                                        <th role="columnheader"></th>
-                                        <th role="columnheader"></th>
-                                        <th role="columnheader"></th>
-                                    </tr>
+                                        <tr  role="row">
+                                            <th role="columnheader">Nr.</th>
+                                            <th role="columnheader">Pavadinimas</th>
+                                            <th role="columnheader">Sutarties numeris</th>
+                                            <th role="columnheader">Statusas</th>
+                                            <th role="columnheader"></th>
+                                        </tr>
                                     </thead>
 
                                     <tbody role="rowgroup">
-                                    <tr class="table-light" role="row">
-                                        <th class="employeeList"scope="row"  role="cell"></th>
-                                        <td  class="employeeList" role="cell"></td>
-                                        <td  class="employeeList"role="cell"></td>
-                                        <td  class="employeeList"role="cell"></td>
-                                        <td  class="employeeList"role="cell"></td>
-                                        <td  class=""role="cell"><i class='fas fa-paperclip' id="actions"></i></td>
-                                        <td class="" role="cell"><a href=""><i class='fas fa-edit' id="actions"></i></a></td>
-                                        <td class="" role="cell">
-                                            <a onclick="redirect('')">
-                                                <i class='fas fa-trash-alt' id="actions"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    <?php
+                                    $duomArrI = count($duomArr);
+
+                                    for($i=0; $i<$duomArrI;$i++){
+                                        $y=$i+1;
+                                        echo "<tr class=\"table-light\" role=\"row\">
+                                                    <th class=\"employeeList\"scope=\"row\"  role=\"cell\">$y</th>
+                                                    <td  class=\"employeeList\" role=\"cell\">".$duomArr[$i]['client']['title']."</td>
+                                                    <td  class=\"employeeList\"role=\"cell\">".$duomArr[$i]['contract']['contract_code']."</td>
+                                                    <td  class=\"employeeList\"role=\"cell\">";
+                                        switch ($duomArr[$i]['contract']['status_id']) {
+                                            case 0:
+                                                echo "Nutraukta";
+                                                break;
+                                            case 1:
+                                                echo "Galiojanti";
+                                                break;
+                                            case 2:
+                                                echo "Sustabdyta";
+                                                break;
+                                        }
+                                        echo"</td>
+                                                    <td  class=\"employeeList\"role=\"cell\"></td>
+                                                    <td  class=\"\"role=\"cell\">
+                                                        <button type=\"button\" class=\"btn btn-secondary\" data-toggle=\"modal\" data-target=\".bd-example-modal-lg".$y."\">
+                                                            <i class='fas fa-search' id=\"actions\"></i>
+                                                        </button>
+                                                        
+                                                    </td>
+                                                    <div class=\"modal fade bd-example-modal-lg".$y."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myLargeModalLabel\" aria-hidden=\"true\">
+                                                      <div class=\"modal-dialog modal-lg\">
+                                                        <div class=\"modal-content\">
+                                                         <div class=\"modal-header\">
+                                                            <h5 class=\"modal-title\">".$duomArr[$i]['contract']['contract_code']."</h5>
+                                                            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+                                                              <span aria-hidden=\"true\">&times;</span>
+                                                            </button>
+                                                          </div>
+                                                          <div class=\"modal-body\">
+                                                            <p><b>Kliento tipas: </b>".$duomArr[$i]['client']['client_type_id']."</p>
+                                                            <p><b>Pavadinimas: </b>".$duomArr[$i]['client']['title']."</p>
+                                                            <p><b>El. paštas: </b>".$duomArr[$i]['client']['email']."</p>
+                                                            <p><b>Telefono numeris: </b>".$duomArr[$i]['client']['phone']."</p>
+                                                            <p><b>Miestas: </b>".$duomArr[$i]['client']['city_id']."</p>
+                                                            <p><b>Gatvė: </b>".$duomArr[$i]['client']['street_id']."</p>
+                                                            <p><b>Numeris: </b>".$duomArr[$i]['client']['house_nb']."</p>
+                                                            <p><b>Kliento kodas: </b>".$duomArr[$i]['client']['identification_code']."</p>
+                                                            <p><b>PVM mokėtojo kodas: </b>".$duomArr[$i]['client']['vat']."</p>
+                                                            <p><b>Įrašo data: </b>".$duomArr[$i]['client']['time']."</p>
+                                                          </div>
+                                                          <div class=\"modal-footer\">
+                                                            <button type=\"button\" class=\"btn adminButton my-2 my-sm-0\" name=\"addUser_btn\">Išsaugoti pakeitimus</button>                                                            
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    
+                                                    
+                                                </tr>";
+                                    }?>
                                     </tbody>
                                 </table>
                             </div>

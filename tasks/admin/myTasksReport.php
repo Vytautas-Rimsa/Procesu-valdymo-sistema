@@ -132,11 +132,7 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="form-inline my-2 my-lg-0" >
-                        <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">
-                            <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
-                        </form>
-                    </li>
+                    <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
                 </ul>
             </div>
         </nav>

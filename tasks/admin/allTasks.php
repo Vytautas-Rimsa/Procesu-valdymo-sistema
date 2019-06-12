@@ -70,13 +70,11 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="form-inline my-2 my-lg-0">
                         <form class="nav navbar-nav navbar-right" action="searchAllTasks.php" method="POST">
-                    <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
-                        <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                            <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                            <button class="btn btn-secondary mr-sm-4" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                        </form>
                     </li>
                     <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
-                    </form>
-                    </li>
                 </ul>
             </div>
         </nav>

@@ -127,16 +127,12 @@
                     <a class="nav-link" href="../../database/user/database.php">Duomenų bazė</a>
                 </li>
             </ul>
-            <li class="nav navbar-nav navbar-right">
-                <li class="form-inline my-2 my-lg-0">
-                    <form class="nav navbar-nav navbar-right" action="" method="">
-                        <li class="nav-item mr-sm-4">
-                            <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
-                        </li>
-                        <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logoutLight"></i></a>
-                    </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item mr-sm-4">
+                    <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
                 </li>
-            </li>
+                <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logoutLight"></i></a>
+            </ul>
         </div>
     </nav>
 </header>

@@ -62,6 +62,9 @@ if(!empty($deleteTask)){
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item mr-sm-4">
+                    <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
+                </li>
                 <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logoutLight"></i></a>
             </ul>
         </div>

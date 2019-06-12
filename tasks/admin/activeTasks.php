@@ -55,36 +55,7 @@
             echo "Nepasirinktas tinkamas variantas";
         }
     }
-//--------------
-//    if(@$_GET['action'] == "darbuPeradresavimas"){
-//        $id=$_POST['peradresavimoId'];
-//        $uzd_id=intval($_POST['uzd_id']);
-//
-//        if(!empty($_GET['activeTasks'])){
-//            $taskas = $_POST['task'];
-//            if(empty($taskas)){
-//                $error = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
-//            }
-//
-//            if(!empty($taskas) && $id!="" || is_int($id)){
-//                DB::updateTask($_GET['activeTasks'], $taskas, $_SESSION['user']);
-//                DB::uzduotiesPeradresavimas($uzd_id, $id);
-//                $success = "Sėkmingai peradresuota užduotis";
-//            }
-//        }
-//
-//        if(!empty($_GET['lateTasks'])){
-//            $taskas = $_POST['task'];
-//            if(!empty($taskas)){
-//                DB::updateTask($_GET['lateTasks'], $taskas, $_SESSION['user']);
-//                DB::uzduotiesPeradresavimas($uzd_id, $id);
-//                $lateTasksSuccess = "Sėkmingai peradresuota užduotis";
-//            }else{
-//                $lateTasksError = "Neužpildytas <b>Užduoties komentaro</b> laukelis";
-//            }
-//        }
-//    }
-//------------
+
 ?>
 
 <!DOCTYPE html>
@@ -123,16 +94,14 @@
                     </li>                     
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="form-inline my-2 my-lg-0" >
+                    <li class="form-inline my-2 my-lg-0">
                         <form class="nav navbar-nav navbar-right" action="searchActiveTasks.php" method="POST">
-                            <li class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
-                                <button class="btn btn-secondary mr-sm-4 paieskaButton" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
-                            </li>
-                            <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
+                            <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                            <button class="btn btn-secondary mr-sm-4" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
                         </form>
                     </li>
-                </ul>                
+                    <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
+                </ul>
             </div>
         </nav>
     </header>

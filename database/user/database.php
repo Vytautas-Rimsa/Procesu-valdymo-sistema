@@ -2,6 +2,13 @@
     require_once('../../core/init.php');
     require_once('../../classes/User.php');
 
+    if(!empty(@$_GET['deleteContract'])){
+        $dfg = $_GET['deleteContract'];
+        $res = DB::deleteContract($dfg);
+
+        echo $res;
+    }
+
     $duomArr = DB::getContractList();
 ?>
 <!DOCTYPE html>
@@ -37,8 +44,10 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Paieška">
-                        <button class="btn btn-secondary mr-sm-4" type="submit">Paieška</button>
+                        <form class="nav navbar-nav navbar-right" action="searchClients.php" method="POST">
+                            <input class="form-control mr-sm-2 paieskaField" type="text" placeholder="Paieška" name="search" id="search" onkeyup="enableSearchButton()">
+                            <button class="btn btn-secondary mr-sm-4" type="submit" name="submit-search" id="searchButton" disabled="">Paieška</button>
+                        </form>
                     </li>
                     <li class="nav-item mr-sm-4">
                         <a href="../../users/user/info.php"><i class='fas fa-address-card'id="infoLight"></i></a>
@@ -49,7 +58,7 @@
         </nav>
     </header>
 
-    <body id="page-top">
+    <div id="page-top">
         <div id="wrapper">
             <div id="content-wrapper">
                 <div class="container-fluid">
@@ -60,16 +69,16 @@
                         </div>
                             <div class="card-body">
                                 <div id="activeTasks">
-
                                     <table table class="table table-hover" id="keywords" cellspacing="0" cellpadding="0">
                                         <thead role="rowgroup">
-                                        <tr  role="row">
-                                            <th role="columnheader">Nr.</th>
-                                            <th role="columnheader">Pavadinimas</th>
-                                            <th role="columnheader">Sutarties numeris</th>
-                                            <th role="columnheader">Statusas</th>
-                                            <th role="columnheader"></th>
-                                        </tr>
+                                            <tr  role="row">
+                                                <th role="columnheader">Nr.</th>
+                                                <th role="columnheader">Pavadinimas</th>
+                                                <th role="columnheader">Sutarties numeris</th>
+                                                <th role="columnheader">Statusas</th>
+                                                <th role="columnheader"></th>
+                                                <th role="columnheader"></th>
+                                            </tr>
                                         </thead>
                                         <tbody role="rowgroup">
                                             <?php
@@ -77,11 +86,12 @@
 
                                             for($i=0; $i<$duomArrI;$i++){
                                                 $y=$i+1;
-                                                echo "<tr class=\"table-light\" role=\"row\">
-                                                    <th class=\"employeeList\"scope=\"row\"  role=\"cell\">$y</th>
-                                                    <td  class=\"employeeList\" role=\"cell\">".$duomArr[$i]['client']['title']."</td>
-                                                    <td  class=\"employeeList\"role=\"cell\">".$duomArr[$i]['contract']['contract_code']."</td>
-                                                    <td  class=\"employeeList\"role=\"cell\">";
+                                                ?>
+                                                <tr class="table-light" role="row">
+                                                    <th class="employeeList"scope="row"  role="cell"><?php echo $y ?></th>
+                                                    <td  class="employeeList" role="cell"><?php echo $duomArr[$i]['client']['title'] ?></td>
+                                                    <td  class="employeeList"role="cell"><?php echo $duomArr[$i]['contract']['contract_code'] ?></td>
+                                                    <td  class="employeeList"role="cell"><?php
                                                     switch ($duomArr[$i]['contract']['status_id']) {
                                                             case 0:
                                                                 echo "Nutraukta";
@@ -93,46 +103,120 @@
                                                                 echo "Sustabdyta";
                                                                 break;
                                                         }
-                                                    echo"</td>
-                                                    <td  class=\"employeeList\"role=\"cell\"></td>
-                                                    <td  class=\"\"role=\"cell\">
-                                                        <button type=\"button\" class=\"btn btn-secondary\" data-toggle=\"modal\" data-target=\".bd-example-modal-lg".$y."\">
-                                                            <i class='fas fa-search' id=\"actions\"></i>
+                                                        ?>
+                                                    </td>
+
+                                                    <td  class="employeeList" role="cell"></td>
+                                                    <td  class="" role="cell">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".bd-example-modal-lg<?php echo $y ?>">
+                                                            <i class='fas fa-search' id="actions"></i>
                                                         </button>
                                                         
                                                     </td>
-                                                    <div class=\"modal fade bd-example-modal-lg".$y."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myLargeModalLabel\" aria-hidden=\"true\">
-                                                      <div class=\"modal-dialog modal-lg\">
-                                                        <div class=\"modal-content\">
-                                                         <div class=\"modal-header\">
-                                                            <h5 class=\"modal-title\">".$duomArr[$i]['contract']['contract_code']."</h5>
-                                                            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
-                                                              <span aria-hidden=\"true\">&times;</span>
+                                                    <div class="modal fade bd-example-modal-lg<?php echo $y ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                                      <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                         <div class="modal-header">
+                                                            <h5 class="modal-title"><?php echo $duomArr[$i]['contract']['contract_code'] ?></h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                              <span aria-hidden="true">&times;</span>
                                                             </button>
                                                           </div>
-                                                          <div class=\"modal-body\">
-                                                            <p><b>Kliento tipas: </b>".$duomArr[$i]['client']['client_type_id']."</p>
-                                                            <p><b>Pavadinimas: </b>".$duomArr[$i]['client']['title']."</p>
-                                                            <p><b>El. paštas: </b>".$duomArr[$i]['client']['email']."</p>
-                                                            <p><b>Telefono numeris: </b>".$duomArr[$i]['client']['phone']."</p>
-                                                            <p><b>Miestas: </b>".$duomArr[$i]['client']['city_id']."</p>
-                                                            <p><b>Gatvė: </b>".$duomArr[$i]['client']['street_id']."</p>
-                                                            <p><b>Numeris: </b>".$duomArr[$i]['client']['house_nb']."</p>
-                                                            <p><b>Kliento kodas: </b>".$duomArr[$i]['client']['identification_code']."</p>
-                                                            <p><b>PVM mokėtojo kodas: </b>".$duomArr[$i]['client']['vat']."</p>
-                                                            <p><b>Įrašo data: </b>".$duomArr[$i]['client']['time']."</p>
+                                                          <div class="modal-body">
+                                                              <form>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>Kliento tipas: </b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <?php
+                                                                          $result = DB::getClientTypeName($duomArr[$i]['client']['client_type_id']);
+                                                                          $row = $result->fetch_assoc();
+                                                                          echo $row['title'];?>
+                                                                      </div>
+                                                                  </div>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>Pavadinimas:</b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <input value='<?php echo $duomArr[$i]['client']['title'] ?>' name='client-title'  class="form-control">
+                                                                      </div>
+                                                                  </div>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>El. paštas:</b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <input value='<?php echo $duomArr[$i]['client']['email'] ?>' name='client-title'  class="form-control">
+                                                                      </div>
+                                                                  </div>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>Telefono numeris:</b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <input value='<?php echo $duomArr[$i]['client']['phone'] ?>' name='client-title'  class="form-control">
+                                                                      </div>
+                                                                  </div>
+
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>Miestas: </b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <input value='<?php
+                                                                          $result = DB::getCityName($duomArr[$i]['client']['city_id']);
+                                                                          $row = $result->fetch_assoc();
+                                                                          echo $row['city_name'];?>' name='client-title'  class="form-control">
+                                                                      </div>
+                                                                  </div>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>Gatvė:</b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <input value='<?php
+                                                                          $result = DB::getStreetName($duomArr[$i]['client']['street_id']);
+                                                                          $row = $result->fetch_assoc();
+                                                                          echo $row['address'] ?>' name='client-title'  class="form-control">
+                                                                      </div>
+                                                                  </div>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>Numeris:</b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <input value='<?php echo $duomArr[$i]['client']['house_nb'] ?>' name='client-title'  class="form-control">
+                                                                      </div>
+                                                                  </div>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>Kliento kodas:</b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <input value='<?php echo $duomArr[$i]['client']['identification_code'] ?>' name='client-title'  class="form-control">
+                                                                      </div>
+                                                                  </div>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>PVM mokėtojo kodas:</b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <input value='<?php echo $duomArr[$i]['client']['vat'] ?>' name='client-title'  class="form-control">
+                                                                      </div>
+                                                                  </div>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>Įrašo data:</b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <?php echo $duomArr[$i]['client']['time'] ?>
+                                                                      </div>
+                                                                  </div>
+                                                                  <div class="form-group row">
+                                                                      <label class="col-sm-4 col-form-label"><b>Dokumentas:</b></label>
+                                                                      <div class="col-sm-8">
+                                                                          <a href="/PROJEKTAI/bd/contractFiles/<?php
+                                                                          $result = DB::getContractInfo($duomArr[$i]['client']['client_id']);
+                                                                          $row = $result->fetch_assoc();
+                                                                          echo $row['file_path'] ?>" target="_blank"><?php echo $row['file_path'] ?></a>
+                                                                      </div>
+                                                                  </div>
+                                                              </form>
+                                                            
                                                           </div>
-                                                          <div class=\"modal-footer\">
-                                                            <button type=\"button\" class=\"btn btn-primary\">Išsaugoti pakeitimus</button>
-                                                            <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>
+                                                          <div class="modal-footer">
+                                                              <a href="?deleteContract=<?php echo $duomArr[$i]['contract']['contract_id'] ?>"><button type="button" class="btn btn-alert my-2 my-sm-0" name="addUser_btn">Istrinti kontrakta</button></a>
+                                                            <button type="button" class="btn userButton my-2 my-sm-0" name="addUser_btn">Išsaugoti pakeitimus</button>
                                                           </div>
                                                         </div>
                                                       </div>
                                                     </div>
-                                                    
-                                                    
-                                                </tr>";
-                                            }?>
+    </div>
+
+                                                </tr>
+                                            <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>

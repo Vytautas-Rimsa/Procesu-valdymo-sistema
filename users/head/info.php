@@ -36,7 +36,7 @@
                         <a class="nav-link" href="../../tasks/head/activeTasks.php">Užduotys</a>
                     </li>  
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Duomenų bazė</a>
+                        <a class="nav-link" href="../../database/head/database.php">Duomenų bazė</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

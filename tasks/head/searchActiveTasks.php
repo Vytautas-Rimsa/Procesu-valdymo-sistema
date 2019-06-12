@@ -57,11 +57,14 @@ if(!empty($deleteTask)){
                     <a class="nav-link" href="../../users/admin/users.php">Darbuotojai</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Duomenų bazė</a>
+                    <a class="nav-link" href="../../database/head/database.php">Duomenų bazė</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <a href="../../logout.php"><i class='fas fa-sign-out-alt' id="logout"></i></a>
+                <li class="nav-item mr-sm-4">
+                    <a href="../../users/head/info.php"><i class='fas fa-address-card'id="info"></i></a>
+                </li>
+                <a href="../../logout.php"><i class="fas fa-sign-out-alt" id="logout"></i></a>
             </ul>
         </div>
     </nav>
